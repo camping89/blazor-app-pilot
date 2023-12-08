@@ -1,0 +1,26 @@
+@page "/shiftschedule"
+
+@using BlazorApp.Share.Models
+
+<PageTitle>Shift Scheduler</PageTitle>
+
+<h1>Shift Scheduler</h1>
+
+<SfSchedule TValue=AppointmentData>
+     <ScheduleEventSettings DataSource="@DataSource"></ScheduleEventSettings>
+    <ScheduleViews>
+        <ScheduleView Option="View.TimelineDay"></ScheduleView>
+        <ScheduleView Option="View.Week"></ScheduleView>
+        <ScheduleView Option="View.WorkWeek"></ScheduleView>
+        <ScheduleView Option="View.Month"></ScheduleView>
+        <ScheduleView Option="View.Agenda"></ScheduleView>
+    </ScheduleViews>
+</SfSchedule>
+
+@code {
+    List<AppointmentData> DataSource = new List<AppointmentData>();
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+}
