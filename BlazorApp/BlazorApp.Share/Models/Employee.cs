@@ -1,6 +1,6 @@
 namespace BlazorApp.Share.Models;
 
-public class Employee : EntityBase
+public class Employee : Entity
 {
     public string Name { get; set; }
     public int THoursWeekly { get; set; }

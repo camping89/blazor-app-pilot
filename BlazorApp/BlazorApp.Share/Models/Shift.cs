@@ -2,7 +2,7 @@ using BlazorApp.Share.Enums;
 
 namespace BlazorApp.Share.Models;
 
-public class Shift : EntityBase
+public class Shift : Entity
 {
     public DateTime CreatedAt { get; set; }
     public DateTime ModifiedAt { get; set; }

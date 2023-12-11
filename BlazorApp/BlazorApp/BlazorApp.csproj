@@ -17,4 +17,8 @@
       <ProjectReference Include="..\BlazorApp.Share\BlazorApp.Share.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Components\" />
+    </ItemGroup>
+
 </Project>

@@ -1,5 +1,4 @@
 using BlazorApp.Application;
-using BlazorApp.Share.Enums;
 using BlazorApp.Share.Models;
 
 namespace BlazorApp.Data;

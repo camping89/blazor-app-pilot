@@ -9,9 +9,9 @@
 
 <h1>Shift Scheduler</h1>
 
-<SfSchedule TValue=AppointmentData>
+<SfSchedule TValue=AppointmentDto>
     <ScheduleEventSettings DataSource="@DataSource" ></ScheduleEventSettings>
-    <ScheduleEvents TValue="AppointmentData" EventRendered="OnEventRendered"></ScheduleEvents> 
+    <ScheduleEvents TValue="AppointmentDto" EventRendered="OnEventRendered"></ScheduleEvents> 
     <ScheduleViews>
         <ScheduleView Option="View.TimelineDay"></ScheduleView>
         <ScheduleView Option="View.Week"></ScheduleView>
@@ -21,8 +21,9 @@
     </ScheduleViews>
 </SfSchedule>
 
+
 @code {
-    List<AppointmentData> DataSource = new();
+    List<AppointmentDto> DataSource = new();
     protected override async Task OnInitializedAsync()
     {
         var employees = await EmployService.GetEmployees();
@@ -32,7 +33,7 @@
             var color = RandomColor();
             foreach (var shift in employee.Shifts)
             {
-                DataSource.Add(new AppointmentData
+                DataSource.Add(new AppointmentDto
                 {
                     Id = shift.Id,
                     Subject = shift.Title,
@@ -46,7 +47,7 @@
         }
     }
     
-    public void OnEventRendered(EventRenderedArgs<AppointmentData> args) 
+    public void OnEventRendered(EventRenderedArgs<AppointmentDto> args) 
     { 
         Dictionary<string, object> attributes = new Dictionary<string, object> {{"style", "background:" + args.Data.CategoryColor}};
         args.Attributes = attributes; 

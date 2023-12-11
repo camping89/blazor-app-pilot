@@ -41,19 +41,8 @@ public class TestDataGenerator
 
                 foreach (var shift in shifts)
                 {
-                    var deviationChance = Randomizer.Seed.NextDouble();
-                    if (deviationChance <= 0.4)
-                    {
-                        var deviation = GetDeviation(shift);
-                        deviations.Add(deviation);
-                    }
-                    else if (deviationChance <= 0.2)
-                    {
-                        var deviation1 = GetDeviation(shift);
-                        var deviation2 = GetDeviation(shift);
-                        deviations.Add(deviation1);
-                        deviations.Add(deviation2);
-                    }
+                    var deviation = GetDeviation(shift);
+                    deviations.Add(deviation);
                 }
             }
         }
@@ -124,7 +113,7 @@ public class TestDataGenerator
             .RuleFor(_ => _.ShiftId, f => shift.Id)
             .RuleFor(_ => _.EmployeeId, f => shift.EmployeeId)
             .RuleFor(_ => _.StartTime,
-                f => new TimeOnly(f.Random.Number(shift.StartTime.Hour, 23), f.Random.Number(0, 59)))
+                f => shift.StartTime)
             .RuleFor(_ => _.EndTime, (f, d) => d.StartTime.Add(TimeSpan.FromMinutes(f.Random.Number(1, 15))))
             .RuleFor(_ => _.DeviationType, f => f.PickRandom<DeviationType>())
             .RuleFor(_ => _.Reason, f => f.Lorem.Sentence())

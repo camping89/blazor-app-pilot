@@ -1,6 +1,6 @@
 namespace BlazorApp.Share.Models;
 
-public class AppointmentData
+public class AppointmentDto
 {
     public int Id { get; set; }
     public string Subject { get; set; }

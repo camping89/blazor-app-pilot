@@ -1,0 +1,60 @@
+@page "/planningchart"
+@using BlazorApp.Share.Models
+@using BlazorApp.Data
+@inject EmployService EmployService
+
+<PageTitle>Planning Chart</PageTitle>
+<h1>Planning Chart</h1>
+
+<SfGantt DataSource="@TaskCollection" Toolbar="@(new List<string>() { "ZoomIn", "ZoomOut", "ZoomToFit" })">
+    <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
+    </GanttTaskFields>
+    <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day"></GanttTimelineSettings>
+</SfGantt>
+
+@code {
+    private List<TaskDto> TaskCollection { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        TaskCollection = new List<TaskDto>();
+        var employees = await EmployService.GetEmployees();
+
+        foreach (var employee in employees)
+        {
+            // var color = RandomColor();
+            foreach (var shift in employee.Shifts)
+            {
+                var taskDto = new TaskDto
+                {
+                    TaskId = shift.Id,
+                    StartDate = shift.Date.ToDateTime(shift.StartTime),
+                    EndDate = shift.Date.ToDateTime(shift.EndTime),
+                    Duration = shift.Duration.ToString(),
+                    TaskName = shift.Title,
+                    Progress = 100,
+                    DurationUnit = "minute"
+                };
+                
+                TaskCollection.Add(taskDto);
+
+                if (shift.Deviations.Any())
+                {
+                    foreach (var deviation in shift.Deviations)
+                    {
+                        TaskCollection.Add(new TaskDto
+                        {
+                            TaskId = deviation.Id,
+                            StartDate = shift.Date.ToDateTime(shift.StartTime),
+                            EndDate = shift.Date.ToDateTime(shift.EndTime),
+                            Duration = deviation.Duration.ToString(),
+                            TaskName = deviation.Reason,
+                            ParentId = shift.Id,
+                            Progress = 100,
+                            DurationUnit = "minute"
+                        });
+                    }
+                }
+            }
+        }
+    }
+}

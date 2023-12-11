@@ -2,7 +2,7 @@ using BlazorApp.Share.Enums;
 
 namespace BlazorApp.Share.Models;
 
-public class Deviation : EntityBase
+public class Deviation : Entity
 {
     public DateTime CreatedAt { get; set; }
     public DateTime ModifiedAt { get; set; }
