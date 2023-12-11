@@ -1,13 +1,17 @@
 @page "/shiftschedule"
 
 @using BlazorApp.Share.Models
+@using BlazorApp.Data
+@using System.Drawing
+@inject EmployService EmployService
 
 <PageTitle>Shift Scheduler</PageTitle>
 
 <h1>Shift Scheduler</h1>
 
 <SfSchedule TValue=AppointmentData>
-     <ScheduleEventSettings DataSource="@DataSource"></ScheduleEventSettings>
+    <ScheduleEventSettings DataSource="@DataSource" ></ScheduleEventSettings>
+    <ScheduleEvents TValue="AppointmentData" EventRendered="OnEventRendered"></ScheduleEvents> 
     <ScheduleViews>
         <ScheduleView Option="View.TimelineDay"></ScheduleView>
         <ScheduleView Option="View.Week"></ScheduleView>
@@ -18,9 +22,42 @@
 </SfSchedule>
 
 @code {
-    List<AppointmentData> DataSource = new List<AppointmentData>();
+    List<AppointmentData> DataSource = new();
     protected override async Task OnInitializedAsync()
     {
-        
+        var employees = await EmployService.GetEmployees();
+
+        foreach (var employee in employees)
+        {
+            var color = RandomColor();
+            foreach (var shift in employee.Shifts)
+            {
+                DataSource.Add(new AppointmentData
+                {
+                    Id = shift.Id,
+                    Subject = shift.Title,
+                    Location = shift.Client.Name,
+                    StartTime = shift.Date.ToDateTime(shift.StartTime),
+                    EndTime = shift.Date.ToDateTime(shift.EndTime),
+                    Description = shift.Title,
+                    CategoryColor = color
+                });
+            }
+        }
+    }
+    
+    public void OnEventRendered(EventRenderedArgs<AppointmentData> args) 
+    { 
+        Dictionary<string, object> attributes = new Dictionary<string, object> {{"style", "background:" + args.Data.CategoryColor}};
+        args.Attributes = attributes; 
+    }
+
+    private string RandomColor()
+    {
+        Random randomGen = new Random();
+        KnownColor[] names = (KnownColor[]) Enum.GetValues(typeof(KnownColor));
+        KnownColor randomColorName = names[randomGen.Next(names.Length)];
+        Color randomColor = Color.FromKnownColor(randomColorName);
+        return  $"#{randomColor.R:X2}{randomColor.G:X2}{randomColor.B:X2}";
     }
 }

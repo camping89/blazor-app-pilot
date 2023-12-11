@@ -12,4 +12,5 @@ public class AppointmentData
     public string RecurrenceRule { get; set; }
     public string RecurrenceException { get; set; }
     public Nullable<int> RecurrenceID { get; set; }
+    public string CategoryColor { get; set; } 
 }

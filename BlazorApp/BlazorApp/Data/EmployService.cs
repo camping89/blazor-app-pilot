@@ -1,3 +1,4 @@
+using BlazorApp.Application;
 using BlazorApp.Share.Enums;
 using BlazorApp.Share.Models;
 
@@ -7,27 +8,19 @@ public class EmployService
 {
     public async Task<IList<Employee>> GetEmployees()
     {
-        return await Task.FromResult(Enumerable.Range(1, 5).Select(index => new Employee
+        var testData =  new TestDataGenerator().Generate();
+        foreach (var employee in testData.Employees)
         {
-            Id = index,
-            DaysAvailable = 10,
-            TranzitMin = 5,
-            VacationDays = 12,
-            Shifts = new List<Shift>
+            var shifts = testData.Shifts.Where(shift => shift.EmployeeId == employee.Id).ToList();
+            employee.Shifts = shifts;
+            foreach (var shift in shifts)
             {
-                new()
-                {
-                    CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now,
-                    EmployeeId = index,
-                    ClientId = index,
-                    Title = $"Client {index}",
-                    Date = DateOnly.FromDateTime(DateTime.Now),
-                    StartTime = new TimeOnly(8 + index,0,0),
-                    EndTime = new TimeOnly(12 + index,0,0,0),
-                    Status = Status.Approved
-                }
+                shift.Deviations = testData.Deviations
+                    .Where(deviation => deviation.ShiftId == shift.Id && employee.Id == deviation.EmployeeId).ToList();
+                shift.Client = testData.Clients.FirstOrDefault(client => client.Id == shift.ClientId);
             }
-        }).ToList());
+        }
+
+        return testData.Employees;
     }
 }
