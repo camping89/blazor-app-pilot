@@ -8,4 +8,7 @@ public class Employee : EntityBase
     public int DaysAvailable { get; set; }
     public int TranzitMin { get; set; }
     public int VacationDays { get; set; }
+    
+    public IList<Shift> Shifts { get; set; }
+    public IList<Deviation> Deviations { get; set; }
 }

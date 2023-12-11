@@ -7,4 +7,5 @@ public class Client : EntityBase
     public int NMin { get; set; }
 
     public int TMin => NDayparts * NMin;
+    public IList<Shift> Shifts { get; set; }
 }
