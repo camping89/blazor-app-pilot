@@ -8,6 +8,7 @@ public class TaskDto
     public DateTime EndDate { get; set; }
     public string Duration { get; set; }
     public string DurationUnit { get; set; }
-    public int Progress { get; set; }
+    public decimal Progress { get; set; }
     public int? ParentId { get; set; }
+    public int DeviationDuration { get; set; }
 }

@@ -1,19 +1,59 @@
 @page "/planningchart"
 @using BlazorApp.Share.Models
 @using BlazorApp.Data
+@using Syncfusion.Blazor.Navigations
+@using BlazorApp.Components
 @inject EmployService EmployService
 
 <PageTitle>Planning Chart</PageTitle>
 <h1>Planning Chart</h1>
 
-<SfGantt DataSource="@TaskCollection" Toolbar="@(new List<string>() { "ZoomIn", "ZoomOut", "ZoomToFit" })">
+<SfGantt @ref="Gantt" DataSource="@TaskCollection" Toolbar="ToolbarItems">
     <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
     </GanttTaskFields>
     <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day"></GanttTimelineSettings>
+    <GanttTooltipSettings ShowTooltip="true" TValue="TaskDto">
+        <TaskbarTemplate>
+            @{
+                <div>@context.TaskName</div>
+                <div>Start Time: @context.StartDate</div>
+                <div>End Time: @context.EndDate</div>
+                <div>Shift Duration: @context.Duration Minutes</div>
+                <div>Deviation Duration: @context.DeviationDuration Minutes</div>
+            }
+        </TaskbarTemplate>
+    </GanttTooltipSettings>
+    <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
+    </GanttEditSettings>
+    <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto"></GanttEvents>
+    @* <GanttAddDialogFields> *@
+    @*     <GanttAddDialogField Type="GanttDialogFieldType.General" HeaderText="General Tab" *@
+    @*                          Fields="@(new string[]{ "TaskId", "TaskName", "Duration" })"></GanttAddDialogField> *@
+    @* </GanttAddDialogFields> *@
 </SfGantt>
+
+<ShiftFormComponent @ref="ShiftForm"  />
+
 
 @code {
     private List<TaskDto> TaskCollection { get; set; }
+    public SfGantt<TaskDto> Gantt;
+    public ShiftFormComponent ShiftForm;
+    private bool IsVisible { get; set; } = false; 
+    
+    // public List<ToolbarItem> Toolbaritems = new List<ToolbarItem>() { new ToolbarItem() { Text = "Quick Filter",
+    //     TooltipText = "Quick Filter", Id = "toolbarfilter" } };
+    public List<object> ToolbarItems = new List<object> { "ZoomIn", "ZoomOut", "ZoomToFit", new ItemModel() { Text = "Add Shift", TooltipText = "Add Shift", Id = "toolbarFilter" } };
+    
+    public async Task ToolbarClickHandler(ClickEventArgs args)
+    {
+        if (args.Item.Id == "toolbarFilter")
+        {
+            ShiftForm.Title = "Add Shift";
+            await ShiftForm.Show();
+        }
+    }
+    
     protected override async Task OnInitializedAsync()
     {
         TaskCollection = new List<TaskDto>();
@@ -35,24 +75,16 @@
                     DurationUnit = "minute"
                 };
                 
-                TaskCollection.Add(taskDto);
+                Console.WriteLine($"shift TaskDto  {taskDto.TaskId}, shift TaskDto Duration {taskDto.Duration}");
+                
+                // TaskCollection.Add(taskDto);
 
                 if (shift.Deviations.Any())
                 {
-                    foreach (var deviation in shift.Deviations)
-                    {
-                        TaskCollection.Add(new TaskDto
-                        {
-                            TaskId = deviation.Id,
-                            StartDate = shift.Date.ToDateTime(shift.StartTime),
-                            EndDate = shift.Date.ToDateTime(shift.EndTime),
-                            Duration = deviation.Duration.ToString(),
-                            TaskName = deviation.Reason,
-                            ParentId = shift.Id,
-                            Progress = 100,
-                            DurationUnit = "minute"
-                        });
-                    }
+                    var deviationDuration = shift.Deviations.First().Duration;
+                    taskDto.DeviationDuration = deviationDuration;
+                    taskDto.Progress = deviationDuration / (decimal)shift.Duration * 100;
+                    TaskCollection.Add(taskDto);
                 }
             }
         }

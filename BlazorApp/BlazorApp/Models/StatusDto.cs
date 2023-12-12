@@ -1,8 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace BlazorApp.Share.Models;
 
-public class Entity
+public class StatusDto
 {
     public int Id { get; set; }
+    public string Name { get; set; }
 }

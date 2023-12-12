@@ -1,4 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using BlazorApp.Share.Enums;
+using BlazorApp.Share.Extensions;
 
 namespace BlazorApp.Share.Models;
 
@@ -14,6 +17,10 @@ public class Shift : Entity
     public TimeOnly EndTime { get; set; }
     public int Duration => (int) (EndTime - StartTime).TotalMinutes;
     public Status Status { get; set; }
-    public IList<Deviation> Deviations { get; set; }
-    public Client Client { get; set; }
+
+    public List<Deviation>? Deviations { get; set; }
+
+    public Client? Client { get; set; }
+
+    public Employee? Employee { get; set; }
 }

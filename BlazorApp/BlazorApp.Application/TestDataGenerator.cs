@@ -27,7 +27,8 @@ public class TestDataGenerator
         foreach (var employee in employees)
         {
             var clientIds = clients.Select(_ => _.Id).ToList();
-            for (var i = 0; i < Randomizer.Seed.Next(2, 5); i++) // 2-5 clients per employee
+            var size = Randomizer.Seed.Next(2, 5);
+            for (var i = 0; i < size; i++) // 2-5 clients per employee
             {
                 var clientId = clientIds[Randomizer.Seed.Next(0, clientIds.Count)];
                 clientIds.Remove(clientId);
@@ -101,6 +102,7 @@ public class TestDataGenerator
             .RuleFor(_ => _.ModifiedAt, (f, s) => f.Date.Recent(10, s.CreatedAt))
             .RuleFor(_ => _.Deviations, new List<Deviation>())
             .RuleFor(_ => _.Client, new Client())
+            .RuleFor(shift => shift.Employee, new Employee())
             .FinishWith((f, e) => { Debug.WriteLine("Generated Shift {0}|{1}", e.Id, e.Title); });
 
         return faker.Generate(1).First();

@@ -7,5 +7,5 @@ public class Client : Entity
     public int NMin { get; set; }
 
     public int TMin => NDayparts * NMin;
-    public IList<Shift> Shifts { get; set; }
+    public List<Shift> Shifts { get; set; }
 }

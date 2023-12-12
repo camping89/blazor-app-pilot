@@ -11,7 +11,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<EmployService>();
-builder.Services.AddSingleton<ShiftService>();
+builder.Services.AddSingleton<ClientService>();
+builder.Services.AddSingleton<GenerateService>();
 
 var app = builder.Build();
 
