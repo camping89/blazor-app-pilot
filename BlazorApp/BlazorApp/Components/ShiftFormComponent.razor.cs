@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using BlazorApp.Components.Base;
+using BlazorApp.Consumers;
 using BlazorApp.Share.Enums;
 using BlazorApp.Share.Models;
 using Microsoft.AspNetCore.Components;
@@ -32,7 +33,7 @@ public partial class  ShiftFormComponent
     private IList<StatusDto> _status;
     [Inject]
     HttpClient Http { get; set; }
-
+    
     protected override async Task OnInitializedAsync()
     {
         _employees = await EmployService.GetEmployees();
@@ -78,38 +79,17 @@ public partial class  ShiftFormComponent
         isAddingSuccess = false;
         try
         {
-            var jsonOptions = new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            };
-            var json = JsonSerializer.Serialize(shiftModel.ToShift(), jsonOptions);
-            
-            var options = new RestClientOptions("http://localhost:5280");
-            var client = new RestClient(options);
-            var a = JsonConvert.SerializeObject(shiftModel.ToShift());
-            // var request = new RestRequest("Shift/add-shift").AddJsonBody(shiftModel.ToShift());
-            var request =
-                new RestRequest("Shift/add-shift", Method.Post).AddParameter("application/json", json,
-                    ParameterType.RequestBody);
-            
-            var response = await client.ExecuteAsync<Dictionary<string, List<string>>>(request);
-            var errors = response.Data;
-            Console.WriteLine("Test");
-            
-            // var a = JsonConvert.SerializeObject(shiftModel);
-            // var response = await Http.PostAsJsonAsync("http://localhost:5280/Shift/add-shift", shiftModel.ToShift());
-            // var errors = await response.Content.ReadFromJsonAsync<Dictionary<string, List<string>>>();
 
-            if (response.StatusCode == HttpStatusCode.BadRequest && errors.Count > 0)
+            var resultData = await ShiftApiConsumer.AddShift(shiftModel);
+
+            if (resultData.IsError)
             {
-                customFormValidator.DisplayFormErrors(errors);
-                throw new HttpRequestException($"Validation failed. Status Code: {response.StatusCode}");
+                customFormValidator.DisplayFormErrors(resultData.ErrorDetails);
+                throw new HttpRequestException("Validation failed.");
             }
-            else
-            {
-                isAddingSuccess = true;
-                Logger.LogInformation("The registration is successful");
-            }
+
+            await Hide();
+            Logger.LogInformation("The registration is successful");
         }
         catch (Exception ex)
         {

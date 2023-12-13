@@ -1,3 +1,4 @@
+using BlazorApp.Consumers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using BlazorApp.Data;
@@ -13,6 +14,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<EmployService>();
 builder.Services.AddSingleton<ClientService>();
 builder.Services.AddSingleton<GenerateService>();
+builder.Services.AddSingleton<ShiftApiConsumer>();
 
 var app = builder.Build();
 
