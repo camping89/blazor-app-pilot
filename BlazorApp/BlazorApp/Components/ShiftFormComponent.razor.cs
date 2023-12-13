@@ -16,12 +16,9 @@ namespace BlazorApp.Components;
 
 public partial class  ShiftFormComponent
 {
-    // [Parameter]
-    public int ShiftId { get; set; }
-    
     public string Title { get; set; }
-    
-    private ShiftDto shiftModel = new ShiftDto
+
+    public ShiftDto ShiftModel { get; set; } = new ShiftDto
     {
         Date = DateTime.Now
     };
@@ -36,8 +33,8 @@ public partial class  ShiftFormComponent
     
     protected override async Task OnInitializedAsync()
     {
-        _employees = await EmployService.GetEmployees();
-        _clients = await ClientService.GetClients();
+        _employees = (await EmployeeApiConsumer.GetAll()).Data;
+        _clients = (await ClientApiConsumer.GetAll()).Data;
         _status = new List<StatusDto>
         {
             new()
@@ -80,7 +77,7 @@ public partial class  ShiftFormComponent
         try
         {
 
-            var resultData = await ShiftApiConsumer.AddShift(shiftModel);
+            var resultData = await ShiftApiConsumer.AddShift(ShiftModel);
 
             if (resultData.IsError)
             {

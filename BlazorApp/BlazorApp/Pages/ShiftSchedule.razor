@@ -3,7 +3,8 @@
 @using BlazorApp.Share.Models
 @using BlazorApp.Data
 @using System.Drawing
-@inject EmployService EmployService
+@using BlazorApp.Consumers
+@inject EmployeeApiConsumer EmployeeApiConsumer
 
 <PageTitle>Shift Scheduler</PageTitle>
 
@@ -26,7 +27,7 @@
     List<AppointmentDto> DataSource = new();
     protected override async Task OnInitializedAsync()
     {
-        var employees = await EmployService.GetEmployees();
+        var employees = (await EmployeeApiConsumer.GetAll()).Data;
 
         foreach (var employee in employees)
         {

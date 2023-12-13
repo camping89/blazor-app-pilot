@@ -1,3 +1,4 @@
+using BlazorApp.Application.Services;
 using BlazorApp.Share.Models;
 using BlazorApp.Share.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,13 @@ namespace BlazorApp.Application.Controllers;
 [Route("[controller]")]
 public class ShiftController : ControllerBase
 {
+    private GenerateService _generateService;
+
+    public ShiftController(GenerateService generateService)
+    {
+        _generateService = generateService;
+    }
+
     [HttpPost("add-shift")]
     public async Task<IActionResult>  Add( AddShiftRequestInput input)
     {
@@ -22,6 +30,18 @@ public class ShiftController : ControllerBase
         }
 
         returnData.Data = input.Shift;
+        return Ok(returnData);
+    }
+
+    [HttpGet("get/{Id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var testData =  _generateService.GenerateTestData();
+        var shift = testData.Shifts.FirstOrDefault(shift => shift.Id ==  int.Parse(id));
+        var returnData = new ResultDto<Shift>
+        {
+            Data = shift
+        };
         return Ok(returnData);
     }
 }

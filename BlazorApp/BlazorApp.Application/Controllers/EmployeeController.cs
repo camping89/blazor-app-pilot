@@ -1,20 +1,26 @@
-using BlazorApp.Application;
+using BlazorApp.Application.Services;
 using BlazorApp.Share.Models;
+using BlazorApp.Share.Models.Dto;
+using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorApp.Data;
+namespace BlazorApp.Application.Controllers;
 
-public class EmployService
+[ApiController]
+[Route("[controller]")]
+public class EmployeeController : ControllerBase
 {
-    private static IList<Employee> Employees = new List<Employee>();
+    private static IList<Employee> _employees = new List<Employee>();
     private readonly GenerateService _generateService;
-
-    public EmployService(GenerateService generateService)
+    
+    public EmployeeController(GenerateService generateService)
     {
         _generateService = generateService;
     }
-    public async Task<IList<Employee>> GetEmployees()
+    
+    [HttpGet("get-all")]
+    public async Task<IActionResult> GetAll()
     {
-        if (!Employees.Any())
+        if (!_employees.Any())
         {
             var testData =  _generateService.GenerateTestData();
             foreach (var employee in testData.Employees)
@@ -34,9 +40,13 @@ public class EmployService
                 }
             }
 
-            Employees =  testData.Employees;
+            _employees =  testData.Employees;
         }
 
-        return Employees;
+        var returnData = new ResultDto<IList<Employee>>
+        {
+            Data = _employees
+        };
+        return Ok(returnData);
     }
 }

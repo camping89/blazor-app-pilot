@@ -1,6 +1,6 @@
 namespace BlazorApp.Share.Enums;
 
-public enum Status
+public enum Status : int
 {
     Planned = 1,
     Approved = 2,

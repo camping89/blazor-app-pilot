@@ -11,10 +11,10 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddSingleton<EmployService>();
-builder.Services.AddSingleton<ClientService>();
 builder.Services.AddSingleton<GenerateService>();
 builder.Services.AddSingleton<ShiftApiConsumer>();
+builder.Services.AddSingleton<EmployeeApiConsumer>();
+builder.Services.AddSingleton<ClientApiConsumer>();
 
 var app = builder.Build();
 
