@@ -44,4 +44,11 @@ public class ShiftController : ControllerBase
         };
         return Ok(returnData);
     }
+
+    [HttpPost("update-shift")]
+    public async Task<IActionResult> Update(UpdateShiftRequestInput input)
+    {
+        var returnData = new ResultDto<Shift>();
+        return Ok(returnData);
+    }
 }

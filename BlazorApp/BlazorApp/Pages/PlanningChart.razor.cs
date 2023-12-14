@@ -46,7 +46,6 @@ public partial class PlanningChart
             args.Cancel = true;
             var shift =  await ShiftApiConsumer.GetById(args.RowData.TaskId);
             ShiftForm.ShiftModel = ToShiftDto(shift);
-            ShiftForm.DevationModel = ToDevationDto(shift);
             ShiftForm.Title = "Update Shift";
             await ShiftForm.Show();
         }
@@ -91,7 +90,8 @@ public partial class PlanningChart
             Date = new DateTime(shift.Date.Year, shift.Date.Month, shift.Date.Day),
             StartTime = shift.Date.ToDateTime(shift.StartTime),
             EndTime = shift.Date.ToDateTime(shift.EndTime),
-            StatusId = ((int) shift.Status).ToString()
+            StatusId = ((int) shift.Status).ToString(),
+            DevationDto = ToDevationDto(shift)
         };
     }
 

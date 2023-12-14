@@ -23,6 +23,8 @@ public class ShiftDto
     public DateTime EndTime { get; set; }
     public int Duration => (int) (EndTime - StartTime).TotalMinutes;
     public string  StatusId { get; set; }
+    
+    public DevationDto DevationDto { get; set; }
 
     public Shift ToShift()
     {

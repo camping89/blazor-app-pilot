@@ -4,6 +4,7 @@ using BlazorApp.Components.Base;
 using BlazorApp.Consumers;
 using BlazorApp.Share.Enums;
 using BlazorApp.Share.Models;
+using BlazorApp.Share.Models.Dto;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using RestSharp;
@@ -20,10 +21,9 @@ public partial class  ShiftFormComponent
 
     public ShiftDto ShiftModel { get; set; } = new ShiftDto
     {
-        Date = DateTime.Now
+        Date = DateTime.Now,
+        DevationDto = new DevationDto()
     };
-
-    public DevationDto DevationModel { get; set; } = new DevationDto();
 
     private SfDialog DialogObj;
 
@@ -68,6 +68,7 @@ public partial class  ShiftFormComponent
     }
     
     protected CustomFormValidator customFormValidator;
+    
     [Inject]
     ILogger<ShiftFormComponent> Logger { get; set; }
     protected bool isAddingSuccess = false;
@@ -78,8 +79,15 @@ public partial class  ShiftFormComponent
         isAddingSuccess = false;
         try
         {
-
-            var resultData = await ShiftApiConsumer.AddShift(ShiftModel);
+            ResultDto<Shift> resultData;
+            if (ShiftModel.Id == 0)
+            {
+                resultData = await ShiftApiConsumer.AddShift(ShiftModel);
+            }
+            else
+            {
+                resultData = await ShiftApiConsumer.UpdateShift(ShiftModel);
+            }
 
             if (resultData.IsError)
             {

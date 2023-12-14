@@ -1,10 +1,6 @@
 @using BlazorApp.Components.Base
 @using BlazorApp.Share.Models
 
-<EditForm id="devationForm" Model="@DevationDto" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator/>
-    <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
-    
     <div class="form-group">
         <label for="title">Reason:</label>
         <SfTextBox ID="title" @bind-Value="@DevationDto.Reason"></SfTextBox>
@@ -36,5 +32,3 @@
             <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
         </SfDropDownList>
     </div>
-    
-</EditForm>

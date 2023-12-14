@@ -8,7 +8,6 @@ public partial class DevationFormComponent
 {
     [Parameter]
     public DevationDto DevationDto { get; set; } = new DevationDto();
-    protected CustomFormValidator customFormValidator;
     private IList<StatusDto> _status;
     private IList<StatusDto> _devationType;
 
@@ -61,10 +60,5 @@ public partial class DevationFormComponent
                 Name = "EarlyLeave"
             }
         };
-    }
-    
-    private async Task HandleValidSubmit()
-    {
-        Console.WriteLine("Test");
     }
 }
