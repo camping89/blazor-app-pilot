@@ -10,7 +10,7 @@
 
 <h1>Shift Scheduler</h1>
 
-<SfSchedule TValue=AppointmentDto>
+<SfSchedule  @ref="Scheduler"  TValue=AppointmentDto> 
     <ScheduleEventSettings DataSource="@DataSource" ></ScheduleEventSettings>
     <ScheduleEvents TValue="AppointmentDto" EventRendered="OnEventRendered"></ScheduleEvents> 
     <ScheduleViews>
@@ -25,6 +25,7 @@
 
 @code {
     List<AppointmentDto> DataSource = new();
+    public SfSchedule<AppointmentDto> Scheduler;
     protected override async Task OnInitializedAsync()
     {
         var employees = (await EmployeeApiConsumer.GetAll()).Data;
@@ -46,6 +47,8 @@
                 });
             }
         }
+
+        await Scheduler.RefreshAsync();
     }
     
     public void OnEventRendered(EventRenderedArgs<AppointmentDto> args) 

@@ -18,7 +18,7 @@ public class Shift : Entity
     public int Duration => (int) (EndTime - StartTime).TotalMinutes;
     public Status Status { get; set; }
 
-    public List<Deviation>? Deviations { get; set; }
+    public List<Devation>? Devations { get; set; }
 
     public Client? Client { get; set; }
 

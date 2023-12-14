@@ -46,6 +46,7 @@ public partial class PlanningChart
             args.Cancel = true;
             var shift =  await ShiftApiConsumer.GetById(args.RowData.TaskId);
             ShiftForm.ShiftModel = ToShiftDto(shift);
+            ShiftForm.DevationModel = ToDevationDto(shift);
             ShiftForm.Title = "Update Shift";
             await ShiftForm.Show();
         }
@@ -66,9 +67,9 @@ public partial class PlanningChart
                 
         Console.WriteLine($"shift TaskDto  {taskDto.TaskId}, shift TaskDto Duration {taskDto.Duration}");
 
-        if (shift.Deviations.Any())
+        if (shift.Devations.Any())
         {
-            var deviationDuration = shift.Deviations.First().Duration;
+            var deviationDuration = shift.Devations.First().Duration;
             taskDto.DeviationDuration = deviationDuration;
             taskDto.Progress = deviationDuration / (decimal)shift.Duration * 100;
                     
@@ -92,5 +93,25 @@ public partial class PlanningChart
             EndTime = shift.Date.ToDateTime(shift.EndTime),
             StatusId = ((int) shift.Status).ToString()
         };
+    }
+
+    public DevationDto ToDevationDto(Shift shift)
+    {
+        if (shift.Devations.Any())
+        {
+            var devation = shift.Devations.First();
+            return new DevationDto
+            {
+                Reason = devation.Reason,
+                EmployeeId = devation.EmployeeId.ToString(),
+                StatusId = ((int) devation.Status).ToString(),
+                StartTime = shift.Date.ToDateTime(devation.StartTime),
+                EndTime = shift.Date.ToDateTime(devation.EndTime),
+                DevationTypeId = ((int) devation.DeviationType).ToString(),
+                ShiftId = devation.ShiftId.ToString()
+            };
+        }
+
+        return new DevationDto();
     }
 }

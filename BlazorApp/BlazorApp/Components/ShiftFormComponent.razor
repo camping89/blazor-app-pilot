@@ -68,56 +68,10 @@
                     </TabItem>
                     <TabItem>
                         <ChildContent>
-                            <TabHeader Text="Deviation"></TabHeader>
+                            <TabHeader Text="Devation"></TabHeader>
                         </ChildContent>
                         <ContentTemplate>
-                            <EditForm id="deviationForm" Model="@ShiftModel" OnValidSubmit="HandleValidSubmit">
-                                <DataAnnotationsValidator/>
-                                <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
-                
-                                <div class="form-group">
-                                    <label for="title">Title:</label>
-                                    <SfTextBox ID="title" @bind-Value="@ShiftModel.Title"></SfTextBox>
-                                    <ValidationMessage For="@(() => ShiftModel.Title)"></ValidationMessage>
-                                </div>
-                                <div class="form-group">
-                                    <label for="employee">Employee:</label>
-                                    <SfDropDownList ID="employee" TValue="string" TItem="Employee" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a employee" @bind-Value="@ShiftModel.EmployeeId" DataSource="@_employees">
-                                        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                    <ValidationMessage For="@(() => ShiftModel.EmployeeId)"></ValidationMessage>
-                                </div>
-                                <div class="form-group">
-                                    <label for="client">Client:</label>
-                                    <SfDropDownList ID="client" TValue="string" TItem="Client" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a client" @bind-Value="@ShiftModel.ClientId" DataSource="@_clients">
-                                        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                    <ValidationMessage For="@(() => ShiftModel.ClientId)"></ValidationMessage>
-                                </div>
-                
-                                <div class="form-group">
-                                    <label for="date">Date:</label>
-                                    <SfDatePicker ID="date" TValue="DateTime?" PlaceHolder="Select a date" Value="@ShiftModel.Date"></SfDatePicker>
-                                </div>
-                                <div class="form-group">
-                                    <label for="startTime">Start Time:</label>
-                                    <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@ShiftModel.StartTime"></SfTimePicker>
-                                    <ValidationMessage For="@(() => ShiftModel.StartTime)"></ValidationMessage>
-                                </div>
-                
-                                <div class="form-group">
-                                    <label for="endTime">End Time:</label>
-                                    <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@ShiftModel.EndTime"></SfTimePicker>
-                                    <ValidationMessage For="@(() => ShiftModel.EndTime)"></ValidationMessage>
-                                </div>
-                                <div class="form-group">
-                                    <label for="endTime">Status:</label>
-                                    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_status" @bind-Value="@ShiftModel.StatusId">
-                                        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
-                                    </SfDropDownList>
-                                </div>
-                
-                            </EditForm>
+                            <DevationFormComponent DevationDto="@DevationModel"></DevationFormComponent>
                         </ContentTemplate>
                     </TabItem>
                         

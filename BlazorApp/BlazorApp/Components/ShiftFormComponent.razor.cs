@@ -23,6 +23,8 @@ public partial class  ShiftFormComponent
         Date = DateTime.Now
     };
 
+    public DevationDto DevationModel { get; set; } = new DevationDto();
+
     private SfDialog DialogObj;
 
     private IList<Employee> _employees = new List<Employee>();

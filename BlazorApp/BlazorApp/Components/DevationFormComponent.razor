@@ -1,0 +1,40 @@
+@using BlazorApp.Components.Base
+@using BlazorApp.Share.Models
+
+<EditForm id="devationForm" Model="@DevationDto" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
+    
+    <div class="form-group">
+        <label for="title">Reason:</label>
+        <SfTextBox ID="title" @bind-Value="@DevationDto.Reason"></SfTextBox>
+        <ValidationMessage For="@(() => DevationDto.Reason)"></ValidationMessage>
+    </div>
+    
+    <div class="form-group">
+        <label for="startTime">Start Time:</label>
+        <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DevationDto.StartTime"></SfTimePicker>
+        <ValidationMessage For="@(() => DevationDto.StartTime)"></ValidationMessage>
+    </div>
+    
+    <div class="form-group">
+        <label for="endTime">End Time:</label>
+        <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DevationDto.EndTime"></SfTimePicker>
+        <ValidationMessage For="@(() => DevationDto.EndTime)"></ValidationMessage>
+    </div>
+    
+    <div class="form-group">
+        <label for="endTime">Status:</label>
+        <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_status" @bind-Value="@DevationDto.StatusId">
+            <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+    
+    <div class="form-group">
+        <label for="endTime">Status:</label>
+        <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_devationType" @bind-Value="@DevationDto.DevationTypeId">
+            <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+        </SfDropDownList>
+    </div>
+    
+</EditForm>

@@ -35,8 +35,8 @@ public class ShiftDto
             ClientId = int.Parse(ClientId),
             Title = Title,
             Date = new DateOnly(Date.Year, Date.Month, Date.Day),
-            StartTime = new TimeOnly(StartTime.Ticks),
-            EndTime = new TimeOnly(EndTime.Ticks),
+            StartTime = new TimeOnly(StartTime.Hour, StartTime.Minute, StartTime.Second),
+            EndTime = new TimeOnly(EndTime.Hour, EndTime.Minute, EndTime.Second),
             Status = StatusId.ToEnum<Status>()
         };
     }

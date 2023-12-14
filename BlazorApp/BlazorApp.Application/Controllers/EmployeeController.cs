@@ -29,13 +29,13 @@ public class EmployeeController : ControllerBase
                 employee.Shifts = shifts;
                 foreach (var shift in shifts)
                 {
-                    shift.Deviations = new List<Deviation>
+                    shift.Devations = new List<Devation>
                     {
                         testData.Deviations
                             .Last(deviation => deviation.ShiftId == shift.Id && employee.Id == deviation.EmployeeId)
                     };
                     Console.WriteLine(
-                        $"shift id {shift.Id}, shift Duration {shift.Duration}, deviation id {shift.Deviations.First().Id}, deviation duration {shift.Deviations.First().Duration}");
+                        $"shift id {shift.Id}, shift Duration {shift.Duration}, deviation id {shift.Devations.First().Id}, deviation duration {shift.Devations.First().Duration}");
                     shift.Client = testData.Clients.FirstOrDefault(client => client.Id == shift.ClientId);
                 }
             }

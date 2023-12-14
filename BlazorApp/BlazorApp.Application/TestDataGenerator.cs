@@ -10,7 +10,7 @@ public class TestData
     public List<Client> Clients { get; set; } = new();
     public List<Employee> Employees { get; set; } = new();
     public List<Shift> Shifts { get; set; } = new();
-    public List<Deviation> Deviations { get; set; } = new();
+    public List<Devation> Deviations { get; set; } = new();
 }
 
 public class TestDataGenerator
@@ -20,7 +20,7 @@ public class TestDataGenerator
         var clients = GetClient(20);
         var employees = GetEmployee(5);
         var shifts = new List<Shift>();
-        var deviations = new List<Deviation>();
+        var deviations = new List<Devation>();
         
         Randomizer.Seed = new Random(new Random().Next(1000, 10000));
 
@@ -68,7 +68,7 @@ public class TestDataGenerator
             .RuleFor(_ => _.TranzitMin, f => f.Random.Number(10, 15))
             .RuleFor(_ => _.VacationDays, f => f.Random.Number(1, 5))
             .RuleFor(_ => _.Shifts, new List<Shift>())
-            .RuleFor(_ => _.Deviations, new List<Deviation>())
+            .RuleFor(_ => _.Deviations, new List<Devation>())
             .FinishWith((f, e) => { Debug.WriteLine("Generated Employee {0}|{1}", e.Id, e.Name); });
 
         return faker.Generate(amount);
@@ -100,7 +100,7 @@ public class TestDataGenerator
             .RuleFor(_ => _.Status, f => f.PickRandom<Status>())
             .RuleFor(_ => _.CreatedAt, (f, s) => f.Date.Recent(10, s.Date.ToDateTime(TimeOnly.MinValue)))
             .RuleFor(_ => _.ModifiedAt, (f, s) => f.Date.Recent(10, s.CreatedAt))
-            .RuleFor(_ => _.Deviations, new List<Deviation>())
+            .RuleFor(_ => _.Devations, new List<Devation>())
             .RuleFor(_ => _.Client, new Client())
             .RuleFor(shift => shift.Employee, new Employee())
             .FinishWith((f, e) => { Debug.WriteLine("Generated Shift {0}|{1}", e.Id, e.Title); });
@@ -108,9 +108,9 @@ public class TestDataGenerator
         return faker.Generate(1).First();
     }
 
-    public static Deviation GetDeviation(Shift shift)
+    public static Devation GetDeviation(Shift shift)
     {
-        var faker = new Faker<Deviation>().StrictMode(true)
+        var faker = new Faker<Devation>().StrictMode(true)
             .RuleFor(_ => _.Id, f => f.IndexGlobal)
             .RuleFor(_ => _.ShiftId, f => shift.Id)
             .RuleFor(_ => _.EmployeeId, f => shift.EmployeeId)
