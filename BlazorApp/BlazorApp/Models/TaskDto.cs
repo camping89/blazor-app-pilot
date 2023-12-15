@@ -11,4 +11,6 @@ public class TaskDto
     public decimal Progress { get; set; }
     public int? ParentId { get; set; }
     public int DeviationDuration { get; set; }
+    public string EmployeeName { get; set; }
+    public string ClientName { get; set; }
 }

@@ -8,11 +8,12 @@ namespace BlazorApp.Pages;
 
 public partial class PlanningChart
 {
-    private List<TaskDto> TaskCollection { get; set; }
+    private List<TaskDto> TaskCollection { get; set; } = new List<TaskDto>();
     public SfGantt<TaskDto> Gantt;
     public ShiftFormComponent ShiftForm;
+    private bool VisibleProperty { get; set; } = false;
     
-    public List<object> ToolbarItems = new List<object> { "ZoomIn", "ZoomOut", "ZoomToFit", new ItemModel() { Text = "Add Shift", TooltipText = "Add Shift", Id = "toolbarFilter" } };
+    public List<object> ToolbarItems = new List<object> { "CollapseAll", "ExpandAll", "ZoomToFit", new ItemModel() { Text = "Add Shift", TooltipText = "Add Shift", Id = "toolbarFilter" } };
     
     public async Task ToolbarClickHandler(ClickEventArgs args)
     {
@@ -25,18 +26,27 @@ public partial class PlanningChart
     
     protected override async Task OnInitializedAsync()
     {
+        this.VisibleProperty = true;
         TaskCollection = new List<TaskDto>();
         var employees = (await EmployeeApiConsumer.GetAll()).Data;
 
         foreach (var employee in employees)
         {
+            var tasks = new List<TaskDto>();
             foreach (var shift in employee.Shifts)
             {
-                TaskCollection.Add(ToTaskDto(shift));
+                var task = ToTaskDto(shift, employee.Name);
+                if (tasks.Any())
+                {
+                    task.ParentId = tasks.First().TaskId;
+                }
+                tasks.Add(task);
             }
+            TaskCollection.AddRange(tasks);
         }
 
-        await this.Gantt.RefreshAsync();
+        this.VisibleProperty = false;
+        // await this.Gantt.RefreshAsync();
     }
     
     public async Task ActionBegin(GanttActionEventArgs<TaskDto> args)
@@ -51,7 +61,7 @@ public partial class PlanningChart
         }
     }
 
-    private TaskDto ToTaskDto(Shift shift)
+    private TaskDto ToTaskDto(Shift shift, string employeeName)
     {
         var taskDto = new TaskDto
         {
@@ -61,8 +71,14 @@ public partial class PlanningChart
             Duration = shift.Duration.ToString(),
             TaskName = shift.Title,
             Progress = 100,
-            DurationUnit = "minute"
+            DurationUnit = "minute",
+            EmployeeName = employeeName
         };
+
+        if (shift.Client is not null)
+        {
+            taskDto.ClientName = shift.Client.Name;
+        }
                 
         Console.WriteLine($"shift TaskDto  {taskDto.TaskId}, shift TaskDto Duration {taskDto.Duration}");
 

@@ -11,29 +11,61 @@
 <PageTitle>Planning Chart</PageTitle>
 <h1>Planning Chart</h1>
 
-<SfGantt @ref="Gantt" DataSource="@TaskCollection" Toolbar="ToolbarItems" >
-    <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
-    </GanttTaskFields>
-    <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day"></GanttTimelineSettings>
-    <GanttTooltipSettings ShowTooltip="true" TValue="TaskDto">
-        <TaskbarTemplate>
-            @{
-                <div>@context.TaskName</div>
-                <div>Start Time: @context.StartDate</div>
-                <div>End Time: @context.EndDate</div>
-                <div>Shift Duration: @context.Duration Minutes</div>
-                <div>Devation Duration: @context.DeviationDuration Minutes</div>
-            }
-        </TaskbarTemplate>
-    </GanttTooltipSettings>
-    <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
-    </GanttEditSettings>
-    <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto" OnActionBegin="ActionBegin"></GanttEvents>
-    @* <GanttSelectionSettings Mode="SelectionMode.Row" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GanttSelectionSettings> *@
-    @* <GanttEvents TValue="TaskDto" RowSelected="RowSelect"></GanttEvents> *@
-    @* <GanttEvents TValue="TaskDto"  OnCellEdit="CellEditHandler"></GanttEvents> *@
-    @* <GanttSelectionSettings Mode="SelectionMode.Cell"></GanttSelectionSettings> *@
-    @*     <GanttEvents TValue="TaskDto" CellSelected="CellSelectedHandler"></GanttEvents> *@
-</SfGantt>
+@if (TaskCollection is null || !TaskCollection.Any())
+{
+    <SfSpinner @bind-Visible="@VisibleProperty" CssClass="e-spin-overlay">
+            </SfSpinner>
+}
+else
+{
+    <SfGantt @ref="Gantt" DataSource="@TaskCollection" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
+        <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
+        </GanttTaskFields>
+        @* <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day"></GanttTimelineSettings> *@
+        <GanttTimelineSettings >
+            <GanttTopTierSettings Unit="TimelineViewMode.Day" Format="MMM-dd"></GanttTopTierSettings>
+            <GanttBottomTierSettings Unit="TimelineViewMode.Hour"></GanttBottomTierSettings>
+        </GanttTimelineSettings>
+        <GanttTooltipSettings ShowTooltip="true" TValue="TaskDto">
+            <TaskbarTemplate>
+                @{
+                    <div>@context.TaskName</div>
+                    <div>Start Time: @context.StartDate</div>
+                    <div>End Time: @context.EndDate</div>
+                    <div>Shift Duration: @context.Duration Minutes</div>
+                    <div>Devation Duration: @context.DeviationDuration Minutes</div>
+                }
+            </TaskbarTemplate>
+        </GanttTooltipSettings>
+        <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
+        </GanttEditSettings>
+        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto" OnActionBegin="ActionBegin"></GanttEvents>
+        <GanttColumns>
+            <GanttColumn Field="EmployeeName" HeaderText="Employee" AllowEditing="false"> </GanttColumn>
+        </GanttColumns>
+        @* <SfSpinner @bind-Visible="@VisibleProperty" CssClass="e-spin-overlay"> *@
+        @*         </SfSpinner> *@
+    </SfGantt>
 
-<ShiftFormComponent @ref="ShiftForm"  />
+    <ShiftFormComponent @ref="ShiftForm"  />
+}
+
+@* <div id="container"> *@
+@*          *@
+@*     </div> *@
+<style>
+    .Gantt {
+        height: 100vh;
+        width: 100vw;
+        border: 2px solid;
+        padding: 20px;
+        resize: both;
+        overflow: auto;
+    }
+    
+   #container {
+               position: relative;
+               height: 550px;
+  }
+
+</style>
