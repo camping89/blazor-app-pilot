@@ -7,8 +7,7 @@ public class CustomFormValidator : ComponentBase
 {
     private ValidationMessageStore validationMessageStore;
 
-    [CascadingParameter]
-    private EditContext CurrentEditContext { get; set; }
+    [CascadingParameter] private EditContext CurrentEditContext { get; set; }
 
     protected override void OnInitialized()
     {
