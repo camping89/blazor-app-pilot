@@ -2,7 +2,7 @@ namespace BlazorApp.Share.Extensions;
 
 public static class StringExtensions
 {
-    public static T ToEnum<T>(this string value)
+    public static T? ToEnum<T>(this string value)
     {
         if (string.IsNullOrWhiteSpace(value)) return default(T);
 
@@ -12,7 +12,7 @@ public static class StringExtensions
         }
         catch (ArgumentException)
         {
-            return default(T);
+            return default;
         }
     }
 }

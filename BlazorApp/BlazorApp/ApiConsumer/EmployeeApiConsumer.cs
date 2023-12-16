@@ -1,8 +1,8 @@
-using BlazorApp.Share.Models;
-using BlazorApp.Share.Models.Dto;
+using BlazorApp.Share.Dtos;
+using BlazorApp.Share.Entities;
 using RestSharp;
 
-namespace BlazorApp.Consumers;
+namespace BlazorApp.Services;
 
 public class EmployeeApiConsumer : BaseConsumer
 {

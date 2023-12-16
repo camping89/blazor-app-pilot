@@ -1,12 +1,13 @@
-@using BlazorApp.Share.Models
 @using BlazorApp.Data
 @using BlazorApp.Components.Base
-@using BlazorApp.Consumers
-@inject ShiftApiConsumer ShiftApiConsumer
+@using BlazorApp.Models
+@using BlazorApp.Services
+@using BlazorApp.Share.Entities
+@inject ShiftApiConsumer    ShiftApiConsumer
 @inject EmployeeApiConsumer EmployeeApiConsumer
-@inject ClientApiConsumer ClientApiConsumer
+@inject ClientApiConsumer   ClientApiConsumer
 
-<SfDialog  Width="250px" IsModal="true" Visible="false" @ref="DialogObj">
+<SfDialog Width="250px" IsModal="true" Visible="false" @ref="DialogObj">
     <DialogTemplates>
         <Header>@Title</Header>
         <Content>
@@ -39,7 +40,7 @@
                                     </SfDropDownList>
                                     <ValidationMessage For="@(() => ShiftModel.ClientId)"></ValidationMessage>
                                 </div>
-                            
+
                                 <div class="form-group">
                                     <label for="date">Date:</label>
                                     <SfDatePicker ID="date" TValue="DateTime?" PlaceHolder="Select a date" Value="@ShiftModel.Date"></SfDatePicker>
@@ -49,7 +50,7 @@
                                     <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@ShiftModel.StartTime"></SfTimePicker>
                                     <ValidationMessage For="@(() => ShiftModel.StartTime)"></ValidationMessage>
                                 </div>
-                            
+
                                 <div class="form-group">
                                     <label for="endTime">End Time:</label>
                                     <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@ShiftModel.EndTime"></SfTimePicker>
@@ -65,10 +66,10 @@
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Devation"></TabHeader>
+                                <TabHeader Text="Deviation"></TabHeader>
                             </ChildContent>
                             <ContentTemplate>
-                                <DevationFormComponent DevationDto="@ShiftModel.DevationDto"></DevationFormComponent>
+                                <DeviationFormComponent DeviationDto="@ShiftModel.DeviationDto"></DeviationFormComponent>
                             </ContentTemplate>
                         </TabItem>
                     </TabItems>
@@ -77,7 +78,7 @@
         </Content>
     </DialogTemplates>
     <DialogButtons>
-        <DialogButton Content="Submit" IsPrimary="true"  Type="ButtonType.Submit" form="shiftForm" />
-        <DialogButton Content="Cancel" IsPrimary="false" OnClick="@OnCancel" />
+        <DialogButton Content="Submit" IsPrimary="true" Type="ButtonType.Submit" form="shiftForm"/>
+        <DialogButton Content="Cancel" IsPrimary="false" OnClick="@OnCancel"/>
     </DialogButtons>
 </SfDialog>

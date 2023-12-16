@@ -1,7 +1,7 @@
-namespace BlazorApp.Share.Models;
+namespace BlazorApp.Models;
 
 public class StatusDto
 {
-    public int Id { get; set; }
+    public int    Id   { get; set; }
     public string Name { get; set; }
 }

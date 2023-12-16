@@ -1,15 +1,14 @@
 using BlazorApp.Components.Base;
-using BlazorApp.Share.Models;
+using BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorApp.Components;
 
-public partial class DevationFormComponent
+public partial class DeviationFormComponent
 {
-    [Parameter]
-    public DevationDto DevationDto { get; set; } = new DevationDto();
-    private IList<StatusDto> _status;
-    private IList<StatusDto> _devationType;
+    [Parameter] public DeviationDto      DeviationDto { get; set; } = new();
+    private            IList<StatusDto> _status;
+    private            IList<StatusDto> _deviationType;
 
     protected override async Task OnInitializedAsync()
     {
@@ -17,46 +16,46 @@ public partial class DevationFormComponent
         {
             new()
             {
-                Id = 1,
+                Id   = 1,
                 Name = "Planned"
             },
-            new StatusDto
+            new()
             {
-                Id = 2,
+                Id   = 2,
                 Name = "Approved"
             },
-            new StatusDto
+            new()
             {
-                Id = 3,
+                Id   = 3,
                 Name = "Completed"
             },
-            new StatusDto
+            new()
             {
-                Id = 4,
+                Id   = 4,
                 Name = "Pending"
             },
-            new StatusDto
+            new()
             {
-                Id = 5,
+                Id   = 5,
                 Name = "Rejected"
             }
         };
 
-        _devationType = new List<StatusDto>
+        _deviationType = new List<StatusDto>
         {
-            new StatusDto
+            new()
             {
-                Id = 1,
+                Id   = 1,
                 Name = "Illness"
             },
-            new StatusDto
+            new()
             {
-                Id = 2,
+                Id   = 2,
                 Name = "Lateness"
             },
-            new StatusDto
+            new()
             {
-                Id = 3,
+                Id   = 3,
                 Name = "EarlyLeave"
             }
         };

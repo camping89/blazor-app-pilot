@@ -1,3 +1,4 @@
+using BlazorApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorApp.Application.Controllers

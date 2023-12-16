@@ -1,4 +1,6 @@
-namespace BlazorApp.Share.Models.Dto;
+using BlazorApp.Share.Entities;
+
+namespace BlazorApp.Share.Dtos;
 
 public class UpdateShiftRequestInput
 {

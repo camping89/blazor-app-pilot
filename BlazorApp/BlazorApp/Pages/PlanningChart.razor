@@ -1,9 +1,9 @@
 @page "/planningchart"
-@using BlazorApp.Share.Models
 @using BlazorApp.Data
 @using Syncfusion.Blazor.Navigations
 @using BlazorApp.Components
-@using BlazorApp.Consumers
+@using BlazorApp.Models
+@using BlazorApp.Services
 @using SelectionMode = Syncfusion.Blazor.Grids.SelectionMode
 @inject EmployeeApiConsumer EmployeeApiConsumer
 @inject ShiftApiConsumer ShiftApiConsumer
@@ -29,12 +29,12 @@ else
         <GanttTooltipSettings ShowTooltip="true" TValue="TaskDto">
             <TaskbarTemplate>
                 @{
-                    <div>@context.TaskName</div>
-                    <div>Start Time: @context.StartDate</div>
-                    <div>End Time: @context.EndDate</div>
-                    <div>Shift Duration: @context.Duration Minutes</div>
-                    <div>Devation Duration: @context.DeviationDuration Minutes</div>
-                }
+                                        <div>@context.TaskName</div>
+                                        <div>Start Time: @context.StartDate</div>
+                                        <div>End Time: @context.EndDate</div>
+                                        <div>Shift Duration: @context.Duration Minutes</div>
+                                        <div>Deviation Duration: @context.DeviationDuration Minutes</div>
+                                        }
             </TaskbarTemplate>
         </GanttTooltipSettings>
         <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">

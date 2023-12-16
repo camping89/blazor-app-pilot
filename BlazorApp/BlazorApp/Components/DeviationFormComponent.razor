@@ -1,0 +1,34 @@
+@using BlazorApp.Components.Base
+@using BlazorApp.Models
+
+<div class="form-group">
+    <label for="title">Reason:</label>
+    <SfTextBox ID="title" @bind-Value="@DeviationDto.Reason"></SfTextBox>
+    <ValidationMessage For="@(() => DeviationDto.Reason)"></ValidationMessage>
+</div>
+
+<div class="form-group">
+    <label for="startTime">Start Time:</label>
+    <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DeviationDto.StartTime"></SfTimePicker>
+    <ValidationMessage For="@(() => DeviationDto.StartTime)"></ValidationMessage>
+</div>
+
+<div class="form-group">
+    <label for="endTime">End Time:</label>
+    <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DeviationDto.EndTime"></SfTimePicker>
+    <ValidationMessage For="@(() => DeviationDto.EndTime)"></ValidationMessage>
+</div>
+
+<div class="form-group">
+    <label for="endTime">Status:</label>
+    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_status" @bind-Value="@DeviationDto.StatusId">
+        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+    </SfDropDownList>
+</div>
+
+<div class="form-group">
+    <label for="endTime">Status:</label>
+    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
+        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+    </SfDropDownList>
+</div>

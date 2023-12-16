@@ -1,4 +1,4 @@
-namespace BlazorApp.Share.Models.Dto;
+namespace BlazorApp.Share.Dtos;
 
 public class ResultDto<T> where T : class
 {

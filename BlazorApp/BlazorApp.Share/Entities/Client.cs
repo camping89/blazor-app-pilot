@@ -1,4 +1,4 @@
-namespace BlazorApp.Share.Models;
+namespace BlazorApp.Share.Entities;
 
 public class Client : Entity 
 {

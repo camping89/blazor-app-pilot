@@ -1,6 +1,7 @@
+using BlazorApp.Application.Repositories;
 using BlazorApp.Application.Services;
-using BlazorApp.Share.Models;
-using BlazorApp.Share.Models.Dto;
+using BlazorApp.Share.Dtos;
+using BlazorApp.Share.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorApp.Application.Controllers;
@@ -10,20 +11,27 @@ namespace BlazorApp.Application.Controllers;
 public class ClientController : ControllerBase
 {
     private readonly GenerateService _generateService;
-    public ClientController(GenerateService generateService)
-    {
-        _generateService = generateService;
-    }
     
-    [HttpGet("get-all")]
-    public async Task<IActionResult> GetAll()
+    private readonly IBaseRepository<Client> _clientRepository;
+    
+    public ClientController(GenerateService generateService, IBaseRepository<Client> clientRepository)
     {
-        var testData = _generateService.GenerateTestData();
-
-        var returnData = new ResultDto<IList<Client>>
-        {
-            Data = testData.Clients
-        };
-        return Ok(returnData);
+        _generateService       = generateService;
+        _clientRepository = clientRepository;
     }
+
+    [HttpGet("get")]
+    public async Task<List<Client>> Get() => await _clientRepository.Get();
+
+    // [HttpGet("get-all")]
+    // public async Task<IActionResult> Get()
+    // {
+    //     var testData = _generateService.GenerateTestData();
+    //
+    //     var returnData = new ResultDto<IList<Client>>
+    //     {
+    //         Data = testData.Clients
+    //     };
+    //     return Ok(returnData);
+    // }
 }

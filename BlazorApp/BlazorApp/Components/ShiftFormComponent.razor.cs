@@ -1,10 +1,9 @@
 using System.Net;
 using System.Text.Json;
 using BlazorApp.Components.Base;
-using BlazorApp.Consumers;
+using BlazorApp.Models;
+using BlazorApp.Share.Entities;
 using BlazorApp.Share.Enums;
-using BlazorApp.Share.Models;
-using BlazorApp.Share.Models.Dto;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using RestSharp;
@@ -12,83 +11,70 @@ using Syncfusion.Blazor;
 using Syncfusion.Blazor.Popups;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-
 namespace BlazorApp.Components;
 
-public partial class  ShiftFormComponent
+public partial class ShiftFormComponent
 {
-    public string Title { get; set; }
+    [Inject] HttpClient                  HttpClient { get; set; }
+    [Inject] ILogger<ShiftFormComponent> Logger     { get; set; }
+    public   string                      Title      { get; set; }
 
-    public ShiftDto ShiftModel { get; set; } = new ShiftDto
+    protected bool     IsAddingSuccess = false;
+    private   SfDialog DialogObj;
+
+    private IList<Employee>  _employees = new List<Employee>();
+    private IList<Client>    _clients   = new List<Client>();
+    private IList<StatusDto> _status;
+
+    public ShiftDto ShiftModel { get; set; } = new()
     {
-        Date = DateTime.Now,
-        DevationDto = new DevationDto()
+        Date         = DateTime.Now,
+        DeviationDto = new DeviationDto()
     };
 
-    private SfDialog DialogObj;
-
-    private IList<Employee> _employees = new List<Employee>();
-    private IList<Client> _clients = new List<Client>();
-    private IList<StatusDto> _status;
-    [Inject]
-    HttpClient Http { get; set; }
-    
     protected override async Task OnInitializedAsync()
     {
         _employees = (await EmployeeApiConsumer.GetAll()).Data;
-        _clients = (await ClientApiConsumer.GetAll()).Data;
+        _clients   = (await ClientApiConsumer.GetAll()).Data;
         _status = new List<StatusDto>
         {
             new()
             {
-                Id = 1,
+                Id   = 1,
                 Name = "Planned"
             },
-            new StatusDto
+            new()
             {
-                Id = 2,
+                Id   = 2,
                 Name = "Approved"
             },
-            new StatusDto
+            new()
             {
-                Id = 3,
+                Id   = 3,
                 Name = "Completed"
             },
-            new StatusDto
+            new()
             {
-                Id = 4,
+                Id   = 4,
                 Name = "Pending"
             },
-            new StatusDto
+            new()
             {
-                Id = 5,
+                Id   = 5,
                 Name = "Rejected"
             }
         };
     }
-    
+
     protected CustomFormValidator customFormValidator;
-    
-    [Inject]
-    ILogger<ShiftFormComponent> Logger { get; set; }
-    protected bool isAddingSuccess = false;
-    
+
     private async Task HandleValidSubmit()
     {
         customFormValidator.ClearFormErrors();
-        isAddingSuccess = false;
+        IsAddingSuccess = false;
         try
         {
-            ResultDto<Shift> resultData;
-            if (ShiftModel.Id == 0)
-            {
-                resultData = await ShiftApiConsumer.AddShift(ShiftModel);
-            }
-            else
-            {
-                resultData = await ShiftApiConsumer.UpdateShift(ShiftModel);
-            }
-
+            var resultData = ShiftModel.Id == 0 ? await ShiftApiConsumer.AddShift(ShiftModel) : await ShiftApiConsumer.UpdateShift(ShiftModel);
             if (resultData.IsError)
             {
                 customFormValidator.DisplayFormErrors(resultData.ErrorDetails);
@@ -108,7 +94,7 @@ public partial class  ShiftFormComponent
     {
         // await Hide();
     }
-    
+
     private async Task OnCancel()
     {
         await Hide();

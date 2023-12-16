@@ -1,5 +1,6 @@
 using BlazorApp.Components;
-using BlazorApp.Share.Models;
+using BlazorApp.Models;
+using BlazorApp.Share.Entities;
 using Syncfusion.Blazor.Gantt;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
@@ -82,9 +83,9 @@ public partial class PlanningChart
                 
         Console.WriteLine($"shift TaskDto  {taskDto.TaskId}, shift TaskDto Duration {taskDto.Duration}");
 
-        if (shift.Devations.Any())
+        if (shift.Deviations.Any())
         {
-            var deviationDuration = shift.Devations.First().Duration;
+            var deviationDuration = shift.Deviations.First().Duration;
             taskDto.DeviationDuration = deviationDuration;
             taskDto.Progress = deviationDuration / (decimal)shift.Duration * 100;
                     
@@ -107,27 +108,27 @@ public partial class PlanningChart
             StartTime = shift.Date.ToDateTime(shift.StartTime),
             EndTime = shift.Date.ToDateTime(shift.EndTime),
             StatusId = ((int) shift.Status).ToString(),
-            DevationDto = ToDevationDto(shift)
+            DeviationDto = ToDeviationDto(shift)
         };
     }
 
-    public DevationDto ToDevationDto(Shift shift)
+    public DeviationDto ToDeviationDto(Shift shift)
     {
-        if (shift.Devations.Any())
+        if (shift.Deviations.Any())
         {
-            var devation = shift.Devations.First();
-            return new DevationDto
+            var Deviation = shift.Deviations.First();
+            return new DeviationDto
             {
-                Reason = devation.Reason,
-                EmployeeId = devation.EmployeeId.ToString(),
-                StatusId = ((int) devation.Status).ToString(),
-                StartTime = shift.Date.ToDateTime(devation.StartTime),
-                EndTime = shift.Date.ToDateTime(devation.EndTime),
-                DevationTypeId = ((int) devation.DeviationType).ToString(),
-                ShiftId = devation.ShiftId.ToString()
+                Reason = Deviation.Reason,
+                EmployeeId = Deviation.EmployeeId.ToString(),
+                StatusId = ((int) Deviation.Status).ToString(),
+                StartTime = shift.Date.ToDateTime(Deviation.StartTime),
+                EndTime = shift.Date.ToDateTime(Deviation.EndTime),
+                DeviationTypeId = ((int) Deviation.DeviationType).ToString(),
+                ShiftId = Deviation.ShiftId.ToString()
             };
         }
 
-        return new DevationDto();
+        return new DeviationDto();
     }
 }

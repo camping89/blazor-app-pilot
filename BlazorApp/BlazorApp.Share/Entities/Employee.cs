@@ -1,4 +1,4 @@
-namespace BlazorApp.Share.Models;
+namespace BlazorApp.Share.Entities;
 
 public class Employee : Entity
 {
@@ -10,5 +10,5 @@ public class Employee : Entity
     public int VacationDays { get; set; }
     
     public List<Shift> Shifts { get; set; }
-    public List<Devation> Deviations { get; set; }
+    public List<Deviation> Deviations { get; set; }
 }
