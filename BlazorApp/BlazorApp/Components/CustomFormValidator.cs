@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace BlazorApp.Components.Base;
+namespace BlazorApp.Components;
 
 public class CustomFormValidator : ComponentBase
 {
