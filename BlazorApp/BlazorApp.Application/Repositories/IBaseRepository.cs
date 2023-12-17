@@ -13,21 +13,29 @@ public interface IBaseRepository<T> where T : Entity
 
 public class BaseRepository<T> : IBaseRepository<T> where T : Entity
 {
-    private readonly ICacheService _cacheService;
+    protected static ICacheService _cacheService;
 
     public BaseRepository(ICacheService cacheService) => _cacheService = cacheService;
 
     public async Task<T?> Get(string id) => await _cacheService.Get<T>(id);
 
-    public async Task<List<T>> Get() => await _cacheService.GetByPrefix<T>();
+    public virtual async Task<List<T>> Get()
+    {
+        var data = await _cacheService.GetByPrefix<T>();
+        return data;
+    }
 
     public async Task Add(T entity)
     {
+        var currentDateTime = DateTime.UtcNow;
+        entity.CreatedAt = currentDateTime;
+        entity.ModifiedAt = currentDateTime;
         await _cacheService.Set(entity.Id.ToString(), entity);
     }
 
     public async Task Update(string id, T entity)
     {
+        entity.ModifiedAt = DateTime.UtcNow;
         await _cacheService.Set(entity.Id.ToString(), entity);
     }
 

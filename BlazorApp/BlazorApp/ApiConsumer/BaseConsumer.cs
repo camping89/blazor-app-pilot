@@ -1,6 +1,6 @@
 using RestSharp;
 
-namespace BlazorApp.Services;
+namespace BlazorApp.ApiConsumer;
 
 public class BaseConsumer
 {

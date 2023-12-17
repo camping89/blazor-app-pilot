@@ -1,6 +1,7 @@
 using BlazorApp.Components;
 using BlazorApp.Models;
 using BlazorApp.Share.Entities;
+using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Gantt;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
@@ -10,8 +11,8 @@ namespace BlazorApp.Pages;
 public partial class PlanningChart
 {
     private List<TaskDto> TaskCollection { get; set; } = new List<TaskDto>();
-    public SfGantt<TaskDto> Gantt;
-    public ShiftFormComponent ShiftForm;
+    private SfGantt<TaskDto> _gantt;
+    private ShiftFormComponent _shiftForm;
     private bool VisibleProperty { get; set; } = false;
     
     public List<object> ToolbarItems = new List<object> { "CollapseAll", "ExpandAll", "ZoomToFit", new ItemModel() { Text = "Add Shift", TooltipText = "Add Shift", Id = "toolbarFilter" } };
@@ -20,8 +21,9 @@ public partial class PlanningChart
     {
         if (args.Item.Id == "toolbarFilter")
         {
-            ShiftForm.Title = "Add Shift";
-            await ShiftForm.Show();
+            _shiftForm.Title = "Add Shift";
+            _shiftForm.ResetData();
+            await _shiftForm.Show();
         }
     }
     
@@ -47,7 +49,6 @@ public partial class PlanningChart
         }
 
         this.VisibleProperty = false;
-        // await this.Gantt.RefreshAsync();
     }
     
     public async Task ActionBegin(GanttActionEventArgs<TaskDto> args)
@@ -56,10 +57,21 @@ public partial class PlanningChart
         {
             args.Cancel = true;
             var shift =  await ShiftApiConsumer.GetById(args.RowData.TaskId);
-            ShiftForm.ShiftModel = ToShiftDto(shift);
-            ShiftForm.Title = "Update Shift";
-            await ShiftForm.Show();
+            _shiftForm.ShiftModel = ToShiftDto(shift);
+            _shiftForm.Title = "Update Shift";
+            _shiftForm.IsDisplayedDeleteButton = true;
+            await _shiftForm.Show();
         }
+    }
+
+    private async Task OnShiftFromClose()
+    {
+        await OnInitializedAsync();
+    }
+    
+    private async Task ActionCompleted(GanttActionEventArgs<TaskDto> args)
+    {
+        await this._gantt.RefreshAsync();
     }
 
     private TaskDto ToTaskDto(Shift shift, string employeeName)
@@ -71,7 +83,7 @@ public partial class PlanningChart
             EndDate = shift.Date.ToDateTime(shift.EndTime),
             Duration = shift.Duration.ToString(),
             TaskName = shift.Title,
-            Progress = 100,
+            Progress = 0,
             DurationUnit = "minute",
             EmployeeName = employeeName
         };
@@ -83,12 +95,15 @@ public partial class PlanningChart
                 
         Console.WriteLine($"shift TaskDto  {taskDto.TaskId}, shift TaskDto Duration {taskDto.Duration}");
 
-        if (shift.Deviations.Any())
+        if (shift.Deviations != null && shift.Deviations.Any())
         {
-            var deviationDuration = shift.Deviations.First().Duration;
-            taskDto.DeviationDuration = deviationDuration;
-            taskDto.Progress = deviationDuration / (decimal)shift.Duration * 100;
-                    
+            var deviation = shift.Deviations.First();
+            if (deviation is not null)
+            {
+                var deviationDuration = shift.Deviations.First().Duration;
+                taskDto.DeviationDuration = deviationDuration;
+                taskDto.Progress = deviationDuration / (decimal)shift.Duration * 100;
+            }
         }
 
         return taskDto;
@@ -114,18 +129,18 @@ public partial class PlanningChart
 
     public DeviationDto ToDeviationDto(Shift shift)
     {
-        if (shift.Deviations.Any())
+        if (shift.Deviations != null && shift.Deviations.Any())
         {
-            var Deviation = shift.Deviations.First();
+            var deviation = shift.Deviations.First();
             return new DeviationDto
             {
-                Reason = Deviation.Reason,
-                EmployeeId = Deviation.EmployeeId.ToString(),
-                StatusId = ((int) Deviation.Status).ToString(),
-                StartTime = shift.Date.ToDateTime(Deviation.StartTime),
-                EndTime = shift.Date.ToDateTime(Deviation.EndTime),
-                DeviationTypeId = ((int) Deviation.DeviationType).ToString(),
-                ShiftId = Deviation.ShiftId.ToString()
+                Reason = deviation.Reason,
+                EmployeeId = deviation.EmployeeId.ToString(),
+                StatusId = ((int) deviation.Status).ToString(),
+                StartTime = shift.Date.ToDateTime(deviation.StartTime),
+                EndTime = shift.Date.ToDateTime(deviation.EndTime),
+                DeviationTypeId = ((int) deviation.DeviationType).ToString(),
+                ShiftId = deviation.ShiftId.ToString()
             };
         }
 

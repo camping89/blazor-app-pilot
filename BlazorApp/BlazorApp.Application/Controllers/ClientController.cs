@@ -21,7 +21,12 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("get")]
-    public async Task<List<Client>> Get() => await _clientRepository.Get();
+    public async Task<IActionResult> Get()
+    {
+        var data = new ResultDto<List<Client>> { Data = await _clientRepository.Get() };
+
+        return Ok(data);
+    }
 
     // [HttpGet("get-all")]
     // public async Task<IActionResult> Get()

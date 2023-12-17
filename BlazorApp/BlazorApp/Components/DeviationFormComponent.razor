@@ -20,7 +20,7 @@
 
 <div class="form-group">
     <label for="endTime">Status:</label>
-    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_status" @bind-Value="@DeviationDto.StatusId">
+    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
         <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
     </SfDropDownList>
 </div>

@@ -1,3 +1,4 @@
+using BlazorApp.Application.Repositories;
 using BlazorApp.Application.Services;
 using BlazorApp.Share.Dtos;
 using BlazorApp.Share.Entities;
@@ -9,44 +10,40 @@ namespace BlazorApp.Application.Controllers;
 [Route("[controller]")]
 public class EmployeeController : ControllerBase
 {
-    private static IList<Employee> _employees = new List<Employee>();
-    private readonly GenerateService _generateService;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IDeviationRepository _deviationRepository;
+    private readonly IShiftRepository _shiftRepository;
     
-    public EmployeeController(GenerateService generateService)
+    public EmployeeController(IEmployeeRepository employeeRepository, IDeviationRepository deviationRepository, IShiftRepository shiftRepository)
     {
-        _generateService = generateService;
+        _employeeRepository = employeeRepository;
+        _deviationRepository = deviationRepository;
+        _shiftRepository = shiftRepository;
     }
     
-    [HttpGet("get-all")]
-    public async Task<IActionResult> GetAll()
+    [HttpGet("get")]
+    public async Task<IActionResult> Get()
     {
-        if (!_employees.Any())
+        var employees = await _employeeRepository.Get();
+        foreach (var employee in employees)
         {
-            var testData =  _generateService.GenerateTestData();
-            foreach (var employee in testData.Employees)
+            var shifts = await _shiftRepository.GetByEmployeeId(employee.Id);
+            foreach (var shift in shifts)
             {
-                var shifts = testData.Shifts.Where(shift => shift.EmployeeId == employee.Id).ToList();
-                employee.Shifts = shifts;
-                foreach (var shift in shifts)
+                var deviation = await _deviationRepository.GetByShiftId(shift.Id);
+                if (deviation is not null)
                 {
-                    shift.Deviations = new List<Deviation>
-                    {
-                        testData.Deviations
-                            .Last(deviation => deviation.ShiftId == shift.Id && employee.Id == deviation.EmployeeId)
-                    };
-                    Console.WriteLine(
-                        $"shift id {shift.Id}, shift Duration {shift.Duration}, deviation id {shift.Deviations.First().Id}, deviation duration {shift.Deviations.First().Duration}");
-                    shift.Client = testData.Clients.FirstOrDefault(client => client.Id == shift.ClientId);
+                    shift.Deviations = new List<Deviation> { deviation };
                 }
             }
 
-            _employees =  testData.Employees;
+            employee.Shifts = shifts.ToList();
         }
-
-        var returnData = new ResultDto<IList<Employee>>
+        var data = new ResultDto<IList<Employee>>
         {
-            Data = _employees
+            Data = employees
         };
-        return Ok(returnData);
+
+        return Ok(data);
     }
 }

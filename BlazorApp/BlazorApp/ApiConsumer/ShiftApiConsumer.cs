@@ -4,7 +4,7 @@ using BlazorApp.Share.Dtos;
 using BlazorApp.Share.Entities;
 using RestSharp;
 
-namespace BlazorApp.Services;
+namespace BlazorApp.ApiConsumer;
 
 public class ShiftApiConsumer : BaseConsumer
 {
@@ -20,7 +20,7 @@ public class ShiftApiConsumer : BaseConsumer
         }, jsonOptions);
         
         var request =
-            new RestRequest("Shift/add-shift", Method.Post).AddParameter("application/json", json,
+            new RestRequest("Shift/add", Method.Post).AddParameter("application/json", json,
                 ParameterType.RequestBody);
         
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);
@@ -39,7 +39,7 @@ public class ShiftApiConsumer : BaseConsumer
         }, jsonOptions);
         
         var request =
-            new RestRequest("Shift/update-shift", Method.Post).AddParameter("application/json", json,
+            new RestRequest("Shift/update", Method.Post).AddParameter("application/json", json,
                 ParameterType.RequestBody);
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);
         

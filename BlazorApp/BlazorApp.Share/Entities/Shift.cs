@@ -4,8 +4,6 @@ namespace BlazorApp.Share.Entities;
 
 public class Shift : Entity
 {
-    public DateTime CreatedAt  { get; set; }
-    public DateTime ModifiedAt { get; set; }
     public int     EmployeeId { get; set; }
     public int     ClientId   { get; set; }
     public string   Title      { get; set; }
@@ -13,7 +11,7 @@ public class Shift : Entity
     public TimeOnly StartTime  { get; set; }
     public TimeOnly EndTime    { get; set; }
     public int      Duration   => (int) (EndTime - StartTime).TotalMinutes;
-    public Status   Status     { get; set; }
+    public ShiftStatus   Status     { get; set; }
 
     public List<Deviation>? Deviations { get; set; }
 

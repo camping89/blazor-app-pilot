@@ -26,18 +26,35 @@ public class ShiftDto
     public string StatusId { get; set; }
 
     public DeviationDto DeviationDto { get; set; }
+    public string EmployeeName { get; set; }
 
-    public Shift ToShift() => new()
+    public Shift ToShift()
     {
-        Id         = Id,
-        CreatedAt  = CreatedAt,
-        ModifiedAt = ModifiedAt,
-        EmployeeId = int.Parse(EmployeeId),
-        ClientId   = int.Parse(ClientId),
-        Title      = Title,
-        Date       = new DateOnly(Date.Year, Date.Month, Date.Day),
-        StartTime  = new TimeOnly(StartTime.Hour, StartTime.Minute, StartTime.Second),
-        EndTime    = new TimeOnly(EndTime.Hour,   EndTime.Minute,   EndTime.Second),
-        Status     = StatusId.ToEnum<Status>()
-    };
+        var shift = new Shift
+        {
+            Id = Id,
+            CreatedAt = CreatedAt,
+            ModifiedAt = ModifiedAt,
+            EmployeeId = int.Parse(EmployeeId),
+            ClientId = int.Parse(ClientId),
+            Title = Title,
+            Date = new DateOnly(Date.Year, Date.Month, Date.Day),
+            StartTime = new TimeOnly(StartTime.Hour, StartTime.Minute, StartTime.Second),
+            EndTime = new TimeOnly(EndTime.Hour, EndTime.Minute, EndTime.Second),
+            Status = StatusId.ToEnum<ShiftStatus>(),
+            
+        };
+
+        if (DeviationDto is not null)
+        {
+            if (DeviationDto.DeviationTypeId.ToEnum<DeviationType>() != DeviationType.None)
+            {
+                DeviationDto.EmployeeId = EmployeeId;
+                DeviationDto.ShiftId = Id.ToString();
+                shift.Deviations = new List<Deviation> { DeviationDto.ToDeviation() };
+            }
+        }
+
+        return shift;
+    }
 }

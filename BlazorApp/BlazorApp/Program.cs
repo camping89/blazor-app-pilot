@@ -1,7 +1,7 @@
+using BlazorApp.ApiConsumer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using BlazorApp.Data;
-using BlazorApp.Services;
 using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,10 +1,7 @@
 @page "/planningchart"
-@using BlazorApp.Data
-@using Syncfusion.Blazor.Navigations
 @using BlazorApp.Components
 @using BlazorApp.Models
-@using BlazorApp.Services
-@using SelectionMode = Syncfusion.Blazor.Grids.SelectionMode
+@using BlazorApp.ApiConsumer
 @inject EmployeeApiConsumer EmployeeApiConsumer
 @inject ShiftApiConsumer ShiftApiConsumer
 
@@ -18,7 +15,7 @@
 }
 else
 {
-    <SfGantt @ref="Gantt" DataSource="@TaskCollection" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
+    <SfGantt @ref="_gantt" DataSource="@TaskCollection" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
         <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
         </GanttTaskFields>
         @* <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day"></GanttTimelineSettings> *@
@@ -29,17 +26,17 @@ else
         <GanttTooltipSettings ShowTooltip="true" TValue="TaskDto">
             <TaskbarTemplate>
                 @{
-                                        <div>@context.TaskName</div>
-                                        <div>Start Time: @context.StartDate</div>
-                                        <div>End Time: @context.EndDate</div>
-                                        <div>Shift Duration: @context.Duration Minutes</div>
-                                        <div>Deviation Duration: @context.DeviationDuration Minutes</div>
-                                        }
+                    <div>@context.TaskName</div>
+                    <div>Start Time: @context.StartDate</div>
+                    <div>End Time: @context.EndDate</div>
+                    <div>Shift Duration: @context.Duration Minutes</div>
+                    <div>Deviation Duration: @context.DeviationDuration Minutes</div>
+                }
             </TaskbarTemplate>
         </GanttTooltipSettings>
         <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
         </GanttEditSettings>
-        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto" OnActionBegin="ActionBegin"></GanttEvents>
+        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto" OnActionBegin="ActionBegin" OnActionComplete="ActionCompleted"></GanttEvents>
         <GanttColumns>
             <GanttColumn Field="EmployeeName" HeaderText="Employee" AllowEditing="false"> </GanttColumn>
         </GanttColumns>
@@ -47,7 +44,7 @@ else
         @*         </SfSpinner> *@
     </SfGantt>
 
-    <ShiftFormComponent @ref="ShiftForm"  />
+    <ShiftFormComponent @ref="_shiftForm" OnShiftFromCloseCallback="OnShiftFromClose" />
 }
 
 @* <div id="container"> *@

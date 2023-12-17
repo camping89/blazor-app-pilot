@@ -57,7 +57,7 @@ public class CacheService : ICacheService
                                                new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_defaultExpirationInMinutes) },
                                                cancellationToken);
 
-        CacheKeys.TryAdd(key, 0);
+        CacheKeys.TryAdd(cacheKey, 0);
     }
 
     public async Task Remove(string key, CancellationToken cancellationToken = default)
@@ -82,9 +82,17 @@ public class CacheService : ICacheService
     public async Task<List<T>> GetByPrefix<T>(string prefix = "", CancellationToken cancellationToken = default) where T : class
     {
         var cacheKey = GetCacheName<T>(prefix).ToLower();
-        var tasks    = CacheKeys.Keys.Where(key => key.ToLower().StartsWith(cacheKey)).Select(key => Get<T>(key, cancellationToken)).ToList();
+        var keys    = CacheKeys.Keys.Where(key => key.ToLower().StartsWith(cacheKey));
+        var result = new List<T>();
+        foreach (var key in keys)
+        {
+            var cachedValue = await _distributedCache.GetStringAsync(key, cancellationToken);
+            if (cachedValue is null) continue;
 
-        var result = await Task.WhenAll(tasks.ToArray());
-        return result.Where(i => i != null).ToList()!;
+            var entity = JsonConvert.DeserializeObject<T>(cachedValue);
+            if (entity != null) result.Add(entity);
+        }
+
+        return result;
     }
 }
