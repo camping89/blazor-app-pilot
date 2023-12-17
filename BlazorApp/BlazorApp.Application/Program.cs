@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
-using BlazorApp.Application.Repositories;
+using BlazorApp.Application.Caching;
+using BlazorApp.Application.Repositories.Implementations;
+using BlazorApp.Application.Repositories.Interfaces;
 using BlazorApp.Application.Services;
 using BlazorApp.Share.Entities;
 
@@ -22,7 +24,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 
-builder.Services.AddSingleton<GenerateService>();
 builder.Services.AddSingleton<DeviationService>();
 builder.Services.AddTransient<IBaseRepository<Shift>, BaseRepository<Shift>>();
 builder.Services.AddTransient<IShiftRepository, ShiftRepository>();
@@ -32,14 +33,13 @@ builder.Services.AddTransient<IBaseRepository<Client>, BaseRepository<Client>>()
 builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IBaseRepository<Employee>, BaseRepository<Employee>>();
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddTransient<IRandomRepository, RandomRepository>();
+builder.Services.AddTransient<IRandomDataProvider, RandomDataProvider>();
 
 
 var app = builder.Build();
 
-await (app.Services.GetService<IRandomRepository>())?.RandomData()!;
-
-
+// random data and store to cache
+await (app.Services.GetService<IRandomDataProvider>())?.Generate()!;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

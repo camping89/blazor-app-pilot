@@ -1,7 +1,4 @@
-using BlazorApp.ApiConsumer;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using BlazorApp.Data;
+using BlazorApp.Services;
 using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,12 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSyncfusionBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddSingleton<GenerateService>();
-builder.Services.AddSingleton<ShiftApiConsumer>();
-builder.Services.AddSingleton<EmployeeApiConsumer>();
-builder.Services.AddSingleton<ClientApiConsumer>();
-builder.Services.AddSingleton<DeviationApiConsumer>();
+builder.Services.AddSingleton<ShiftApiService>();
+builder.Services.AddSingleton<EmployeeApiService>();
+builder.Services.AddSingleton<ClientApiService>();
+builder.Services.AddSingleton<DeviationApiService>();
 
 var app = builder.Build();
 

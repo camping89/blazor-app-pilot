@@ -1,7 +1,7 @@
-using BlazorApp.Application.Repositories;
-using BlazorApp.Share.Dtos;
+using BlazorApp.Application.Repositories.Interfaces;
 using BlazorApp.Share.Entities;
 using BlazorApp.Share.Enums;
+using BlazorApp.Share.ValueObjects;
 
 namespace BlazorApp.Application.Services;
 
@@ -24,10 +24,10 @@ public class DeviationService
                 var existingDeviation = await _deviationRepository.Get(deviation.Id.ToString());
                 if (existingDeviation is null)
                 {
-                    returnData.ErrorDetails.Add(nameof(deviation.Id), new List<string>{"The DeviationId is not existing"});
+                    returnData.ErrorDetails.Add(nameof(deviation.Id), new List<string> { "The DeviationId is not existing" });
                 }
             }
-            
+
             if (deviation.StartTime >= deviation.EndTime)
             {
                 returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Start Time should be less than the End Time" });
@@ -55,7 +55,7 @@ public class DeviationService
 
         return new ResultDto<Deviation>();
     }
-    
+
     private static void ValidateDeviationTime(Deviation deviation, Shift shift, ResultDto<Deviation> returnData)
     {
         switch (deviation.DeviationType)
@@ -70,7 +70,9 @@ public class DeviationService
                 {
                     returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
                 }
+
                 break;
+
             case DeviationType.Lateness:
                 if (deviation.EndTime != shift.EndTime)
                 {
@@ -81,7 +83,9 @@ public class DeviationService
                 {
                     returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
                 }
+
                 break;
+
             case DeviationType.EarlyLeave:
                 if (deviation.StartTime != shift.StartTime)
                 {
@@ -92,10 +96,11 @@ public class DeviationService
                 {
                     returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
                 }
+
                 break;
         }
     }
-    
+
     public bool HasDeviation(Deviation deviation)
     {
         return deviation.DeviationType != DeviationType.None;

@@ -15,21 +15,23 @@ namespace BlazorApp.Components;
 
 public partial class ShiftFormComponent
 {
-    [Inject] ILogger<ShiftFormComponent> Logger     { get; set; }
-    public   string                      Title      { get; set; }
-    
-    private   SfDialog DialogObj;
-
-    private IList<Employee>  _employees = new List<Employee>();
-    private IList<Client>    _clients   = new List<Client>();
-    private IList<StatusDto> _shiftStatus;
-    private IList<StatusDto> _deviationStatus;
-    public bool IsDisplayedDeleteButton = false;
-    
     [Parameter]
     public EventCallback OnShiftFormCloseCallback { get; set; }
 
-    public ShiftDto ShiftModel { get; set; } = new()
+    [Inject] private ILogger<ShiftFormComponent> Logger { get; set; }
+    public           string                      Title  { get; set; }
+
+    protected CustomFormValidator customFormValidator;
+
+    private SfDialog Dialog;
+
+    private List<Employee>  _employees = new();
+    private List<Client>    _clients   = new();
+    private List<StatusDto> _shiftStatus;
+    private List<StatusDto> _deviationStatus;
+    public  bool            IsDisplayedDeleteButton = false;
+
+    public ShiftDto Shift { get; set; } = new()
     {
         Date         = DateTime.Now,
         DeviationDto = new DeviationDto()
@@ -37,8 +39,8 @@ public partial class ShiftFormComponent
 
     protected override async Task OnInitializedAsync()
     {
-        _employees = (await EmployeeApiConsumer.GetAll()).Data;
-        _clients   = (await ClientApiConsumer.GetAll()).Data;
+        _employees = (await EmployeeApiService.Get()).Payload;
+        _clients   = (await ClientApiService.Get()).Payload;
         _shiftStatus = new List<StatusDto>
         {
             new()
@@ -57,26 +59,22 @@ public partial class ShiftFormComponent
                 Name = "Completed"
             }
         };
-
-        
     }
-
-    protected CustomFormValidator customFormValidator;
 
     private async Task HandleValidSubmit()
     {
         customFormValidator.ClearFormErrors();
         try
         {
-            var resultData = ShiftModel.Id == 0 ? await ShiftApiConsumer.Add(ShiftModel) : await ShiftApiConsumer.Update(ShiftModel);
+            var resultData = Shift.Id == 0 ? await ShiftApiService.Add(Shift) : await ShiftApiService.Update(Shift);
             if (resultData.IsError)
             {
                 customFormValidator.DisplayFormErrors(resultData.ErrorDetails);
                 throw new HttpRequestException("Validation failed.");
             }
 
-            ShiftModel.EmployeeName = resultData.Data.Employee.Name;
-            
+            Shift.EmployeeName = resultData.Payload.Employee.Name;
+
             await Hide();
             Logger.LogInformation("The registration is successful");
         }
@@ -98,18 +96,22 @@ public partial class ShiftFormComponent
 
     public async Task Hide()
     {
-        await this.DialogObj.HideAsync();
+        await Dialog.HideAsync();
         await OnShiftFormCloseCallback.InvokeAsync();
         IsDisplayedDeleteButton = false;
     }
 
     public async Task Show()
     {
-        await this.DialogObj.ShowAsync();
+        await Dialog.ShowAsync();
     }
 
     public void ResetData()
     {
-        ShiftModel = new ShiftDto { Date = DateTime.Now, DeviationDto = new DeviationDto() };
+        Shift = new ShiftDto
+        {
+            Date         = DateTime.Now,
+            DeviationDto = new DeviationDto()
+        };
     }
 }

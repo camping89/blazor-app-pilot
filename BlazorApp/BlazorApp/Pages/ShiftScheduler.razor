@@ -1,0 +1,21 @@
+@page "/shift-sheduler"
+@using System.Drawing
+@using BlazorApp.Models
+@using BlazorApp.Services
+@inject EmployeeApiService EmployeeApiService
+
+<PageTitle>Shift _shiftScheduler</PageTitle>
+
+<h1>Shift _shiftScheduler</h1>
+
+<SfSchedule  @ref="_shiftScheduler"  TValue=ShiftSchedulerDto> 
+    <ScheduleEventSettings DataSource="@DataSource" AllowEditing="false" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+    <ScheduleEvents TValue="ShiftSchedulerDto" EventRendered="OnEventRendered"></ScheduleEvents> 
+    <ScheduleViews>
+        <ScheduleView Option="View.Day"></ScheduleView>
+        <ScheduleView Option="View.Week"></ScheduleView>
+        <ScheduleView Option="View.WorkWeek"></ScheduleView>
+        <ScheduleView Option="View.Month"></ScheduleView>
+        <ScheduleView Option="View.Agenda"></ScheduleView>
+    </ScheduleViews>
+</SfSchedule>

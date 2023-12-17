@@ -1,0 +1,118 @@
+@page "/shift-planning"
+@using BlazorApp.Components
+@using BlazorApp.Models
+@using BlazorApp.Services
+@inject EmployeeApiService EmployeeApiService
+@inject ShiftApiService    ShiftApiService
+
+<PageTitle>Planning Chart</PageTitle>
+<h1>Planning Chart</h1>
+
+@if (ShiftPlanningDtos is null || !ShiftPlanningDtos.Any())
+{
+    <SfSpinner @bind-Visible="@VisibleProperty" CssClass="e-spin-overlay">
+    </SfSpinner>
+}
+else
+{
+    <SfGantt @ref="_gantt" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
+        <GanttTaskFields Id="Id" Name="Title" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="minute" Progress="Progress" ParentID="ParentId">
+        </GanttTaskFields>
+        <GanttTimelineSettings >
+            <GanttTopTierSettings Unit="TimelineViewMode.Day" Format="MMMM-dd-yyyy"></GanttTopTierSettings>
+            <GanttBottomTierSettings Unit="TimelineViewMode.Hour"></GanttBottomTierSettings>
+        </GanttTimelineSettings>
+        <GanttTooltipSettings ShowTooltip="true" TValue="ShiftPlanningDto">
+            <TaskbarTemplate>
+                @{
+                    <div>Shift Title: @context.Title</div>
+                    <div>Start Time: @context.StartDate</div>
+                    <div>End Time: @context.EndDate</div>
+                    <div>Shift Duration: @context.Duration Minutes</div>
+                    <div>Deviation Duration: @context.DeviationDuration Minutes</div>
+                }
+            </TaskbarTemplate>
+        </GanttTooltipSettings>
+        <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
+        </GanttEditSettings>
+        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="ShiftPlanningDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo"></GanttEvents>
+        <GanttColumns>
+            <GanttColumn Field="EmployeeName" HeaderText="Employee Shift" AllowEditing="false"> </GanttColumn>
+        </GanttColumns>
+        @* <SfSpinner @bind-Visible="@VisibleProperty" CssClass="e-spin-overlay"> *@
+        @*         </SfSpinner> *@
+    </SfGantt>
+
+    <ShiftFormComponent @ref="_shiftForm" OnShiftFormCloseCallback="OnShiftFormClose"/>
+    <AddDeviationFormComponent @ref="_deviationForm" OnAddUpdateDeviationFormCloseCallback="OnAddUpdateDeviationFormClose"/>
+}
+
+<style>
+    .Gantt {
+        height: 100vh;
+        width: 100vw;
+        border: 2px solid;
+        padding: 20px;
+        resize: both;
+        overflow: auto;
+    }
+    
+   #container {
+               position: relative;
+               height: 550px;
+  }
+  
+  .customize-task-parent-1 .e-gantt-parent-taskbar {
+    background-color: #0c4128 !important;
+  }
+  
+  .customize-task-child-1 .e-gantt-child-taskbar {
+      background-color: #0c4128 !important;
+    }
+   
+  .customize-task-parent-2 .e-gantt-parent-taskbar {
+    background-color: #0a58ca !important;
+  }
+  
+  .customize-task-child-2 .e-gantt-child-taskbar {
+      background-color: #0a58ca !important;
+    }
+  
+   .customize-task-parent-3 .e-gantt-parent-taskbar {
+      background-color: #0dcaf0 !important;
+    }
+    
+ .customize-task-child-3 .e-gantt-child-taskbar {
+      background-color: #0dcaf0 !important;
+    }
+    
+    .customize-task-parent-4 .e-gantt-parent-taskbar {
+          background-color: #3a0647 !important;
+        }
+        
+     .customize-task-child-4 .e-gantt-child-taskbar{
+              background-color: #3a0647 !important;
+            }
+        
+    .customize-task-parent-5 .e-gantt-parent-taskbar {
+              background-color: #6a1a21 !important;
+            }      
+            
+    .customize-task-child-5 .e-gantt-child-taskbar {
+                  background-color: #6a1a21 !important;
+                }  
+            
+     .customize-task-parent-5 .e-gantt-parent-taskbar {
+      background-color: #86b7fe !important;
+    }      
+    
+    .customize-task-child-5  .e-gantt-child-taskbar {
+          background-color: #86b7fe !important;
+        }            
+        
+        
+    .customize-child .e-gantt-child-taskbar {
+            background-color: red !important;
+        }                                                                            
+
+</style>

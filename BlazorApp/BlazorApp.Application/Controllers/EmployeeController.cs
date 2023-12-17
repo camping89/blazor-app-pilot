@@ -1,7 +1,6 @@
-using BlazorApp.Application.Repositories;
-using BlazorApp.Application.Services;
-using BlazorApp.Share.Dtos;
+using BlazorApp.Application.Repositories.Interfaces;
 using BlazorApp.Share.Entities;
+using BlazorApp.Share.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorApp.Application.Controllers;
@@ -10,19 +9,23 @@ namespace BlazorApp.Application.Controllers;
 [Route("[controller]")]
 public class EmployeeController : ControllerBase
 {
-    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IEmployeeRepository  _employeeRepository;
     private readonly IDeviationRepository _deviationRepository;
-    private readonly IShiftRepository _shiftRepository;
-    private readonly IClientRepository _clientRepository;
-    
-    public EmployeeController(IEmployeeRepository employeeRepository, IDeviationRepository deviationRepository, IShiftRepository shiftRepository, IClientRepository clientRepository)
+    private readonly IShiftRepository     _shiftRepository;
+    private readonly IClientRepository    _clientRepository;
+
+    public EmployeeController
+    (IEmployeeRepository  employeeRepository,
+     IDeviationRepository deviationRepository,
+     IShiftRepository     shiftRepository,
+     IClientRepository    clientRepository)
     {
-        _employeeRepository = employeeRepository;
+        _employeeRepository  = employeeRepository;
         _deviationRepository = deviationRepository;
-        _shiftRepository = shiftRepository;
-        _clientRepository = clientRepository;
+        _shiftRepository     = shiftRepository;
+        _clientRepository    = clientRepository;
     }
-    
+
     [HttpGet("get")]
     public async Task<IActionResult> Get()
     {
@@ -44,10 +47,8 @@ public class EmployeeController : ControllerBase
 
             employee.Shifts = shifts.ToList();
         }
-        var data = new ResultDto<IList<Employee>>
-        {
-            Data = employees
-        };
+
+        var data = new ResultDto<List<Employee>> { Payload = employees };
 
         return Ok(data);
     }
