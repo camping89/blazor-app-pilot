@@ -44,8 +44,8 @@ else
         @*         </SfSpinner> *@
     </SfGantt>
 
-    <ShiftFormComponent @ref="_shiftForm" OnShiftFromCloseCallback="OnShiftFromClose" />
-    <AddDeviationFormComponent @ref="_deviationForm"  />
+    <ShiftFormComponent @ref="_shiftForm" OnShiftFormCloseCallback="OnShiftFormClose" />
+    <AddDeviationFormComponent @ref="_deviationForm" OnAddUpdateDeviationFormCloseCallback="OnAddUpdateDeviationFormClose"  />
 }
 
 @* <div id="container"> *@

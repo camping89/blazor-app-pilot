@@ -23,6 +23,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSingleton<ICacheService, CacheService>();
 
 builder.Services.AddSingleton<GenerateService>();
+builder.Services.AddSingleton<DeviationService>();
 builder.Services.AddTransient<IBaseRepository<Shift>, BaseRepository<Shift>>();
 builder.Services.AddTransient<IShiftRepository, ShiftRepository>();
 builder.Services.AddTransient<IBaseRepository<Deviation>, BaseRepository<Deviation>>();

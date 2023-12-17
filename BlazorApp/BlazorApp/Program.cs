@@ -15,6 +15,7 @@ builder.Services.AddSingleton<GenerateService>();
 builder.Services.AddSingleton<ShiftApiConsumer>();
 builder.Services.AddSingleton<EmployeeApiConsumer>();
 builder.Services.AddSingleton<ClientApiConsumer>();
+builder.Services.AddSingleton<DeviationApiConsumer>();
 
 var app = builder.Build();
 

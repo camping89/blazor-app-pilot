@@ -3,7 +3,6 @@ using BlazorApp.Application.Services;
 using BlazorApp.Share.Dtos;
 using BlazorApp.Share.Entities;
 using BlazorApp.Share.Enums;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorApp.Application.Controllers;
@@ -16,13 +15,15 @@ public class ShiftController : ControllerBase
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IClientRepository _clientRepository;
     private readonly IDeviationRepository _deviationRepository;
+    private readonly DeviationService _deviationService;
 
-    public ShiftController(IShiftRepository shiftRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IDeviationRepository deviationRepository)
+    public ShiftController(IShiftRepository shiftRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IDeviationRepository deviationRepository, DeviationService deviationService)
     {
         _shiftRepository = shiftRepository;
         _employeeRepository = employeeRepository;
         _clientRepository = clientRepository;
         _deviationRepository = deviationRepository;
+        this._deviationService = deviationService;
     }
 
     [HttpPost("add")]
@@ -35,7 +36,13 @@ public class ShiftController : ControllerBase
             if (input.Shift.Deviations != null && input.Shift.Deviations.Any())
             {
                 deviation = input.Shift.Deviations.First();
-                returnData = await ValidateDeviation(deviation, input.Shift, false);
+                var validateDeviationResultDto = await _deviationService.ValidateDeviation(deviation, input.Shift, false);
+                if (validateDeviationResultDto.IsError)
+                {
+                    returnData.ErrorDetails = validateDeviationResultDto.ErrorDetails;
+                    returnData.IsError = validateDeviationResultDto.IsError;
+                    return BadRequest(returnData);
+                }
             }
         }
         
@@ -47,7 +54,7 @@ public class ShiftController : ControllerBase
         input.Shift.Id = TestDataGenerator.GetId();
         await _shiftRepository.Add(input.Shift);
 
-        if (deviation is not null && HasDeviation(deviation))
+        if (deviation is not null && _deviationService.HasDeviation(deviation))
         {
             deviation.Id = TestDataGenerator.GetId();
             deviation.ShiftId = input.Shift.Id;
@@ -105,7 +112,13 @@ public class ShiftController : ControllerBase
             if (input.Shift.Deviations != null && input.Shift.Deviations.Any())
             {
                 deviation = input.Shift.Deviations.First();
-                returnData = await ValidateDeviation(deviation, input.Shift, true);
+                var validateDeviationResultDto = await _deviationService.ValidateDeviation(deviation, input.Shift, true);
+                if (validateDeviationResultDto.IsError)
+                {
+                    returnData.ErrorDetails = validateDeviationResultDto.ErrorDetails;
+                    returnData.IsError = validateDeviationResultDto.IsError;
+                    return BadRequest(returnData);
+                }
             }
         }
         
@@ -118,7 +131,7 @@ public class ShiftController : ControllerBase
         await _shiftRepository.Update(input.Shift.Id.ToString(), input.Shift);
         input.Shift.Employee = employee;
 
-        if (deviation is not null && HasDeviation(deviation))
+        if (deviation is not null && _deviationService.HasDeviation(deviation))
         {
             await _deviationRepository.Update(deviation.Id.ToString(), deviation);
             input.Shift.Deviations = new List<Deviation> { deviation };
@@ -186,93 +199,5 @@ public class ShiftController : ControllerBase
         }
 
         return returnData;
-    }
-
-    private async Task<ResultDto<Shift>> ValidateDeviation(Deviation deviation, Shift shift,  bool isUpdate)
-    {
-        if (HasDeviation(deviation))
-        {
-            var returnData = new ResultDto<Shift> { ErrorDetails = new Dictionary<string, List<string>>() };
-            if (isUpdate && deviation.Id != 0)
-            {
-                var existingDeviation = await _deviationRepository.Get(deviation.Id.ToString());
-                if (existingDeviation is null)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.Id), new List<string>{"The DeviationId is not existing"});
-                }
-            }
-            
-            if (deviation.StartTime >= deviation.EndTime)
-            {
-                returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Start Time should be less than the End Time" });
-            }
-
-            if (string.IsNullOrWhiteSpace(deviation.Reason))
-            {
-                returnData.ErrorDetails.Add(nameof(deviation.Reason), new List<string> { "The Reason should not be null or empty" });
-            }
-
-            if (deviation.Status == DeviationStatus.None)
-            {
-                returnData.ErrorDetails.Add(nameof(deviation.Status), new List<string> { "The Status is invalid" });
-            }
-
-            ValidateDeviationTime(deviation, shift, returnData);
-            
-
-            if (returnData.ErrorDetails.Any())
-            {
-                returnData.IsError = true;
-            }
-
-            return returnData;
-        }
-
-        return new ResultDto<Shift>();
-    }
-
-    private static void ValidateDeviationTime(Deviation deviation, Shift shift, ResultDto<Shift> returnData)
-    {
-        switch (deviation.DeviationType)
-        {
-            case DeviationType.Illness:
-                if (deviation.StartTime != shift.StartTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
-                }
-
-                if (deviation.EndTime != shift.EndTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
-                }
-                break;
-            case DeviationType.Lateness:
-                if (deviation.EndTime != shift.EndTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
-                }
-
-                if (deviation.StartTime < shift.StartTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
-                }
-                break;
-            case DeviationType.EarlyLeave:
-                if (deviation.StartTime != shift.StartTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
-                }
-
-                if (deviation.EndTime > shift.EndTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
-                }
-                break;
-        }
-    }
-
-    private bool HasDeviation(Deviation deviation)
-    {
-        return deviation.DeviationType != DeviationType.None;
     }
 }

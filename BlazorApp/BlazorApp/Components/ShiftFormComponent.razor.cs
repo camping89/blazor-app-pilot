@@ -15,7 +15,6 @@ namespace BlazorApp.Components;
 
 public partial class ShiftFormComponent
 {
-    [Inject] HttpClient                  HttpClient { get; set; }
     [Inject] ILogger<ShiftFormComponent> Logger     { get; set; }
     public   string                      Title      { get; set; }
     
@@ -28,7 +27,7 @@ public partial class ShiftFormComponent
     public bool IsDisplayedDeleteButton = false;
     
     [Parameter]
-    public EventCallback OnShiftFromCloseCallback { get; set; }
+    public EventCallback OnShiftFormCloseCallback { get; set; }
 
     public ShiftDto ShiftModel { get; set; } = new()
     {
@@ -69,7 +68,7 @@ public partial class ShiftFormComponent
         customFormValidator.ClearFormErrors();
         try
         {
-            var resultData = ShiftModel.Id == 0 ? await ShiftApiConsumer.AddShift(ShiftModel) : await ShiftApiConsumer.UpdateShift(ShiftModel);
+            var resultData = ShiftModel.Id == 0 ? await ShiftApiConsumer.Add(ShiftModel) : await ShiftApiConsumer.Update(ShiftModel);
             if (resultData.IsError)
             {
                 customFormValidator.DisplayFormErrors(resultData.ErrorDetails);
@@ -100,7 +99,7 @@ public partial class ShiftFormComponent
     public async Task Hide()
     {
         await this.DialogObj.HideAsync();
-        await OnShiftFromCloseCallback.InvokeAsync();
+        await OnShiftFormCloseCallback.InvokeAsync();
         IsDisplayedDeleteButton = false;
     }
 

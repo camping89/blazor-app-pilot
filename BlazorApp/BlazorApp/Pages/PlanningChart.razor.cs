@@ -32,8 +32,8 @@ public partial class PlanningChart
         
         if (args.Item.Id == "toolbarAddDeviation")
         {
-            _deviationForm.Title = "Add Deviation";
-            // _deviationForm.ResetData();
+            _deviationForm.Title = "Add/Update Deviation";
+            _deviationForm.ResetData();
             await _deviationForm.Show();
         }
     }
@@ -108,7 +108,12 @@ public partial class PlanningChart
         }
     }
 
-    private async Task OnShiftFromClose()
+    private async Task OnShiftFormClose()
+    {
+        await OnInitializedAsync();
+    }
+    
+    private async Task OnAddUpdateDeviationFormClose()
     {
         await OnInitializedAsync();
     }

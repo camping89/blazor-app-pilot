@@ -8,7 +8,7 @@ namespace BlazorApp.ApiConsumer;
 
 public class ShiftApiConsumer : BaseConsumer
 {
-    public async Task<ResultDto<Shift>> AddShift(ShiftDto shiftDto)
+    public async Task<ResultDto<Shift>> Add(ShiftDto shiftDto)
     {
         var jsonOptions = new JsonSerializerOptions
         {
@@ -27,7 +27,7 @@ public class ShiftApiConsumer : BaseConsumer
         return response.Data;
     }
 
-    public async Task<ResultDto<Shift>> UpdateShift(ShiftDto shiftDto)
+    public async Task<ResultDto<Shift>> Update(ShiftDto shiftDto)
     {
         var jsonOptions = new JsonSerializerOptions
         {
