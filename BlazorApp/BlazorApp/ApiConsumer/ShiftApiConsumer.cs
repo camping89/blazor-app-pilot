@@ -53,4 +53,12 @@ public class ShiftApiConsumer : BaseConsumer
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);
         return response.Data.Data;
     }
+
+    public async Task<List<Shift>> Get()
+    {
+        var request =
+            new RestRequest($"Shift/get");
+        var response = await GetRestClient().ExecuteAsync<ResultDto<List<Shift>>>(request);
+        return response.Data.Data;
+    }
 }

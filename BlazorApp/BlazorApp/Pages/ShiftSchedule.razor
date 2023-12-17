@@ -10,7 +10,7 @@
 <h1>Shift Scheduler</h1>
 
 <SfSchedule  @ref="Scheduler"  TValue=AppointmentDto> 
-    <ScheduleEventSettings DataSource="@DataSource" ></ScheduleEventSettings>
+    <ScheduleEventSettings DataSource="@DataSource" AllowEditing="false" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
     <ScheduleEvents TValue="AppointmentDto" EventRendered="OnEventRendered"></ScheduleEvents> 
     <ScheduleViews>
         <ScheduleView Option="View.Day"></ScheduleView>

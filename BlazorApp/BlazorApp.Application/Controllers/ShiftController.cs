@@ -3,6 +3,7 @@ using BlazorApp.Application.Services;
 using BlazorApp.Share.Dtos;
 using BlazorApp.Share.Entities;
 using BlazorApp.Share.Enums;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorApp.Application.Controllers;
@@ -63,6 +64,26 @@ public class ShiftController : ControllerBase
         returnData.Data = input.Shift;
         
         return Ok(returnData);
+    }
+    [HttpGet("get")]
+    public async Task<IActionResult> Get()
+    {
+        var shifts = await _shiftRepository.Get();
+        foreach (var shift in shifts)
+        {
+            var client = await _clientRepository.Get(shift.ClientId.ToString());
+            var employee = await _employeeRepository.Get(shift.EmployeeId.ToString());
+            var deviation = await _deviationRepository.GetByShiftId(shift.Id);
+            shift.Client = client;
+            shift.Employee = employee;
+            shift.Deviations = new List<Deviation> {deviation};
+        }
+
+        return Ok(new ResultDto<List<Shift>>
+        {
+            Data = shifts
+        });
+
     }
 
     [HttpGet("get/{Id}")]

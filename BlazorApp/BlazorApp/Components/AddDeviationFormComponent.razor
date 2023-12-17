@@ -1,0 +1,23 @@
+@using BlazorApp.Share.Entities
+@using BlazorApp.ApiConsumer
+@inject ShiftApiConsumer    ShiftApiConsumer
+
+<SfDialog Width="250px" IsModal="true" Visible="false" @ref="DialogObj">
+    <Header>@Title</Header>
+    <Content>
+        <EditForm id="shiftForm" Model="@_deviationDto" OnValidSubmit="HandleValidSubmit">
+            <ContentTemplate>
+                <DataAnnotationsValidator/>
+                
+                <div class="form-group">
+                    <label for="shift">Employee:</label>
+                    <SfDropDownList ID="shift" TValue="string" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a shift" @bind-Value="@_deviationDto.ShiftId" DataSource="@_shifts">
+                        <DropDownListFieldSettings Value="Id" Text="Title"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                    <ValidationMessage For="@(() => _deviationDto.ShiftId)"></ValidationMessage>
+                </div>
+                
+            </ContentTemplate>
+        </EditForm>
+    </Content>
+</SfDialog>

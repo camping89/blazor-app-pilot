@@ -20,7 +20,7 @@ else
         </GanttTaskFields>
         @* <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day"></GanttTimelineSettings> *@
         <GanttTimelineSettings >
-            <GanttTopTierSettings Unit="TimelineViewMode.Day" Format="MMM-dd"></GanttTopTierSettings>
+            <GanttTopTierSettings Unit="TimelineViewMode.Day" Format="MMMM-dd-yyyy" ></GanttTopTierSettings>
             <GanttBottomTierSettings Unit="TimelineViewMode.Hour"></GanttBottomTierSettings>
         </GanttTimelineSettings>
         <GanttTooltipSettings ShowTooltip="true" TValue="TaskDto">
@@ -36,15 +36,16 @@ else
         </GanttTooltipSettings>
         <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
         </GanttEditSettings>
-        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto" OnActionBegin="ActionBegin" OnActionComplete="ActionCompleted"></GanttEvents>
+        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="TaskDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo"></GanttEvents>
         <GanttColumns>
-            <GanttColumn Field="EmployeeName" HeaderText="Employee" AllowEditing="false"> </GanttColumn>
+            <GanttColumn Field="EmployeeName" HeaderText="Employee Shift" AllowEditing="false"> </GanttColumn>
         </GanttColumns>
         @* <SfSpinner @bind-Visible="@VisibleProperty" CssClass="e-spin-overlay"> *@
         @*         </SfSpinner> *@
     </SfGantt>
 
     <ShiftFormComponent @ref="_shiftForm" OnShiftFromCloseCallback="OnShiftFromClose" />
+    <AddDeviationFormComponent @ref="_deviationForm"  />
 }
 
 @* <div id="container"> *@
@@ -64,5 +65,58 @@ else
                position: relative;
                height: 550px;
   }
+  
+  .customize-task-parent-1 .e-gantt-parent-taskbar {
+    background-color: #0c4128 !important;
+  }
+  
+  .customize-task-child-1 .e-gantt-child-taskbar {
+      background-color: #0c4128 !important;
+    }
+   
+  .customize-task-parent-2 .e-gantt-parent-taskbar {
+    background-color: #0a58ca !important;
+  }
+  
+  .customize-task-child-2 .e-gantt-child-taskbar {
+      background-color: #0a58ca !important;
+    }
+  
+   .customize-task-parent-3 .e-gantt-parent-taskbar {
+      background-color: #0dcaf0 !important;
+    }
+    
+ .customize-task-child-3 .e-gantt-child-taskbar {
+      background-color: #0dcaf0 !important;
+    }
+    
+    .customize-task-parent-4 .e-gantt-parent-taskbar {
+          background-color: #3a0647 !important;
+        }
+        
+     .customize-task-child-4 .e-gantt-child-taskbar{
+              background-color: #3a0647 !important;
+            }
+        
+    .customize-task-parent-5 .e-gantt-parent-taskbar {
+              background-color: #6a1a21 !important;
+            }      
+            
+    .customize-task-child-5 .e-gantt-child-taskbar {
+                  background-color: #6a1a21 !important;
+                }  
+            
+     .customize-task-parent-5 .e-gantt-parent-taskbar {
+      background-color: #86b7fe !important;
+    }      
+    
+    .customize-task-child-5  .e-gantt-child-taskbar {
+          background-color: #86b7fe !important;
+        }            
+        
+        
+    .customize-child .e-gantt-child-taskbar {
+            background-color: red !important;
+        }                                                                            
 
 </style>

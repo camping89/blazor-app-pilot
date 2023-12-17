@@ -13,12 +13,14 @@ public class EmployeeController : ControllerBase
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IDeviationRepository _deviationRepository;
     private readonly IShiftRepository _shiftRepository;
+    private readonly IClientRepository _clientRepository;
     
-    public EmployeeController(IEmployeeRepository employeeRepository, IDeviationRepository deviationRepository, IShiftRepository shiftRepository)
+    public EmployeeController(IEmployeeRepository employeeRepository, IDeviationRepository deviationRepository, IShiftRepository shiftRepository, IClientRepository clientRepository)
     {
         _employeeRepository = employeeRepository;
         _deviationRepository = deviationRepository;
         _shiftRepository = shiftRepository;
+        _clientRepository = clientRepository;
     }
     
     [HttpGet("get")]
@@ -35,6 +37,9 @@ public class EmployeeController : ControllerBase
                 {
                     shift.Deviations = new List<Deviation> { deviation };
                 }
+
+                var client = await _clientRepository.Get(shift.ClientId.ToString());
+                shift.Client = client;
             }
 
             employee.Shifts = shifts.ToList();

@@ -13,17 +13,48 @@ public partial class PlanningChart
     private List<TaskDto> TaskCollection { get; set; } = new List<TaskDto>();
     private SfGantt<TaskDto> _gantt;
     private ShiftFormComponent _shiftForm;
+    private AddDeviationFormComponent _deviationForm;
     private bool VisibleProperty { get; set; } = false;
+    private int _index = 0;
     
-    public List<object> ToolbarItems = new List<object> { "CollapseAll", "ExpandAll", "ZoomToFit", new ItemModel() { Text = "Add Shift", TooltipText = "Add Shift", Id = "toolbarFilter" } };
+    public List<object> ToolbarItems = new List<object> { "CollapseAll", "ExpandAll", "ZoomToFit", 
+        new ItemModel() { Text = "Add Shift", TooltipText = "Add Shift", Id = "toolbarAddShift" },
+        new ItemModel() { Text = "Add Deviation", TooltipText = "Add Deviation", Id = "toolbarAddDeviation" } };
     
     public async Task ToolbarClickHandler(ClickEventArgs args)
     {
-        if (args.Item.Id == "toolbarFilter")
+        if (args.Item.Id == "toolbarAddShift")
         {
             _shiftForm.Title = "Add Shift";
             _shiftForm.ResetData();
             await _shiftForm.Show();
+        }
+        
+        if (args.Item.Id == "toolbarAddDeviation")
+        {
+            _deviationForm.Title = "Add Deviation";
+            // _deviationForm.ResetData();
+            await _deviationForm.Show();
+        }
+    }
+
+    private void GanttChartRowInfo(QueryChartRowInfoEventArgs<TaskDto> args)
+    {
+        if (args.Data.ParentId is null)
+        {
+            if (_index == 6)
+            {
+                _index = 1;
+            }
+            else
+            {
+                _index = _index + 1;
+            }
+            args.Row.AddClass(new string[] { $"customize-task-parent-{_index}" });
+        }
+        else
+        {
+            args.Row.AddClass(new string[] { $"customize-task-child-{_index}" });
         }
     }
     
@@ -42,8 +73,18 @@ public partial class PlanningChart
                 if (tasks.Any())
                 {
                     task.ParentId = tasks.First().TaskId;
+                    task.EmployeeName = $"Client: {task.ClientName}" ;
+                    tasks.Add(task);
                 }
-                tasks.Add(task);
+                else
+                {
+                    task.TaskId *= -1;
+                    tasks.Add(task);
+                    var subTask =ToTaskDto(shift, employee.Name);
+                    subTask.ParentId = tasks.First().TaskId;
+                    subTask.EmployeeName = $"Client: {task.ClientName}" ;
+                    tasks.Add(subTask);
+                }
             }
             TaskCollection.AddRange(tasks);
         }
@@ -56,22 +97,20 @@ public partial class PlanningChart
         if(args.RequestType == Syncfusion.Blazor.Gantt.Action.BeforeOpenEditDialog)
         {
             args.Cancel = true;
-            var shift =  await ShiftApiConsumer.GetById(args.RowData.TaskId);
-            _shiftForm.ShiftModel = ToShiftDto(shift);
-            _shiftForm.Title = "Update Shift";
-            _shiftForm.IsDisplayedDeleteButton = true;
-            await _shiftForm.Show();
+            if (args.RowData.ParentId is not null)
+            {
+                var shift =  await ShiftApiConsumer.GetById(args.RowData.TaskId);
+                _shiftForm.ShiftModel = ToShiftDto(shift);
+                _shiftForm.Title = "Update Shift";
+                _shiftForm.IsDisplayedDeleteButton = true;
+                await _shiftForm.Show();
+            }
         }
     }
 
     private async Task OnShiftFromClose()
     {
         await OnInitializedAsync();
-    }
-    
-    private async Task ActionCompleted(GanttActionEventArgs<TaskDto> args)
-    {
-        await this._gantt.RefreshAsync();
     }
 
     private TaskDto ToTaskDto(Shift shift, string employeeName)
