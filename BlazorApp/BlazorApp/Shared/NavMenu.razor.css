@@ -21,6 +21,7 @@
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
+
 }
 
     .nav-item:first-of-type {
@@ -38,6 +39,7 @@
         display: flex;
         align-items: center;
         line-height: 3rem;
+        padding-left: 10px;
     }
 
 .nav-item ::deep a.active {
@@ -64,5 +66,6 @@
         /* Allow sidebar to scroll for tall menus */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
+        min-width: 200px;
     }
 }
