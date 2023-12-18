@@ -36,6 +36,11 @@ public static class MapperExtensions
         item.DeviationDuration = deviationDuration;
         item.Progress          = deviationDuration / (decimal)shift.Duration * 100;
 
+        foreach (var shiftDeviation in shift.Deviations)
+        {
+            item.Deviations.Add(shiftDeviation.ToDeviationDto(shift));
+        }
+
         return item;
     }
 
@@ -51,22 +56,18 @@ public static class MapperExtensions
         StartTime    = shift.Date.ToDateTime(shift.StartTime),
         EndTime      = shift.Date.ToDateTime(shift.EndTime),
         StatusId     = ((int)shift.Status).ToString(),
-        DeviationDto = ToDeviationDto(shift)
+        Deviations = shift.Deviations.Select(deviation => deviation.ToDeviationDto(shift)).ToList()
     };
 
-    public static DeviationDto ToDeviationDto(Shift shift)
+    public static DeviationDto ToDeviationDto(this Deviation deviation, Shift shift)
     {
-        if (shift.Deviations == null || !shift.Deviations.Any()) return new DeviationDto();
-
-        // note: for now, shift has only one deviation
-        var deviation = shift.Deviations.First();
         return new DeviationDto
         {
             Reason          = deviation.Reason,
             EmployeeId      = deviation.EmployeeId.ToString(),
             StatusId        = ((int)deviation.Status).ToString(),
             StartTime       = shift.Date.ToDateTime(deviation.StartTime),
-            EndTime         = shift.Date.ToDateTime(deviation.EndTime),
+            EndTime         =  shift.Date.ToDateTime(deviation.EndTime),
             DeviationTypeId = ((int)deviation.DeviationType).ToString(),
             ShiftId         = deviation.ShiftId.ToString()
         };

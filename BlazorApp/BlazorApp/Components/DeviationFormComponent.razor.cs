@@ -73,33 +73,11 @@ public partial class DeviationFormComponent
     public void OnValueChange(ChangeEventArgs<string, Shift> args)
     {
         var shift = _shifts.FirstOrDefault(_ => _.Id == args.ItemData.Id);
-        if (shift?.Deviations != null && shift.Deviations.Any())
+        _deviationDto = new DeviationDto
         {
-            var deviation = shift.Deviations.First();
-            _deviationDto = new DeviationDto
-            {
-                Id              = deviation.Id,
-                Reason          = deviation.Reason,
-                EmployeeId      = deviation.EmployeeId.ToString(),
-                StatusId        = ((int)deviation.Status).ToString(),
-                StartTime       = shift.Date.ToDateTime(deviation.StartTime),
-                EndTime         = shift.Date.ToDateTime(deviation.EndTime),
-                DeviationTypeId = ((int)deviation.DeviationType).ToString(),
-                ShiftId         = deviation.ShiftId.ToString()
-            };
-
-            IsDisplayedDeleteButton = true;
-        }
-        else
-        {
-            _deviationDto = new DeviationDto
-            {
-                ShiftId    = shift.Id.ToString(),
-                EmployeeId = shift.EmployeeId.ToString()
-            };
-
-            IsDisplayedDeleteButton = false;
-        }
+            ShiftId    = shift.Id.ToString(),
+            EmployeeId = shift.EmployeeId.ToString()
+        };
     }
 
     public void ResetData()

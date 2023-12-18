@@ -10,7 +10,6 @@ public partial class ShiftDetailFormComponent
     public ShiftDto Shift { get; set; } = new()
     {
         Date         = DateTime.Now,
-        DeviationDto = new DeviationDto()
     };
     
     private List<StatusDto> _shiftStatus;

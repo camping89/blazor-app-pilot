@@ -34,7 +34,6 @@ public partial class ShiftFormComponent
     public ShiftDto Shift { get; set; } = new()
     {
         Date         = DateTime.Now,
-        DeviationDto = new DeviationDto()
     };
 
     protected override async Task OnInitializedAsync()
@@ -93,7 +92,7 @@ public partial class ShiftFormComponent
         Shift = new ShiftDto
         {
             Date         = DateTime.Now,
-            DeviationDto = new DeviationDto()
+            Deviations = new List<DeviationDto>()
         };
     }
 }

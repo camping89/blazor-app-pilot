@@ -19,7 +19,7 @@ public class RandomDataGenerator
 
     public TestData Generate()
     {
-        var clients    = GetClient(20);
+        var clients    = GetClient(5);
         var employees  = GetEmployee(5);
         var shifts     = new List<Shift>();
         var deviations = new List<Deviation>();
@@ -51,7 +51,6 @@ public class RandomDataGenerator
                                          .RuleFor(_ => _.TranzitMin,    f => f.Random.Number(10, 15))
                                          .RuleFor(_ => _.VacationDays,  f => f.Random.Number(1,  5))
                                          .RuleFor(_ => _.Shifts,        new List<Shift>())
-                                         .RuleFor(_ => _.Deviations,    new List<Deviation>())
                                          .RuleFor(_ => _.CreatedAt,     DateTime.Now)
                                          .RuleFor(_ => _.ModifiedAt,    DateTime.Now)
                                          .FinishWith((f, e) => { Debug.WriteLine("Generated Employee {0}|{1}", e.Id, e.Name); });
@@ -76,14 +75,11 @@ public class RandomDataGenerator
 
     public static Shift GetShift(int employeeId, int clientId)
     {
-        var faker = new Faker<Shift>().StrictMode(true)
-                                      .RuleFor(_ => _.Id,               f => f.IndexGlobal)
+        var faker = new Faker<Shift>().RuleFor(_ => _.Id, f => f.IndexGlobal)
                                       .RuleFor(_ => _.EmployeeId,       f => employeeId)
                                       .RuleFor(_ => _.ClientId,         f => clientId)
                                       .RuleFor(_ => _.Title,            f => f.Lorem.Slug(5))
                                       .RuleFor(_ => _.Date,             f => f.Date.SoonDateOnly(14))
-                                      .RuleFor(_ => _.StartTime,        f => new TimeOnly(f.Random.Number(0, 23), f.Random.Number(0, 59)))
-                                      .RuleFor(_ => _.EndTime,          (f, s) => s.StartTime.Add(TimeSpan.FromHours(6)))
                                       .RuleFor(_ => _.Status,           f => f.PickRandom(ShiftStatus.Planned, ShiftStatus.Approved, ShiftStatus.Completed))
                                       .RuleFor(_ => _.CreatedAt,        (f, s) => f.Date.Recent(10, s.Date.ToDateTime(TimeOnly.MinValue)))
                                       .RuleFor(_ => _.ModifiedAt,       (f, s) => f.Date.Recent(10, s.CreatedAt))

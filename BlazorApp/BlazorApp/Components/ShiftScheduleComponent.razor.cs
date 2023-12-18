@@ -8,7 +8,7 @@ public partial class ShiftScheduleComponent
 {
     List<ShiftScheduleDto>               DataSource = new();
     private SfSchedule<ShiftScheduleDto> _shiftSchedule;
-    
+
     protected override async Task OnInitializedAsync()
     {
         var employees = await EmployeeApiService.Get();
@@ -27,6 +27,7 @@ public partial class ShiftScheduleComponent
                         Location      = $"Client: {shift.Client?.Name ?? ""}",
                         StartTime     = shift.Date.ToDateTime(shift.StartTime),
                         EndTime       = shift.Date.ToDateTime(shift.EndTime),
+                        Description   = $"Employee: {employee.Name}",
                         CategoryColor = color
                     });
                 }

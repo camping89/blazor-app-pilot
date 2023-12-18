@@ -10,28 +10,11 @@
         <Header>@Title</Header>
         <Content>
             <EditForm id="shiftForm" Model="@Shift" OnValidSubmit="HandleValidSubmit">
-                <SfTab>
-                    <TabItems>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Shift"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <DataAnnotationsValidator/>
-                                <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
-                                <ShiftDetailFormComponent Shift="@Shift"></ShiftDetailFormComponent>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Deviation"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <DeviationDetailFormComponent DeviationDto="@Shift.DeviationDto"></DeviationDetailFormComponent>
-                            </ContentTemplate>
-                        </TabItem>
-                    </TabItems>
-                </SfTab>
+                <ContentTemplate>
+                    <DataAnnotationsValidator/>
+                    <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
+                    <ShiftDetailFormComponent Shift="@Shift"></ShiftDetailFormComponent>
+                </ContentTemplate>
             </EditForm>
         </Content>
     </DialogTemplates>

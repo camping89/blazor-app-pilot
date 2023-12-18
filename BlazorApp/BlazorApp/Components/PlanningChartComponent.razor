@@ -14,10 +14,12 @@
         <TaskbarTemplate>
             @{
                 <div>Shift Title: @context.Title</div>
+                <div>Client: @context.ClientName</div>
+                <div>Employee: @context.EmployeeName</div>
                 <div>Start Time: @context.StartDate</div>
                 <div>End Time: @context.EndDate</div>
                 <div>Shift Duration: @context.Duration Minutes</div>
-                <div>Deviation Duration: @context.DeviationDuration Minutes</div>
+                <div>Deviation: @context.DeviationDuration Minutes</div>
             }
         </TaskbarTemplate>
     </GanttTooltipSettings>

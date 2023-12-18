@@ -1,3 +1,5 @@
+using System.ComponentModel.Design.Serialization;
+
 namespace BlazorApp.Share.Entities;
 
 public class Client : Entity 
@@ -8,4 +10,9 @@ public class Client : Entity
 
     public int TMin => NDayparts * NMin;
     public List<Shift> Shifts { get; set; }
+
+    public Client()
+    {
+        Shifts = new List<Shift>();
+    }
 }

@@ -1,28 +1,34 @@
 using BlazorApp.Application.Repositories.Interfaces;
 using BlazorApp.Share.Entities;
 using BlazorApp.Share.Enums;
+using BlazorApp.Share.Extensions;
 
 namespace BlazorApp.Application.Services;
 
 public class RandomDataProvider : IRandomDataProvider
 {
-    private readonly IEmployeeRepository _employeeRepository;
-    private readonly IClientRepository _clientRepository;
-    private readonly IShiftRepository _shiftRepository;
+    private readonly IEmployeeRepository  _employeeRepository;
+    private readonly IClientRepository    _clientRepository;
+    private readonly IShiftRepository     _shiftRepository;
     private readonly IDeviationRepository _deviationRepository;
 
-    public RandomDataProvider(IEmployeeRepository employeeRepository, IClientRepository clientRepository, IShiftRepository shiftRepository, IDeviationRepository deviationRepository)
+    public RandomDataProvider
+    (IEmployeeRepository  employeeRepository,
+     IClientRepository    clientRepository,
+     IShiftRepository     shiftRepository,
+     IDeviationRepository deviationRepository)
     {
-        _employeeRepository = employeeRepository;
-        _clientRepository = clientRepository;
-        _shiftRepository = shiftRepository;
+        _employeeRepository  = employeeRepository;
+        _clientRepository    = clientRepository;
+        _shiftRepository     = shiftRepository;
         _deviationRepository = deviationRepository;
     }
 
     public async Task Generate()
     {
-        var testDataGenerator = new RandomDataGenerator();
-        var testData = testDataGenerator.Generate();
+        Random random            = new Random();
+        var    testDataGenerator = new RandomDataGenerator();
+        var    testData          = testDataGenerator.Generate();
 
         foreach (var employee in testData.Employees)
         {
@@ -34,30 +40,44 @@ public class RandomDataProvider : IRandomDataProvider
             await _clientRepository.Add(client);
         }
 
-        var clientsGroup = testData.Clients.Partition(4).ToList();
         for (int i = 0; i < testData.Employees.Count; i++)
         {
-            var clients = clientsGroup[i];
             var employee = testData.Employees[i];
-            var shifts = new List<Shift>();
-            foreach (var client in clients)
+            var client   = testData.Clients[i];
+
+            for (int j = 0; j < 6; j++)
             {
-                var shift = RandomDataGenerator.GetShift(employee.Id, client.Id);
-                var deviation = RandomDataGenerator.GetDeviation(shift);
-                await _deviationRepository.Add(deviation);
-                shift.Deviations = new List<Deviation> { deviation };
-                // shift.Client = client;
-                // shift.Employee = employee;
-                shifts.Add(shift);
-                await _shiftRepository.Add(shift);
-                client.Shifts = new List<Shift> { shift };
-                await _clientRepository.Update(client.Id.ToString(), client);
+                var morningShift = RandomDataGenerator.GetShift(employee.Id, client.Id);
+                morningShift.Date      = DateTime.Now.AddDays(j).ToDateOnly();
+                morningShift.StartTime = new TimeOnly(8,  0);
+                morningShift.EndTime   = new TimeOnly(12, 0);
+                morningShift.Status    = ShiftStatus.Planned;
+
+                bool fiftyPercentChance = random.NextDouble() < 0.5;
+                if (fiftyPercentChance)
+                {
+                    var deviation = RandomDataGenerator.GetDeviation(morningShift);
+                    morningShift.Deviations.Add(deviation);
+                    await _deviationRepository.Add(deviation);
+                }
+                await _shiftRepository.Add(morningShift);
+
+                // afternoon shift
+                var afternoonShift = RandomDataGenerator.GetShift(employee.Id, client.Id);
+                afternoonShift.Date      = DateTime.Now.AddDays(j).ToDateOnly();
+                afternoonShift.StartTime = new TimeOnly(13, 0);
+                afternoonShift.EndTime   = new TimeOnly(17, 0);
+                afternoonShift.Status    = ShiftStatus.Planned;
+
+                fiftyPercentChance = random.NextDouble() < 0.3;
+                if (fiftyPercentChance)
+                {
+                    var deviation = RandomDataGenerator.GetDeviation(afternoonShift);
+                    afternoonShift.Deviations.Add(deviation);
+                    await _deviationRepository.Add(deviation);
+                }
+                await _shiftRepository.Add(afternoonShift);
             }
-
-            employee.Shifts = shifts;
-
-            await _employeeRepository.Update(employee.Id.ToString(), employee);
-
         }
     }
 }

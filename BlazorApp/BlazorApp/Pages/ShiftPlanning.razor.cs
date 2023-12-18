@@ -5,29 +5,28 @@ namespace BlazorApp.Pages;
 
 public partial class ShiftPlanning
 {
-    
-    private List<ShiftPlanningDto>    ShiftPlanningDtos { get; set; } = new();
+    private List<ShiftPlanningDto> ShiftPlanningDtos { get; set; } = new();
 
-    private bool                      VisibleProperty { get; set; }
-    private int                       _index;
-    
+    private bool VisibleProperty { get; set; }
+    private int  _index;
+
     protected override async Task OnInitializedAsync()
     {
-        VisibleProperty = true;
-        ShiftPlanningDtos      = new List<ShiftPlanningDto>();
+        VisibleProperty   = true;
+        ShiftPlanningDtos = new List<ShiftPlanningDto>();
         var employees = (await EmployeeApiService.Get()).Payload;
 
         foreach (var employee in employees)
         {
             var shiftPlanningDtos = new List<ShiftPlanningDto>();
-            foreach (var shift in employee.Shifts)
+            foreach (var shift in employee.Shifts.OrderBy(s => s.Date).ThenBy(s => s.StartTime))
             {
                 var shiftPlanningDto = shift.ToShiftPlanningDto(employee.Name);
                 shiftPlanningDto.Description = $"Employee: {shiftPlanningDto.EmployeeName}";
                 if (shiftPlanningDtos.Any())
                 {
-                    shiftPlanningDto.ParentId     = shiftPlanningDtos.First().Id;
-                    shiftPlanningDto.Description = $"Client: {shiftPlanningDto.ClientName}";
+                    shiftPlanningDto.ParentId    = shiftPlanningDtos.First().Id;
+                    shiftPlanningDto.Description = $"{shiftPlanningDto.Title}";
                     shiftPlanningDtos.Add(shiftPlanningDto);
                 }
                 else
@@ -35,8 +34,8 @@ public partial class ShiftPlanning
                     shiftPlanningDto.Id *= -1;
                     shiftPlanningDtos.Add(shiftPlanningDto);
                     var subTask = shift.ToShiftPlanningDto(employee.Name);
-                    subTask.ParentId     = shiftPlanningDtos.First().Id;
-                    subTask.Description = $"Client: {shiftPlanningDto.ClientName}";
+                    subTask.ParentId    = shiftPlanningDtos.First().Id;
+                    subTask.Description = $"{shiftPlanningDto.Title}";
                     shiftPlanningDtos.Add(subTask);
                 }
             }

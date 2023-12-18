@@ -25,8 +25,8 @@ public class ShiftDto
     public int    Duration => (int)(EndTime - StartTime).TotalMinutes;
     public string StatusId { get; set; }
 
-    public DeviationDto DeviationDto { get; set; }
-    public string       EmployeeName { get; set; }
+    public List<DeviationDto> Deviations   { get; set; } = new();
+    public string             EmployeeName { get; set; }
 
     public Shift ToShift()
     {
@@ -44,14 +44,15 @@ public class ShiftDto
             Status     = StatusId.ToEnum<ShiftStatus>(),
         };
 
-        if (DeviationDto is not null)
+        foreach (var deviation in Deviations)
         {
-            if (DeviationDto.DeviationTypeId.ToEnum<DeviationType>() != DeviationType.None)
+            if (deviation.DeviationTypeId.ToEnum<DeviationType>() != DeviationType.None)
             {
-                DeviationDto.EmployeeId = EmployeeId;
-                DeviationDto.ShiftId    = Id.ToString();
-                shift.Deviations        = new List<Deviation> { DeviationDto.ToDeviation() };
+                deviation.EmployeeId = EmployeeId;
+                deviation.ShiftId    = Id.ToString();
+                shift.Deviations.Add(deviation.ToDeviation());
             }
+
         }
 
         return shift;
