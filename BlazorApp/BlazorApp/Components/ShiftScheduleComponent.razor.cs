@@ -4,7 +4,7 @@ using Syncfusion.Blazor.Schedule;
 
 namespace BlazorApp.Components;
 
-public partial class ShiftSchedulerComponent
+public partial class ShiftScheduleComponent
 {
     List<ShiftScheduleDto>               DataSource = new();
     private SfSchedule<ShiftScheduleDto> _shiftSchedule;
@@ -27,7 +27,6 @@ public partial class ShiftSchedulerComponent
                         Location      = $"Client: {shift.Client?.Name ?? ""}",
                         StartTime     = shift.Date.ToDateTime(shift.StartTime),
                         EndTime       = shift.Date.ToDateTime(shift.EndTime),
-                        // Description   = $"Note: {shift.Title}",
                         CategoryColor = color
                     });
                 }
