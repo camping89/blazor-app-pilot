@@ -61,40 +61,40 @@ public class DeviationService
         switch (deviation.DeviationType)
         {
             case DeviationType.Illness:
-                if (deviation.StartTime != shift.StartTime)
+                if (deviation.StartTime < shift.StartTime)
                 {
-                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
+                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The illness deviation end time must be in range of shift time" });
                 }
 
-                if (deviation.EndTime != shift.EndTime)
+                if (deviation.EndTime > shift.EndTime)
                 {
-                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
+                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The illness deviation end time must be in range of shift time" });
                 }
 
                 break;
 
             case DeviationType.Lateness:
-                if (deviation.EndTime != shift.EndTime)
-                {
-                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
-                }
-
                 if (deviation.StartTime < shift.StartTime)
                 {
-                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
+                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The lateness deviation must be from shift start time" });
+                }
+
+                if (deviation.EndTime > shift.EndTime)
+                {
+                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The lateness deviation must be before shift end time" });
                 }
 
                 break;
 
             case DeviationType.EarlyLeave:
-                if (deviation.StartTime != shift.StartTime)
+                if (deviation.StartTime < shift.StartTime)
                 {
-                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The Deviation StartTime is invalid" });
+                    returnData.ErrorDetails.Add(nameof(deviation.StartTime), new List<string> { "The early leave deviation must be after shift start time" });
                 }
 
                 if (deviation.EndTime > shift.EndTime)
                 {
-                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The Deviation EndTime is invalid" });
+                    returnData.ErrorDetails.Add(nameof(deviation.EndTime), new List<string> { "The early leave deviation must be end by shift end time" });
                 }
 
                 break;

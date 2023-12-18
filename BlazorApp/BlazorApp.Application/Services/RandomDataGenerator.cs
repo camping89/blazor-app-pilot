@@ -78,7 +78,7 @@ public class RandomDataGenerator
         var faker = new Faker<Shift>().RuleFor(_ => _.Id, f => f.IndexGlobal)
                                       .RuleFor(_ => _.EmployeeId,       f => employeeId)
                                       .RuleFor(_ => _.ClientId,         f => clientId)
-                                      .RuleFor(_ => _.Title,            f => f.Lorem.Slug(5))
+                                      .RuleFor(_ => _.Title,            f => f.Lorem.Slug(3))
                                       .RuleFor(_ => _.Date,             f => f.Date.SoonDateOnly(14))
                                       .RuleFor(_ => _.Status,           f => f.PickRandom(ShiftStatus.Planned, ShiftStatus.Approved, ShiftStatus.Completed))
                                       .RuleFor(_ => _.CreatedAt,        (f, s) => f.Date.Recent(10, s.Date.ToDateTime(TimeOnly.MinValue)))

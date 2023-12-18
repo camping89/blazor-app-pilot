@@ -1,5 +1,6 @@
 using BlazorApp.Models;
 using BlazorApp.Share.Entities;
+using BlazorApp.Share.Extensions;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Popups;
@@ -76,7 +77,9 @@ public partial class DeviationFormComponent
         _deviationDto = new DeviationDto
         {
             ShiftId    = shift.Id.ToString(),
-            EmployeeId = shift.EmployeeId.ToString()
+            EmployeeId = shift.EmployeeId.ToString(),
+            StartTime = shift.StartTime.ToDateTime(shift.Date),
+            EndTime = shift.EndTime.ToDateTime(shift.Date),
         };
     }
 

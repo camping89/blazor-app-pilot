@@ -16,4 +16,14 @@ public static class DateExtensions
     {
         return new(date.Hour, date.Minute, date.Second);
     }
+    
+    public static DateTime ToDateTime(this TimeOnly time, DateTime date)
+    {
+        return new(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
+    }
+    
+    public static DateTime ToDateTime(this TimeOnly time, DateOnly dateOnly)
+    {
+        return new(dateOnly.Year, dateOnly.Month, dateOnly.Day, time.Hour, time.Minute, time.Second);
+    }
 }

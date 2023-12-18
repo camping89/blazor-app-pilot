@@ -26,7 +26,7 @@ public partial class ShiftPlanning
                 if (shiftPlanningDtos.Any())
                 {
                     shiftPlanningDto.ParentId    = shiftPlanningDtos.First().Id;
-                    shiftPlanningDto.Description = $"{shiftPlanningDto.Title}";
+                    shiftPlanningDto.Description = $"Shift Title: {shiftPlanningDto.Title}";
                     shiftPlanningDtos.Add(shiftPlanningDto);
                 }
                 else
@@ -35,7 +35,7 @@ public partial class ShiftPlanning
                     shiftPlanningDtos.Add(shiftPlanningDto);
                     var subTask = shift.ToShiftPlanningDto(employee.Name);
                     subTask.ParentId    = shiftPlanningDtos.First().Id;
-                    subTask.Description = $"{shiftPlanningDto.Title}";
+                    subTask.Description = $"Shift Title: {shiftPlanningDto.Title}";
                     shiftPlanningDtos.Add(subTask);
                 }
             }
