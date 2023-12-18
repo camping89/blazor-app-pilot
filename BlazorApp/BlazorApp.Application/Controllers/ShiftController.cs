@@ -97,8 +97,10 @@ public class ShiftController : ControllerBase
     [HttpGet("get/{Id}")]
     public async Task<IActionResult> Get(string id)
     {
-        var shift      = await _shiftRepository.Get(id);
-        var returnData = new ResultDto<Shift> { Payload = shift };
+        var shift = await _shiftRepository.Get(id);
+        var deviation = await _deviationRepository.GetByShiftId(shift.Id);
+        shift.Deviations = new List<Deviation> {deviation};
+        var returnData = new ResultDto<Shift> { Data = shift };
         return Ok(returnData);
     }
 

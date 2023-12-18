@@ -70,13 +70,14 @@ public partial class AddDeviationFormComponent
             var deviation = shift.Deviations.First();
             _deviationDto = new DeviationDto
             {
-                Reason          = deviation.Reason,
-                EmployeeId      = deviation.EmployeeId.ToString(),
-                StatusId        = ((int)deviation.Status).ToString(),
-                StartTime       = shift.Date.ToDateTime(deviation.StartTime),
-                EndTime         = shift.Date.ToDateTime(deviation.EndTime),
-                DeviationTypeId = ((int)deviation.DeviationType).ToString(),
-                ShiftId         = deviation.ShiftId.ToString()
+                Id = deviation.Id,
+                Reason = deviation.Reason,
+                EmployeeId = deviation.EmployeeId.ToString(),
+                StatusId = ((int) deviation.Status).ToString(),
+                StartTime = shift.Date.ToDateTime(deviation.StartTime),
+                EndTime = shift.Date.ToDateTime(deviation.EndTime),
+                DeviationTypeId = ((int) deviation.DeviationType).ToString(),
+                ShiftId = deviation.ShiftId.ToString()
             };
         }
         else
