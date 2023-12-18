@@ -93,7 +93,7 @@ public partial class PlanningChartComponent
     
     public async Task OnCreated(object args)
     {
-        await _gantt.ZoomToFitAsync();
+        // await _gantt.ZoomToFitAsync();
     }
     
     protected override async Task OnInitializedAsync()
