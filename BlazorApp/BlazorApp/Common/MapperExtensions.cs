@@ -1,5 +1,6 @@
 using BlazorApp.Models;
 using BlazorApp.Share.Entities;
+using BlazorApp.Share.Enums;
 
 namespace BlazorApp.Common;
 
@@ -31,10 +32,24 @@ public static class MapperExtensions
         // note: for now, shift has only one deviation
         var deviation = shift.Deviations.FirstOrDefault();
         if (deviation is null) return item;
-
+        
         var deviationDuration = shift.Deviations.First().Duration;
         item.DeviationDuration = deviationDuration;
-        item.Progress          = deviationDuration / (decimal)shift.Duration * 100;
+        if (deviation.DeviationType == DeviationType.EarlyLeave)
+        {
+            item.Progress = (shift.Duration - deviationDuration) / (decimal) shift.Duration * 100;
+        }
+
+        if (deviation.DeviationType == DeviationType.Lateness)
+        {
+            item.Progress = deviationDuration / (decimal)shift.Duration * 100;
+        }
+
+        if (deviation.DeviationType == DeviationType.Illness)
+        {
+            item.Progress = 100;
+        }
+        
 
         foreach (var shiftDeviation in shift.Deviations)
         {

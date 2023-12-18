@@ -6,11 +6,7 @@ namespace BlazorApp.Components;
 
 public partial class ShiftDetailFormComponent
 {
-    [Parameter]
-    public ShiftDto Shift { get; set; } = new()
-    {
-        Date         = DateTime.Now,
-    };
+    [Parameter] public ShiftDto Shift { get; set; } = new();
     
     private List<KeyValueDto> _shiftStatus;
     private List<Employee>  _employees = new();
