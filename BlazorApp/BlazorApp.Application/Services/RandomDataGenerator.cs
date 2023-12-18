@@ -13,7 +13,7 @@ public class TestData
     public List<Deviation> Deviations { get; set; } = new();
 }
 
-public class TestDataGenerator
+public class RandomDataGenerator
 {
     private static int _index;
 
@@ -80,11 +80,11 @@ public class TestDataGenerator
                                       .RuleFor(_ => _.Id,               f => f.IndexGlobal)
                                       .RuleFor(_ => _.EmployeeId,       f => employeeId)
                                       .RuleFor(_ => _.ClientId,         f => clientId)
-                                      .RuleFor(_ => _.Title,            f => f.Lorem.Sentence())
-                                      .RuleFor(_ => _.Date,             f => f.Date.SoonDateOnly(30))
+                                      .RuleFor(_ => _.Title,            f => f.Lorem.Slug(5))
+                                      .RuleFor(_ => _.Date,             f => f.Date.SoonDateOnly(14))
                                       .RuleFor(_ => _.StartTime,        f => new TimeOnly(f.Random.Number(0, 23), f.Random.Number(0, 59)))
-                                      .RuleFor(_ => _.EndTime,          (f, s) => s.StartTime.Add(TimeSpan.FromHours(f.Random.Number(1, 6))))
-                                      .RuleFor(_ => _.Status,           f => f.PickRandom<ShiftStatus>())
+                                      .RuleFor(_ => _.EndTime,          (f, s) => s.StartTime.Add(TimeSpan.FromHours(6)))
+                                      .RuleFor(_ => _.Status,           f => f.PickRandom(ShiftStatus.Planned, ShiftStatus.Approved, ShiftStatus.Completed))
                                       .RuleFor(_ => _.CreatedAt,        (f, s) => f.Date.Recent(10, s.Date.ToDateTime(TimeOnly.MinValue)))
                                       .RuleFor(_ => _.ModifiedAt,       (f, s) => f.Date.Recent(10, s.CreatedAt))
                                       .RuleFor(_ => _.Deviations,       new List<Deviation>())
@@ -101,14 +101,34 @@ public class TestDataGenerator
                                           .RuleFor(_ => _.Id,            f => f.IndexGlobal)
                                           .RuleFor(_ => _.ShiftId,       f => shift.Id)
                                           .RuleFor(_ => _.EmployeeId,    f => shift.EmployeeId)
-                                          .RuleFor(_ => _.StartTime,     f => shift.StartTime)
-                                          .RuleFor(_ => _.EndTime,       (f, d) => d.StartTime.Add(TimeSpan.FromMinutes(f.Random.Number(1, 15))))
-                                          .RuleFor(_ => _.DeviationType, f => f.PickRandom<DeviationType>())
-                                          .RuleFor(_ => _.Reason,        f => f.Lorem.Sentence())
-                                          .RuleFor(_ => _.Status,        f => f.PickRandom<DeviationStatus>())
-                                          .RuleFor(_ => _.CreatedAt,     (f, d) => DateTime.Now)
-                                          .RuleFor(_ => _.ModifiedAt,    (f, d) => DateTime.Now)
-                                          .FinishWith((f,                    e) => { Debug.WriteLine("Generated Shift {0}|{1}", e.Id, e.Reason); });
+                                          .RuleFor(_ => _.DeviationType, f => f.PickRandom(DeviationType.Illness, DeviationType.Lateness))
+                                          .RuleFor(_ => _.StartTime,
+                                                   (f, d) =>
+                                                   {
+                                                       return d.DeviationType switch
+                                                       {
+                                                           DeviationType.Illness    => shift.StartTime,
+                                                           DeviationType.Lateness   => shift.StartTime,
+                                                           DeviationType.EarlyLeave => shift.EndTime.Add(TimeSpan.FromMinutes(-30)),
+                                                           _                        => throw new ArgumentOutOfRangeException()
+                                                       };
+                                                   })
+                                          .RuleFor(_ => _.EndTime,
+                                                   (f, d) =>
+                                                   {
+                                                       return d.DeviationType switch
+                                                       {
+                                                           DeviationType.Illness    => shift.StartTime.Add(TimeSpan.FromMinutes(30)),
+                                                           DeviationType.Lateness   => shift.StartTime.Add(TimeSpan.FromMinutes(30)),
+                                                           DeviationType.EarlyLeave => shift.EndTime,
+                                                           _                        => throw new ArgumentOutOfRangeException()
+                                                       };
+                                                   })
+                                          .RuleFor(_ => _.Reason,     f => f.Lorem.Sentence())
+                                          .RuleFor(_ => _.Status,     f => f.PickRandom(DeviationStatus.Pending, DeviationStatus.Approved, DeviationStatus.Rejected))
+                                          .RuleFor(_ => _.CreatedAt,  (f, d) => DateTime.Now)
+                                          .RuleFor(_ => _.ModifiedAt, (f, d) => DateTime.Now)
+                                          .FinishWith((f,                 e) => { Debug.WriteLine("Generated Shift {0}|{1}", e.Id, e.Reason); });
 
         return faker.Generate(1).First();
     }

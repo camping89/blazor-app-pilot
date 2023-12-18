@@ -13,7 +13,7 @@ public class ShiftApiService : BaseService
         var jsonOptions = new JsonSerializerOptions { IgnoreNullValues = true };
         var json        = JsonSerializer.Serialize(new AddShiftRequestInput { Shift = shiftDto.ToShift() }, jsonOptions);
 
-        var request = new RestRequest("Shift/add", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
+        var request = new RestRequest("shift/add", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
 
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);
         return response.Data;
@@ -24,7 +24,7 @@ public class ShiftApiService : BaseService
         var jsonOptions = new JsonSerializerOptions { IgnoreNullValues = true };
         var json        = JsonSerializer.Serialize(new UpdateShiftRequestInput { Shift = shiftDto.ToShift() }, jsonOptions);
 
-        var request  = new RestRequest("Shift/update", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
+        var request  = new RestRequest("shift/update", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);
 
         return response.Data;
@@ -32,21 +32,21 @@ public class ShiftApiService : BaseService
 
     public async Task<Shift> Get(int id)
     {
-        var request  = new RestRequest($"Shift/get/{id}");
+        var request  = new RestRequest($"shift/get/{id}");
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);
         return response.Data.Payload;
     }
 
     public async Task<List<Shift>> Get()
     {
-        var request  = new RestRequest($"Shift/get");
+        var request  = new RestRequest($"shift/get");
         var response = await GetRestClient().ExecuteAsync<ResultDto<List<Shift>>>(request);
         return response.Data.Payload;
     }
 
     public async Task Delete(string Id)
     {
-        var request  = new RestRequest($"Shift/delete/{Id}", Method.Delete);
+        var request  = new RestRequest($"shift/delete/{Id}", Method.Delete);
         await GetRestClient().ExecuteAsync(request);
     }
 }

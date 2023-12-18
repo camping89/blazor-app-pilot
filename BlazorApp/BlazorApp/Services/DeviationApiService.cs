@@ -14,7 +14,7 @@ public class DeviationApiService : BaseService
 
         var json = JsonSerializer.Serialize(new AddDeviationRequestInput { Deviation = deviationDto.ToDeviation() }, jsonOptions);
 
-        var request = new RestRequest("Deviation/add", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
+        var request = new RestRequest("deviation/add", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
 
         var response = await GetRestClient().ExecuteAsync<ResultDto<Deviation>>(request);
         return response.Data;
@@ -25,7 +25,7 @@ public class DeviationApiService : BaseService
         var jsonOptions = new JsonSerializerOptions { IgnoreNullValues = true };
         var json        = JsonSerializer.Serialize(new UpdateDeviationRequestInput { Deviation = deviationDto.ToDeviation() }, jsonOptions);
 
-        var request  = new RestRequest("Deviation/update", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
+        var request  = new RestRequest("deviation/update", Method.Post).AddParameter("application/json", json, ParameterType.RequestBody);
         var response = await GetRestClient().ExecuteAsync<ResultDto<Deviation>>(request);
 
         return response.Data;
@@ -33,7 +33,7 @@ public class DeviationApiService : BaseService
     
     public async Task Delete(string Id)
     {
-        var request  = new RestRequest($"Deviation/delete/{Id}", Method.Delete);
+        var request  = new RestRequest($"deviation/delete/{Id}", Method.Delete);
         await GetRestClient().ExecuteAsync(request);
     }
 }

@@ -13,6 +13,9 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BlazorApp.Components;
 
+/// <summary>
+/// A component to create and edit shifts.
+/// </summary>
 public partial class ShiftFormComponent
 {
     [Parameter]

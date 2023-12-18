@@ -56,12 +56,12 @@ public class ShiftController : ControllerBase
             return BadRequest(returnData);
         }
 
-        input.Shift.Id = TestDataGenerator.GetId();
+        input.Shift.Id = RandomDataGenerator.GetId();
         await _shiftRepository.Add(input.Shift);
 
         if (deviation is not null && _deviationService.HasDeviation(deviation))
         {
-            deviation.Id         = TestDataGenerator.GetId();
+            deviation.Id         = RandomDataGenerator.GetId();
             deviation.ShiftId    = input.Shift.Id;
             deviation.EmployeeId = input.Shift.EmployeeId;
 

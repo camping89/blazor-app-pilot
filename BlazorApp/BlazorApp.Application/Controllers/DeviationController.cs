@@ -32,7 +32,7 @@ public class DeviationController : ControllerBase
             return BadRequest(validateDeviationResultDto);
         }
 
-        input.Deviation.Id = TestDataGenerator.GetId();
+        input.Deviation.Id = RandomDataGenerator.GetId();
 
         await _deviationRepository.Add(input.Deviation);
 

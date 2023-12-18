@@ -12,10 +12,10 @@ public partial class DeviationFormComponent
     public EventCallback OnAddUpdateDeviationFormCloseCallback { get; set; }
 
     [Inject] ILogger<DeviationFormComponent> Logger { get; set; }
-    private  SfDialog                           DialogObj;
-    private  DeviationDto                       _deviationDto = new();
-    private  List<Shift>                       _shifts       = new();
-    public  bool            IsDisplayedDeleteButton = false;
+    private  SfDialog                        DialogObj;
+    private  DeviationDto                    _deviationDto           = new();
+    private  List<Shift>                     _shifts                 = new();
+    public   bool                            IsDisplayedDeleteButton = false;
 
     protected CustomFormValidator customFormValidator;
 
@@ -47,14 +47,14 @@ public partial class DeviationFormComponent
         }
     }
 
-    private async Task OnCancel()
-    {
-        await Hide();
-    }
-
     private async Task OnDelete()
     {
         await DeviationApiService.Delete(_deviationDto.Id.ToString());
+        await Hide();
+    }
+
+    private async Task OnCancel()
+    {
         await Hide();
     }
 
@@ -73,19 +73,19 @@ public partial class DeviationFormComponent
     public void OnValueChange(ChangeEventArgs<string, Shift> args)
     {
         var shift = _shifts.FirstOrDefault(_ => _.Id == args.ItemData.Id);
-        if (shift?.Deviations != null && shift.Deviations.Any() && shift.Deviations.All(deviation => deviation != null))
+        if (shift?.Deviations != null && shift.Deviations.Any())
         {
             var deviation = shift.Deviations.First();
             _deviationDto = new DeviationDto
             {
-                Id = deviation.Id,
-                Reason = deviation.Reason,
-                EmployeeId = deviation.EmployeeId.ToString(),
-                StatusId = ((int) deviation.Status).ToString(),
-                StartTime = shift.Date.ToDateTime(deviation.StartTime),
-                EndTime = shift.Date.ToDateTime(deviation.EndTime),
-                DeviationTypeId = ((int) deviation.DeviationType).ToString(),
-                ShiftId = deviation.ShiftId.ToString()
+                Id              = deviation.Id,
+                Reason          = deviation.Reason,
+                EmployeeId      = deviation.EmployeeId.ToString(),
+                StatusId        = ((int)deviation.Status).ToString(),
+                StartTime       = shift.Date.ToDateTime(deviation.StartTime),
+                EndTime         = shift.Date.ToDateTime(deviation.EndTime),
+                DeviationTypeId = ((int)deviation.DeviationType).ToString(),
+                ShiftId         = deviation.ShiftId.ToString()
             };
 
             IsDisplayedDeleteButton = true;

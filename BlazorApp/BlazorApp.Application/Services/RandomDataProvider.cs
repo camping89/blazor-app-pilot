@@ -21,7 +21,7 @@ public class RandomDataProvider : IRandomDataProvider
 
     public async Task Generate()
     {
-        var testDataGenerator = new TestDataGenerator();
+        var testDataGenerator = new RandomDataGenerator();
         var testData = testDataGenerator.Generate();
 
         foreach (var employee in testData.Employees)
@@ -42,8 +42,8 @@ public class RandomDataProvider : IRandomDataProvider
             var shifts = new List<Shift>();
             foreach (var client in clients)
             {
-                var shift = TestDataGenerator.GetShift(employee.Id, client.Id);
-                var deviation = TestDataGenerator.GetDeviation(shift);
+                var shift = RandomDataGenerator.GetShift(employee.Id, client.Id);
+                var deviation = RandomDataGenerator.GetDeviation(shift);
                 await _deviationRepository.Add(deviation);
                 shift.Deviations = new List<Deviation> { deviation };
                 // shift.Client = client;

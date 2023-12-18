@@ -37,18 +37,19 @@ public partial class ShiftPlanning
 
     public async Task ToolbarClickHandler(ClickEventArgs args)
     {
-        if (args.Item.Id == "toolbarAddShift")
+        switch (args.Item.Id)
         {
-            _shiftForm.Title = "Add Shift";
-            _shiftForm.ResetData();
-            await _shiftForm.Show();
-        }
+            case "toolbarAddShift":
+                _shiftForm.Title = "Add Shift";
+                _shiftForm.ResetData();
+                await _shiftForm.Show();
+                break;
 
-        if (args.Item.Id == "toolbarAddDeviation")
-        {
-            _deviationForm.Title = "Add/Update Deviation";
-            _deviationForm.ResetData();
-            await _deviationForm.Show();
+            case "toolbarAddDeviation":
+                _deviationForm.Title = "Add/Update Deviation";
+                _deviationForm.ResetData();
+                await _deviationForm.Show();
+                break;
         }
     }
 
@@ -109,6 +110,10 @@ public partial class ShiftPlanning
         VisibleProperty = false;
     }
 
+    /// <summary>
+    ///    Triggered before the shift form (dialog) is opened.
+    /// </summary>
+    /// <param name="args"></param>
     public async Task ActionBegin(GanttActionEventArgs<ShiftPlanningDto> args)
     {
         if (args.RequestType == Syncfusion.Blazor.Gantt.Action.BeforeOpenEditDialog)

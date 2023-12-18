@@ -8,7 +8,7 @@ public class ClientApiService : BaseService
 {
     public async Task<ResultDto<List<Client>>> Get()
     {
-        var request  = new RestRequest("Client/get");
+        var request  = new RestRequest("client/get");
         var response = await GetRestClient().ExecuteAsync<ResultDto<List<Client>>>(request);
         return response.Data;
     }
