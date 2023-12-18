@@ -35,7 +35,7 @@ else
         </GanttTooltipSettings>
         <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
         </GanttEditSettings>
-        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="ShiftPlanningDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo"></GanttEvents>
+        <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="ShiftPlanningDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo" Created="OnCreated"></GanttEvents>
         <GanttColumns>
             <GanttColumn Field="Description" HeaderText="Employee Shift" AllowEditing="false"> </GanttColumn>
         </GanttColumns>

@@ -120,7 +120,7 @@ public class RandomDataGenerator
                                                        {
                                                            DeviationType.Illness    => shift.StartTime.Add(TimeSpan.FromMinutes(30)),
                                                            DeviationType.Lateness   => shift.StartTime.Add(TimeSpan.FromMinutes(30)),
-                                                           DeviationType.EarlyLeave => shift.EndTime,
+                                                           DeviationType.EarlyLeave => shift.EndTime.Add(TimeSpan.FromMinutes(-1)),
                                                            _                        => throw new ArgumentOutOfRangeException()
                                                        };
                                                    })

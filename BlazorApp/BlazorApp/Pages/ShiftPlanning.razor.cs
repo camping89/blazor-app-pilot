@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using BlazorApp.Common;
 using BlazorApp.Components;
 using BlazorApp.Models;
@@ -74,6 +75,11 @@ public partial class ShiftPlanning
         }
     }
 
+    public async Task OnCreated(object args)
+    {
+        await _gantt.ZoomToFitAsync();
+    }
+    
     protected override async Task OnInitializedAsync()
     {
         VisibleProperty = true;
@@ -86,7 +92,7 @@ public partial class ShiftPlanning
             foreach (var shift in employee.Shifts)
             {
                 var shiftPlanningDto = shift.ToShiftPlanningDto(employee.Name);
-                shiftPlanningDto.Description = shiftPlanningDto.EmployeeName;
+                shiftPlanningDto.Description = $"Employee: {shiftPlanningDto.EmployeeName}";
                 if (shiftPlanningDtos.Any())
                 {
                     shiftPlanningDto.ParentId     = shiftPlanningDtos.First().Id;

@@ -23,11 +23,11 @@ public partial class ShiftScheduler
                     DataSource.Add(new ShiftSchedulerDto
                     {
                         Id            = shift.Id,
-                        Subject       = shift.Title,
-                        Location      = shift.Client?.Name ?? "",
+                        Subject       = $"Shift: {shift.Title}",
+                        Location      = $"Client: {shift.Client?.Name ?? ""}",
                         StartTime     = shift.Date.ToDateTime(shift.StartTime),
                         EndTime       = shift.Date.ToDateTime(shift.EndTime),
-                        Description   = shift.Title,
+                        Description   = $"Note: {shift.Title}",
                         CategoryColor = color
                     });
                 }
