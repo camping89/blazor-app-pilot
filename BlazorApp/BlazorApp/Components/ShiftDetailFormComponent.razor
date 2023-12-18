@@ -4,51 +4,51 @@
 @inject EmployeeApiService EmployeeApiService
 @inject ClientApiService   ClientApiService
 
-<div class="container">
+<div>
     <div class="form-group">
         <label for="title">Title:</label>
         <SfTextBox ID="title" @bind-Value="@Shift.Title"></SfTextBox>
         <ValidationMessage For="@(() => Shift.Title)"></ValidationMessage>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mt-2">
         <label for="employee">Employee:</label>
-        <SfDropDownList ID="employee" TValue="string" TItem="Employee" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a employee" @bind-Value="@Shift.EmployeeId" DataSource="@_employees">
+        <SfDropDownList ID="employee" TValue="string" TItem="Employee" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a employee" @bind-Value="@Shift.EmployeeId" DataSource="@_employees">
             <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
         </SfDropDownList>
         <ValidationMessage For="@(() => Shift.EmployeeId)"></ValidationMessage>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mt-2">
         <label for="client">Client:</label>
-        <SfDropDownList ID="client" TValue="string" TItem="Client" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a client" @bind-Value="@Shift.ClientId" DataSource="@_clients">
+        <SfDropDownList ID="client" TValue="string" TItem="Client" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a client" @bind-Value="@Shift.ClientId" DataSource="@_clients">
             <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
         </SfDropDownList>
         <ValidationMessage For="@(() => Shift.ClientId)"></ValidationMessage>
     </div>
 
 
-    <div class="form-group">
+    <div class="form-group mt-2">
         <label for="date">Date:</label>
         <SfDatePicker ID="date" TValue="DateTime?" PlaceHolder="Select a date" Value="@Shift.Date"></SfDatePicker>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mt-2">
         <label for="startTime">Start Time:</label>
         <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@Shift.StartTime"></SfTimePicker>
         <ValidationMessage For="@(() => Shift.StartTime)"></ValidationMessage>
     </div>
 
 
-    <div class="form-group">
+    <div class="form-group mt-2">
         <label for="endTime">End Time:</label>
         <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@Shift.EndTime"></SfTimePicker>
         <ValidationMessage For="@(() => Shift.EndTime)"></ValidationMessage>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mt-2">
         <label for="endTime">Status:</label>
-        <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_shiftStatus" @bind-Value="@Shift.StatusId">
+        <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a status" DataSource="@_shiftStatus" @bind-Value="@Shift.StatusId">
             <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
         </SfDropDownList>
     </div>

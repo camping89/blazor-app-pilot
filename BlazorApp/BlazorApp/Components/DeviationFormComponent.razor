@@ -3,7 +3,7 @@
 @inject ShiftApiService     ShiftApiService
 @inject DeviationApiService DeviationApiService
 
-<SfDialog Width="250px" IsModal="true" Visible="false" @ref="DialogObj">
+<SfDialog Width="450px" IsModal="true" Visible="false" @ref="DialogObj">
     <DialogTemplates>
         <Header>@Title</Header>
         <Content>
@@ -14,7 +14,7 @@
 
                     <div class="form-group">
                         <label for="shift">Shift:</label>
-                        <SfDropDownList ID="shift" TValue="string" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a shift" @bind-Value="@_deviationDto.ShiftId" DataSource="@_shifts">
+                        <SfDropDownList ID="shift" TValue="string" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a shift" @bind-Value="@_deviationDto.ShiftId" DataSource="@_shifts">
                             <DropDownListFieldSettings Value="Id" Text="Title"></DropDownListFieldSettings>
                             <DropDownListEvents TValue="string" TItem="Shift" ValueChange="OnValueChange"></DropDownListEvents>
                         </SfDropDownList>

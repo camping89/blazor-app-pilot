@@ -1,33 +1,33 @@
 @using BlazorApp.Models
 
-<div class="form-group">
-    <label for="title">Reason:</label>
+<div class="form-group mt-2">
+    <label for="title ">Reason:</label>
     <SfTextBox ID="title" @bind-Value="@DeviationDto.Reason"></SfTextBox>
     <ValidationMessage For="@(() => DeviationDto.Reason)"></ValidationMessage>
 </div>
 
-<div class="form-group">
+<div class="form-group mt-2">
     <label for="startTime">Start Time:</label>
     <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DeviationDto.StartTime"></SfTimePicker>
     <ValidationMessage For="@(() => DeviationDto.StartTime)"></ValidationMessage>
 </div>
 
-<div class="form-group">
+<div class="form-group mt-2">
     <label for="endTime">End Time:</label>
     <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DeviationDto.EndTime"></SfTimePicker>
     <ValidationMessage For="@(() => DeviationDto.EndTime)"></ValidationMessage>
 </div>
 
-<div class="form-group">
+<div class="form-group mt-2">
     <label for="status">Status:</label>
-    <SfDropDownList ID="status" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
+    <SfDropDownList ID="status" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
         <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
     </SfDropDownList>
 </div>
 
-<div class="form-group">
+<div class="form-group mt-2">
     <label for="type">Type:</label>
-    <SfDropDownList ID="type" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a type" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
+    <SfDropDownList ID="type" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a type" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
         <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
     </SfDropDownList>
 </div>
