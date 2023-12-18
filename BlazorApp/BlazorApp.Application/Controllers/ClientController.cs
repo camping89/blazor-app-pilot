@@ -45,7 +45,7 @@ public class ClientController : ControllerBase
 
             client.Shifts = shifts;
         }
-        var data = new ResultDto<List<Client>> { Payload = await _clientRepository.Get() };
+        var data = new ResultDto<List<Client>> { Payload = clients };
 
         return Ok(data);
     }
