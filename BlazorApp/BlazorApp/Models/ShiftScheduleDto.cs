@@ -1,6 +1,6 @@
 namespace BlazorApp.Models;
 
-public class ShiftSchedulerDto
+public class ShiftScheduleDto
 {
     public int      Id                  { get; set; }
     public string   Subject             { get; set; }

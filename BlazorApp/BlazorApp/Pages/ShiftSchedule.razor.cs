@@ -4,10 +4,10 @@ using Syncfusion.Blazor.Schedule;
 
 namespace BlazorApp.Pages;
 
-public partial class ShiftScheduler
+public partial class ShiftSchedule
 {
-    List<ShiftSchedulerDto>               DataSource = new();
-    private SfSchedule<ShiftSchedulerDto> _shiftScheduler;
+    List<ShiftScheduleDto>               DataSource = new();
+    private SfSchedule<ShiftScheduleDto> _shiftSchedule;
 
     protected override async Task OnInitializedAsync()
     {
@@ -20,7 +20,7 @@ public partial class ShiftScheduler
                 var color = RandomColor();
                 foreach (var shift in employee.Shifts)
                 {
-                    DataSource.Add(new ShiftSchedulerDto
+                    DataSource.Add(new ShiftScheduleDto
                     {
                         Id            = shift.Id,
                         Subject       = $"Shift: {shift.Title}",
@@ -34,10 +34,10 @@ public partial class ShiftScheduler
             }
         }
 
-        await _shiftScheduler.RefreshAsync();
+        await _shiftSchedule.RefreshAsync();
     }
 
-    public void OnEventRendered(EventRenderedArgs<ShiftSchedulerDto> args)
+    public void OnEventRendered(EventRenderedArgs<ShiftScheduleDto> args)
     {
         Dictionary<string, object> attributes = new Dictionary<string, object> { { "style", "background:" + args.Data.CategoryColor } };
         args.Attributes = attributes;

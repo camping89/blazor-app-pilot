@@ -101,13 +101,12 @@ public class RandomDataGenerator
                                           .RuleFor(_ => _.Id,            f => f.IndexGlobal)
                                           .RuleFor(_ => _.ShiftId,       f => shift.Id)
                                           .RuleFor(_ => _.EmployeeId,    f => shift.EmployeeId)
-                                          .RuleFor(_ => _.DeviationType, f => f.PickRandom(DeviationType.Illness, DeviationType.Lateness))
+                                          .RuleFor(_ => _.DeviationType, f => f.PickRandom(DeviationType.Lateness, DeviationType.EarlyLeave))
                                           .RuleFor(_ => _.StartTime,
                                                    (f, d) =>
                                                    {
                                                        return d.DeviationType switch
                                                        {
-                                                           DeviationType.Illness    => shift.StartTime,
                                                            DeviationType.Lateness   => shift.StartTime,
                                                            DeviationType.EarlyLeave => shift.EndTime.Add(TimeSpan.FromMinutes(-30)),
                                                            _                        => throw new ArgumentOutOfRangeException()
@@ -118,7 +117,6 @@ public class RandomDataGenerator
                                                    {
                                                        return d.DeviationType switch
                                                        {
-                                                           DeviationType.Illness    => shift.StartTime.Add(TimeSpan.FromMinutes(30)),
                                                            DeviationType.Lateness   => shift.StartTime.Add(TimeSpan.FromMinutes(30)),
                                                            DeviationType.EarlyLeave => shift.EndTime.Add(TimeSpan.FromMinutes(-1)),
                                                            _                        => throw new ArgumentOutOfRangeException()
