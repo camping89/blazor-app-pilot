@@ -1,21 +1,8 @@
 @page "/shift-Schedule"
-@using System.Drawing
-@using BlazorApp.Models
-@using BlazorApp.Services
-@inject EmployeeApiService EmployeeApiService
+@using BlazorApp.Components
 
 <PageTitle>Shift Schedule</PageTitle>
 
 <h1>Shift Schedule</h1>
 
-<SfSchedule  @ref="_shiftSchedule"  TValue=ShiftScheduleDto> 
-    <ScheduleEventSettings DataSource="@DataSource" AllowEditing="false" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
-    <ScheduleEvents TValue="ShiftScheduleDto" EventRendered="OnEventRendered"></ScheduleEvents> 
-    <ScheduleViews>
-        <ScheduleView Option="View.Day"></ScheduleView>
-        <ScheduleView Option="View.Week"></ScheduleView>
-        <ScheduleView Option="View.WorkWeek"></ScheduleView>
-        <ScheduleView Option="View.Month"></ScheduleView>
-        <ScheduleView Option="View.Agenda"></ScheduleView>
-    </ScheduleViews>
-</SfSchedule>
+<ShiftSchedulerComponent></ShiftSchedulerComponent>
