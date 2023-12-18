@@ -39,10 +39,14 @@ public partial class ClientPlanning
                     shiftPlanningDtos.Add(subPlanningDto);
                 }
             }
-
             ShiftPlanningDtos.AddRange(shiftPlanningDtos);
         }
 
         VisibleProperty = false;
+    }
+    
+    public async Task ReloadComponent()
+    {
+        await OnInitializedAsync();
     }
 }

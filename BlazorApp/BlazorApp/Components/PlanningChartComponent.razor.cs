@@ -12,6 +12,8 @@ public partial class PlanningChartComponent
     public List<ShiftPlanningDto>    ShiftPlanningDtos { get; set; } = new();
     [Parameter]
     public string ColumnHeaderText { get; set; }
+    [Parameter]
+    public EventCallback ReloadComponent { get; set; }
     
     private SfGantt<ShiftPlanningDto> _gantt;
     
@@ -111,11 +113,11 @@ public partial class PlanningChartComponent
 
     private async Task OnShiftFormClose()
     {
-        await OnInitializedAsync();
+        await ReloadComponent.InvokeAsync();
     }
 
     private async Task OnAddUpdateDeviationFormClose()
     {
-        await OnInitializedAsync();
+        await ReloadComponent.InvokeAsync();
     }
 }

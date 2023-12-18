@@ -46,4 +46,9 @@ public partial class ShiftPlanning
 
         VisibleProperty = false;
     }
+
+    public async Task ReloadComponent()
+    {
+        await OnInitializedAsync();
+    }
 }

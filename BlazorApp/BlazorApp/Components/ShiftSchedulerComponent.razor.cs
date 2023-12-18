@@ -27,7 +27,7 @@ public partial class ShiftSchedulerComponent
                         Location      = $"Client: {shift.Client?.Name ?? ""}",
                         StartTime     = shift.Date.ToDateTime(shift.StartTime),
                         EndTime       = shift.Date.ToDateTime(shift.EndTime),
-                        Description   = $"Note: {shift.Title}",
+                        // Description   = $"Note: {shift.Title}",
                         CategoryColor = color
                     });
                 }
