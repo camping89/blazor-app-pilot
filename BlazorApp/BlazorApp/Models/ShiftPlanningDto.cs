@@ -13,4 +13,5 @@ public class ShiftPlanningDto
     public int      DeviationDuration { get; set; }
     public string   EmployeeName      { get; set; }
     public string   ClientName        { get; set; }
+    public string Description { get; set; }
 }

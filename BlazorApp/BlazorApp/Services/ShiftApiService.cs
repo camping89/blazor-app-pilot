@@ -30,7 +30,7 @@ public class ShiftApiService : BaseService
         return response.Data;
     }
 
-    public async Task<Shift> GetById(int id)
+    public async Task<Shift> Get(int id)
     {
         var request  = new RestRequest($"Shift/get/{id}");
         var response = await GetRestClient().ExecuteAsync<ResultDto<Shift>>(request);

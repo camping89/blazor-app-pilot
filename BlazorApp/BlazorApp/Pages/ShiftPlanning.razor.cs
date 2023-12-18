@@ -81,28 +81,29 @@ public partial class ShiftPlanning
 
         foreach (var employee in employees)
         {
-            var tasks = new List<ShiftPlanningDto>();
+            var shiftPlanningDtos = new List<ShiftPlanningDto>();
             foreach (var shift in employee.Shifts)
             {
-                var task = shift.ToShiftPlanningDto(employee.Name);
-                if (tasks.Any())
+                var shiftPlanningDto = shift.ToShiftPlanningDto(employee.Name);
+                shiftPlanningDto.Description = shiftPlanningDto.EmployeeName;
+                if (shiftPlanningDtos.Any())
                 {
-                    task.ParentId     = tasks.First().Id;
-                    task.EmployeeName = $"Client: {task.ClientName}";
-                    tasks.Add(task);
+                    shiftPlanningDto.ParentId     = shiftPlanningDtos.First().Id;
+                    shiftPlanningDto.Description = $"Client: {shiftPlanningDto.ClientName}";
+                    shiftPlanningDtos.Add(shiftPlanningDto);
                 }
                 else
                 {
-                    task.Id *= -1;
-                    tasks.Add(task);
+                    shiftPlanningDto.Id *= -1;
+                    shiftPlanningDtos.Add(shiftPlanningDto);
                     var subTask = shift.ToShiftPlanningDto(employee.Name);
-                    subTask.ParentId     = tasks.First().Id;
-                    subTask.EmployeeName = $"Client: {task.ClientName}";
-                    tasks.Add(subTask);
+                    subTask.ParentId     = shiftPlanningDtos.First().Id;
+                    subTask.Description = $"Client: {shiftPlanningDto.ClientName}";
+                    shiftPlanningDtos.Add(subTask);
                 }
             }
 
-            ShiftPlanningDtos.AddRange(tasks);
+            ShiftPlanningDtos.AddRange(shiftPlanningDtos);
         }
 
         VisibleProperty = false;
@@ -115,7 +116,7 @@ public partial class ShiftPlanning
             args.Cancel = true;
             if (args.RowData.ParentId is not null)
             {
-                var shift = await ShiftApiService.GetById(args.RowData.Id);
+                var shift = await ShiftApiService.Get(args.RowData.Id);
                 _shiftForm.Shift                   = shift.ToShiftDto();
                 _shiftForm.Title                   = "Update Shift";
                 _shiftForm.IsDisplayedDeleteButton = true;
