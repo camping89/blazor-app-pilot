@@ -10,6 +10,8 @@ public partial class PlanningChartComponent
 {
     [Parameter]
     public List<ShiftPlanningDto>    ShiftPlanningDtos { get; set; } = new();
+    [Parameter]
+    public string ColumnHeaderText { get; set; }
     
     private SfGantt<ShiftPlanningDto> _gantt;
     

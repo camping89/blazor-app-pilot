@@ -2,10 +2,9 @@
 @using BlazorApp.Components
 @using BlazorApp.Services
 @inject EmployeeApiService EmployeeApiService
-@inject ShiftApiService    ShiftApiService
 
-<PageTitle>Planning Chart</PageTitle>
-<h1>Planning Chart</h1>
+<PageTitle>Shift Planning Chart</PageTitle>
+<h1>Shift Planning Chart</h1>
 
 @if (ShiftPlanningDtos is null || !ShiftPlanningDtos.Any())
 {
@@ -14,5 +13,5 @@
 }
 else
 {
-    <PlanningChartComponent ShiftPlanningDtos="@ShiftPlanningDtos"></PlanningChartComponent>
+    <PlanningChartComponent ColumnHeaderText="Employee Shift" ShiftPlanningDtos="@ShiftPlanningDtos"></PlanningChartComponent>
 }

@@ -1,0 +1,17 @@
+@page "/client-planning"
+@using BlazorApp.Services
+@inject ClientApiService ClientApiService
+@using BlazorApp.Components
+
+<PageTitle>Client Planning Chart</PageTitle>
+<h1>Client Planning Chart</h1>
+
+@if (ShiftPlanningDtos is null || !ShiftPlanningDtos.Any())
+{
+    <SfSpinner @bind-Visible="@VisibleProperty" CssClass="e-spin-overlay">
+    </SfSpinner>
+}
+else
+{
+    <PlanningChartComponent ColumnHeaderText="Client Shift" ShiftPlanningDtos="@ShiftPlanningDtos"></PlanningChartComponent>
+}

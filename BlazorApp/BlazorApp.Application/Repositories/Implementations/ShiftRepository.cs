@@ -18,4 +18,10 @@ public class ShiftRepository: BaseRepository<Shift>, IShiftRepository
 
         return shifts.Where(shift => shift.EmployeeId == employeeId).ToList();
     }
+
+    public async Task<List<Shift>> GetByClientId(int clientId)
+    {
+        var shifts = await Get();
+        return shifts.Where(shift => shift.ClientId == clientId).ToList();
+    }
 }
