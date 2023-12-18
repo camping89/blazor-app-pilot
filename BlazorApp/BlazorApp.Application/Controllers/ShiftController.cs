@@ -98,8 +98,9 @@ public class ShiftController : ControllerBase
     public async Task<IActionResult> Get(string id)
     {
         var shift = await _shiftRepository.Get(id);
+        shift.Deviations = new List<Deviation>();
         var deviation = await _deviationRepository.GetByShiftId(shift.Id);
-        if (deviation != null) shift.Deviations = new List<Deviation> {deviation};
+        if (deviation != null) shift.Deviations.Add(deviation);
         var returnData = new ResultDto<Shift> { Payload = shift };
         return Ok(returnData);
     }
@@ -203,5 +204,22 @@ public class ShiftController : ControllerBase
         }
 
         return returnData;
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var shift = await _shiftRepository.Get(id);
+        if (shift is not null)
+        {
+            await _shiftRepository.Delete(shift.Id.ToString());
+            var deviation = await _deviationRepository.GetByShiftId(shift.Id);
+            if (deviation is not null)
+            {
+                await _deviationRepository.Delete(deviation.Id.ToString());
+            }
+        }
+
+        return Ok();
     }
 }

@@ -43,4 +43,10 @@ public class ShiftApiService : BaseService
         var response = await GetRestClient().ExecuteAsync<ResultDto<List<Shift>>>(request);
         return response.Data.Payload;
     }
+
+    public async Task Delete(string Id)
+    {
+        var request  = new RestRequest($"Shift/delete/{Id}", Method.Delete);
+        await GetRestClient().ExecuteAsync(request);
+    }
 }

@@ -35,10 +35,11 @@ public class EmployeeController : ControllerBase
             var shifts = await _shiftRepository.GetByEmployeeId(employee.Id);
             foreach (var shift in shifts)
             {
+                shift.Deviations = new List<Deviation>();
                 var deviation = await _deviationRepository.GetByShiftId(shift.Id);
                 if (deviation is not null)
                 {
-                    shift.Deviations = new List<Deviation> { deviation };
+                    shift.Deviations.Add(deviation);
                 }
 
                 var client = await _clientRepository.Get(shift.ClientId.ToString());

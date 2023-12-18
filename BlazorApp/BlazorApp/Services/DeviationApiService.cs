@@ -30,4 +30,10 @@ public class DeviationApiService : BaseService
 
         return response.Data;
     }
+    
+    public async Task Delete(string Id)
+    {
+        var request  = new RestRequest($"Deviation/delete/{Id}", Method.Delete);
+        await GetRestClient().ExecuteAsync(request);
+    }
 }

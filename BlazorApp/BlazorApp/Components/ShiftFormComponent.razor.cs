@@ -25,10 +25,7 @@ public partial class ShiftFormComponent
 
     private SfDialog Dialog;
 
-    private List<Employee>  _employees = new();
-    private List<Client>    _clients   = new();
-    private List<StatusDto> _shiftStatus;
-    private List<StatusDto> _deviationStatus;
+    
     public  bool            IsDisplayedDeleteButton = false;
 
     public ShiftDto Shift { get; set; } = new()
@@ -39,26 +36,7 @@ public partial class ShiftFormComponent
 
     protected override async Task OnInitializedAsync()
     {
-        _employees = (await EmployeeApiService.Get()).Payload;
-        _clients   = (await ClientApiService.Get()).Payload;
-        _shiftStatus = new List<StatusDto>
-        {
-            new()
-            {
-                Id   = "1",
-                Name = "Planned"
-            },
-            new()
-            {
-                Id   = "2",
-                Name = "Approved"
-            },
-            new()
-            {
-                Id   = "3",
-                Name = "Completed"
-            }
-        };
+        
     }
 
     private async Task HandleValidSubmit()
@@ -91,6 +69,7 @@ public partial class ShiftFormComponent
 
     private async Task OnDelete()
     {
+        await ShiftApiService.Delete(Shift.Id.ToString());
         await Hide();
     }
 

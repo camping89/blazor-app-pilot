@@ -1,33 +1,38 @@
-@using BlazorApp.Models
+@using BlazorApp.Share.Entities
+@using BlazorApp.Services
+@inject ShiftApiService     ShiftApiService
+@inject DeviationApiService DeviationApiService
 
-<div class="form-group">
-    <label for="title">Reason:</label>
-    <SfTextBox ID="title" @bind-Value="@DeviationDto.Reason"></SfTextBox>
-    <ValidationMessage For="@(() => DeviationDto.Reason)"></ValidationMessage>
-</div>
+<SfDialog Width="250px" IsModal="true" Visible="false" @ref="DialogObj">
+    <DialogTemplates>
+        <Header>@Title</Header>
+        <Content>
+            <EditForm id="deviationForm" Model="@_deviationDto" OnValidSubmit="HandleValidSubmit">
+                <ContentTemplate>
+                    <DataAnnotationsValidator/>
+                    <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
 
-<div class="form-group">
-    <label for="startTime">Start Time:</label>
-    <SfTimePicker ID="startTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DeviationDto.StartTime"></SfTimePicker>
-    <ValidationMessage For="@(() => DeviationDto.StartTime)"></ValidationMessage>
-</div>
+                    <div class="form-group">
+                        <label for="shift">Shift:</label>
+                        <SfDropDownList ID="shift" TValue="string" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a shift" @bind-Value="@_deviationDto.ShiftId" DataSource="@_shifts">
+                            <DropDownListFieldSettings Value="Id" Text="Title"></DropDownListFieldSettings>
+                            <DropDownListEvents TValue="string" TItem="Shift" ValueChange="OnValueChange"></DropDownListEvents>
+                        </SfDropDownList>
+                        <ValidationMessage For="@(() => _deviationDto.ShiftId)"></ValidationMessage>
+                    </div>
 
-<div class="form-group">
-    <label for="endTime">End Time:</label>
-    <SfTimePicker ID="endTime" TValue="DateTime" PlaceHolder="Select a time" @bind-Value="@DeviationDto.EndTime"></SfTimePicker>
-    <ValidationMessage For="@(() => DeviationDto.EndTime)"></ValidationMessage>
-</div>
+                    <DeviationDetailFormComponent DeviationDto="@_deviationDto"></DeviationDetailFormComponent>
 
-<div class="form-group">
-    <label for="status">Status:</label>
-    <SfDropDownList ID="status" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
-        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
-    </SfDropDownList>
-</div>
-
-<div class="form-group">
-    <label for="type">Type:</label>
-    <SfDropDownList ID="type" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a type" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
-        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
-    </SfDropDownList>
-</div>
+                </ContentTemplate>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="Submit" IsPrimary="true" Type="ButtonType.Submit" form="deviationForm"/>
+        @if (IsDisplayedDeleteButton)
+        {
+            <DialogButton Content="Delete" IsPrimary="false" OnClick="@OnDelete"/>
+        }
+        <DialogButton Content="Cancel" IsPrimary="false" OnClick="@OnCancel"/>
+    </DialogButtons>
+</SfDialog>

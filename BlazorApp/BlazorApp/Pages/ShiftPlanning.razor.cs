@@ -11,7 +11,7 @@ public partial class ShiftPlanning
     private SfGantt<ShiftPlanningDto> _gantt;
     private List<ShiftPlanningDto>    ShiftPlanningDtos { get; set; } = new();
     private ShiftFormComponent        _shiftForm;
-    private AddDeviationFormComponent _deviationForm;
+    private DeviationFormComponent _deviationForm;
     private bool                      VisibleProperty { get; set; }
     private int                       _index;
 

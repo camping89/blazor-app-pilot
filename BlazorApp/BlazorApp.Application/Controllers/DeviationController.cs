@@ -54,4 +54,16 @@ public class DeviationController : ControllerBase
 
         return Ok(new ResultDto<Deviation> { Payload = input.Deviation });
     }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var deviation = await _deviationRepository.Get(id);
+        if (deviation is not null)
+        {
+            await _deviationRepository.Delete(deviation.Id.ToString());
+        }
+
+        return Ok();
+    }
 }

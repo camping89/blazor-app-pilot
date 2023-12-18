@@ -1,53 +1,109 @@
 using BlazorApp.Models;
+using BlazorApp.Share.Entities;
 using Microsoft.AspNetCore.Components;
+using Syncfusion.Blazor.DropDowns;
+using Syncfusion.Blazor.Popups;
 
 namespace BlazorApp.Components;
 
 public partial class DeviationFormComponent
 {
-    [Parameter] public DeviationDto DeviationDto { get; set; } = new();
+    [Parameter]
+    public EventCallback OnAddUpdateDeviationFormCloseCallback { get; set; }
 
-    private List<StatusDto> _deviationStatus;
-    private List<StatusDto> _deviationType;
+    [Inject] ILogger<DeviationFormComponent> Logger { get; set; }
+    private  SfDialog                           DialogObj;
+    private  DeviationDto                       _deviationDto = new();
+    private  List<Shift>                       _shifts       = new();
+    public  bool            IsDisplayedDeleteButton = false;
+
+    protected CustomFormValidator customFormValidator;
+
+    public string Title { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _deviationStatus = new List<StatusDto>
-        {
-            new()
-            {
-                Id   = "1",
-                Name = "Pending"
-            },
-            new()
-            {
-                Id   = "2",
-                Name = "Approved"
-            },
-            new()
-            {
-                Id   = "3",
-                Name = "Rejected"
-            }
-        };
+        _shifts = await ShiftApiService.Get();
+    }
 
-        _deviationType = new List<StatusDto>
+    private async Task HandleValidSubmit()
+    {
+        customFormValidator.ClearFormErrors();
+        try
         {
-            new()
+            var resultData = _deviationDto.Id == 0 ? await DeviationApiService.Add(_deviationDto) : await DeviationApiService.Update(_deviationDto);
+            if (resultData.IsError)
             {
-                Id   = "1",
-                Name = "Illness"
-            },
-            new()
-            {
-                Id   = "2",
-                Name = "Lateness"
-            },
-            new()
-            {
-                Id   = "3",
-                Name = "EarlyLeave"
+                customFormValidator.DisplayFormErrors(resultData.ErrorDetails);
+                throw new HttpRequestException("Validation failed.");
             }
-        };
+
+            await Hide();
+            Logger.LogInformation("The registration is successful");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex.Message);
+        }
+    }
+
+    private async Task OnCancel()
+    {
+        await Hide();
+    }
+
+    private async Task OnDelete()
+    {
+        await DeviationApiService.Delete(_deviationDto.Id.ToString());
+        await Hide();
+    }
+
+    public async Task Hide()
+    {
+        IsDisplayedDeleteButton = false;
+        await this.DialogObj.HideAsync();
+        await OnAddUpdateDeviationFormCloseCallback.InvokeAsync();
+    }
+
+    public async Task Show()
+    {
+        await this.DialogObj.ShowAsync();
+    }
+
+    public void OnValueChange(ChangeEventArgs<string, Shift> args)
+    {
+        var shift = _shifts.FirstOrDefault(_ => _.Id == args.ItemData.Id);
+        if (shift?.Deviations != null && shift.Deviations.Any() && shift.Deviations.All(deviation => deviation != null))
+        {
+            var deviation = shift.Deviations.First();
+            _deviationDto = new DeviationDto
+            {
+                Id = deviation.Id,
+                Reason = deviation.Reason,
+                EmployeeId = deviation.EmployeeId.ToString(),
+                StatusId = ((int) deviation.Status).ToString(),
+                StartTime = shift.Date.ToDateTime(deviation.StartTime),
+                EndTime = shift.Date.ToDateTime(deviation.EndTime),
+                DeviationTypeId = ((int) deviation.DeviationType).ToString(),
+                ShiftId = deviation.ShiftId.ToString()
+            };
+
+            IsDisplayedDeleteButton = true;
+        }
+        else
+        {
+            _deviationDto = new DeviationDto
+            {
+                ShiftId    = shift.Id.ToString(),
+                EmployeeId = shift.EmployeeId.ToString()
+            };
+
+            IsDisplayedDeleteButton = false;
+        }
+    }
+
+    public void ResetData()
+    {
+        _deviationDto = new DeviationDto();
     }
 }
