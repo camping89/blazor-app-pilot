@@ -28,7 +28,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : Entity
 
     public async Task Add(T entity)
     {
-        var currentDateTime = DateTime.UtcNow;
+        var currentDateTime = DateTime.Now;
         entity.CreatedAt = currentDateTime;
         entity.ModifiedAt = currentDateTime;
         await _cacheService.Set(entity.Id.ToString(), entity);
@@ -36,7 +36,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : Entity
 
     public async Task Update(string id, T entity)
     {
-        entity.ModifiedAt = DateTime.UtcNow;
+        entity.ModifiedAt = DateTime.Now;
         await _cacheService.Set(entity.Id.ToString(), entity);
     }
 

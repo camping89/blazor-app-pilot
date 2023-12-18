@@ -19,15 +19,15 @@
 </div>
 
 <div class="form-group">
-    <label for="endTime">Status:</label>
-    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
+    <label for="status">Status:</label>
+    <SfDropDownList ID="status" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
         <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
     </SfDropDownList>
 </div>
 
 <div class="form-group">
-    <label for="endTime">Status:</label>
-    <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a status" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
+    <label for="type">Type:</label>
+    <SfDropDownList ID="type" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="200px" Placeholder="Select a type" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
         <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
     </SfDropDownList>
 </div>

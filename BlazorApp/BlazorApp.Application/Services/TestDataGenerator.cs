@@ -52,8 +52,8 @@ public class TestDataGenerator
                                          .RuleFor(_ => _.VacationDays,  f => f.Random.Number(1,  5))
                                          .RuleFor(_ => _.Shifts,        new List<Shift>())
                                          .RuleFor(_ => _.Deviations,    new List<Deviation>())
-                                         .RuleFor(_ => _.CreatedAt,     DateTime.UtcNow)
-                                         .RuleFor(_ => _.ModifiedAt,    DateTime.UtcNow)
+                                         .RuleFor(_ => _.CreatedAt,     DateTime.Now)
+                                         .RuleFor(_ => _.ModifiedAt,    DateTime.Now)
                                          .FinishWith((f, e) => { Debug.WriteLine("Generated Employee {0}|{1}", e.Id, e.Name); });
 
         return faker.Generate(amount);
@@ -67,8 +67,8 @@ public class TestDataGenerator
                                        .RuleFor(_ => _.NDayparts,  f => f.Random.Number(1,      4))
                                        .RuleFor(_ => _.NMin,       f => f.Random.Number(60 * 4, 60 * 6))
                                        .RuleFor(_ => _.Shifts,     new List<Shift>())
-                                       .RuleFor(_ => _.CreatedAt,  DateTime.UtcNow)
-                                       .RuleFor(_ => _.ModifiedAt, DateTime.UtcNow)
+                                       .RuleFor(_ => _.CreatedAt,  DateTime.Now)
+                                       .RuleFor(_ => _.ModifiedAt, DateTime.Now)
                                        .FinishWith((f, e) => { Debug.WriteLine("Generated Client {0}|{1}", e.Id, e.Name); });
 
         return faker.Generate(amount);

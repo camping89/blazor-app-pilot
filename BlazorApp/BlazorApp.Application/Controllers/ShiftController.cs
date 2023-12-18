@@ -99,8 +99,8 @@ public class ShiftController : ControllerBase
     {
         var shift = await _shiftRepository.Get(id);
         var deviation = await _deviationRepository.GetByShiftId(shift.Id);
-        shift.Deviations = new List<Deviation> {deviation};
-        var returnData = new ResultDto<Shift> { Data = shift };
+        if (deviation != null) shift.Deviations = new List<Deviation> {deviation};
+        var returnData = new ResultDto<Shift> { Payload = shift };
         return Ok(returnData);
     }
 
@@ -197,7 +197,7 @@ public class ShiftController : ControllerBase
             returnData.IsError = true;
         }
 
-        if (shift.Date < new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day))
+        if (shift.Date < new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
         {
             returnData.ErrorDetails.Add(nameof(shift.Date), new List<string> { "The Date is invalid" });
         }
