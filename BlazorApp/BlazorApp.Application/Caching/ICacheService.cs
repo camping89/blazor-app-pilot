@@ -13,5 +13,4 @@ public interface ICacheService
 
     Task Remove(string         key,    CancellationToken cancellationToken = default);
     Task Remove<T>(string      key,    CancellationToken cancellationToken = default);
-    Task RemoveByPrefix(string prefix, CancellationToken cancellationToken = default);
 }

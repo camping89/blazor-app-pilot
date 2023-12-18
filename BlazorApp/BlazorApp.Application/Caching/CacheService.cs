@@ -71,14 +71,7 @@ public class CacheService : ICacheService
         var cacheKey = GetCacheName<T>(key);
         await Remove(cacheKey, cancellationToken);
     }
-
-    public async Task RemoveByPrefix(string prefix, CancellationToken cancellationToken = default)
-    {
-        var tasks = CacheKeys.Keys.Where(key => key.ToLower().StartsWith(prefix.ToLower())).Select(key => Remove(key, cancellationToken));
-
-        await Task.WhenAll(tasks);
-    }
-
+    
     public async Task<List<T>> GetByPrefix<T>(string prefix = "", CancellationToken cancellationToken = default) where T : class
     {
         var cacheKey = GetCacheName<T>(prefix).ToLower();
