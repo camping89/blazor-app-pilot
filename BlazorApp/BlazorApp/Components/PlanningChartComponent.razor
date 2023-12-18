@@ -3,7 +3,7 @@
 @inject EmployeeApiService EmployeeApiService
 @inject ShiftApiService    ShiftApiService
 
-<SfGantt @ref="_gantt" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
+<SfGantt @ref="_gantt"  ShowColumnChooser="true"  AllowSorting="true" AllowFiltering="true" AllowReordering="true" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
     <GanttTaskFields Id="Id" Name="Title" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
     </GanttTaskFields>
     <GanttTimelineSettings >
@@ -26,9 +26,9 @@
     <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
     </GanttEditSettings>
     <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="ShiftPlanningDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo" Created="OnCreated"></GanttEvents>
-    <GanttColumns>
-        <GanttColumn Field="Description" HeaderText="@ColumnHeaderText" AllowEditing="false"> </GanttColumn>
-    </GanttColumns>
+    @* <GanttColumns> *@
+    @*     <GanttColumn Field="Description" HeaderText="@ColumnHeaderText" AllowEditing="false"> </GanttColumn> *@
+    @* </GanttColumns> *@
 </SfGantt>
 
 <ShiftFormComponent @ref="_shiftForm" OnShiftFormCloseCallback="OnShiftFormClose"/>

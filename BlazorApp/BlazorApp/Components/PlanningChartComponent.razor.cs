@@ -39,6 +39,12 @@ public partial class PlanningChartComponent
             Text        = "Add Deviation",
             TooltipText = "Add Deviation",
             Id          = "toolbarAddDeviation"
+        },
+        new ItemModel
+        {
+            Text = "Column Chooser", 
+            TooltipText = "Column Chooser", 
+            Id = "toolbarColumnChooser"
         }
     };
     
@@ -56,6 +62,10 @@ public partial class PlanningChartComponent
                 _deviationForm.Title = "Add Deviation";
                 _deviationForm.ResetData();
                 await _deviationForm.Show();
+                break;
+            
+            case "toolbarColumnChooser":
+                await _gantt.OpenColumnChooser(100, 50);
                 break;
         }
     }
