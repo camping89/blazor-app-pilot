@@ -53,7 +53,7 @@ public partial class PlanningChartComponent
                 break;
 
             case "toolbarAddDeviation":
-                _deviationForm.Title = "Add/Update Deviation";
+                _deviationForm.Title = "Add Deviation";
                 _deviationForm.ResetData();
                 await _deviationForm.Show();
                 break;

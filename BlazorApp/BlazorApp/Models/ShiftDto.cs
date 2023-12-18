@@ -10,12 +10,12 @@ public class ShiftDto
     public int      Id         { get; set; }
     public DateTime CreatedAt  { get; set; }
     public DateTime ModifiedAt { get; set; }
-    [Required(ErrorMessage = "Please select {0}.")]
+    [Required(ErrorMessage = "Please select employee.")]
     public string EmployeeId { get; set; }
-    [Required(ErrorMessage = "Please select {0}.")]
+    [Required(ErrorMessage = "Please select client.")]
     public string ClientId { get; set; }
 
-    [Required(ErrorMessage = "Please enter {0}.")]
+    [Required(ErrorMessage = "Please enter title of the shift.")]
     public string Title { get;  set; }
     public DateTime Date { get; set; }
     [Required]
@@ -23,6 +23,7 @@ public class ShiftDto
     [Required]
     public DateTime EndTime { get; set; }
     public int    Duration => (int)(EndTime - StartTime).TotalMinutes;
+    [Required(ErrorMessage = "Please select status.")]
     public string StatusId { get; set; }
 
     public List<DeviationDto> Deviations   { get; set; } = new();

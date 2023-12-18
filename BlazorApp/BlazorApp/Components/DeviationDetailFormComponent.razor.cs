@@ -7,46 +7,46 @@ public partial class DeviationDetailFormComponent
 {
     [Parameter] public DeviationDto DeviationDto { get; set; } = new();
 
-    private List<StatusDto> _deviationStatus;
-    private List<StatusDto> _deviationType;
+    private List<KeyValueDto> _deviationStatus;
+    private List<KeyValueDto> _deviationType;
 
     protected override async Task OnInitializedAsync()
     {
-        _deviationStatus = new List<StatusDto>
+        _deviationStatus = new List<KeyValueDto>
         {
             new()
             {
-                Id   = "1",
-                Name = "Pending"
+                Key   = "1",
+                Value = "Pending"
             },
             new()
             {
-                Id   = "2",
-                Name = "Approved"
+                Key   = "2",
+                Value = "Approved"
             },
             new()
             {
-                Id   = "3",
-                Name = "Rejected"
+                Key   = "3",
+                Value = "Rejected"
             }
         };
 
-        _deviationType = new List<StatusDto>
+        _deviationType = new List<KeyValueDto>
         {
             new()
             {
-                Id   = "1",
-                Name = "Illness"
+                Key   = "1",
+                Value = "Illness"
             },
             new()
             {
-                Id   = "2",
-                Name = "Lateness"
+                Key   = "2",
+                Value = "Lateness"
             },
             new()
             {
-                Id   = "3",
-                Name = "EarlyLeave"
+                Key   = "3",
+                Value = "EarlyLeave"
             }
         };
     }

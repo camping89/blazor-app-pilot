@@ -31,6 +31,7 @@
     <div class="form-group mt-2">
         <label for="date">Date:</label>
         <SfDatePicker ID="dateOnly" TValue="DateTime?" PlaceHolder="Select a dateOnly" Value="@Shift.Date"></SfDatePicker>
+        <ValidationMessage For="@(() => Shift.Date)"></ValidationMessage>
     </div>
 
     <div class="form-group mt-2">
@@ -48,8 +49,9 @@
 
     <div class="form-group mt-2">
         <label for="endTime">Status:</label>
-        <SfDropDownList TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a status" DataSource="@_shiftStatus" @bind-Value="@Shift.StatusId">
-            <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+        <SfDropDownList TValue="string" TItem="KeyValueDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a status" DataSource="@_shiftStatus" @bind-Value="@Shift.StatusId">
+            <DropDownListFieldSettings Value="Key" Text="Value"></DropDownListFieldSettings>
         </SfDropDownList>
+        <ValidationMessage For="@(() => Shift.StatusId)"></ValidationMessage>
     </div>
 </div>

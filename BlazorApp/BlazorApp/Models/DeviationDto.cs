@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using BlazorApp.Share.Entities;
 using BlazorApp.Share.Enums;
 using BlazorApp.Share.Extensions;
@@ -6,15 +7,20 @@ namespace BlazorApp.Models;
 
 public class DeviationDto
 {
-    public DateTime CreatedAt       { get; set; }
-    public DateTime ModifiedAt      { get; set; }
-    public string   EmployeeId      { get; set; }
-    public string   ShiftId         { get; set; }
+    public DateTime CreatedAt  { get; set; }
+    public DateTime ModifiedAt { get; set; }
+
+    public string EmployeeId { get; set; }
+    [Required(ErrorMessage = "Please select shift.")]
+    public string ShiftId { get;           set; }
     public DateTime StartTime       { get; set; }
     public DateTime EndTime         { get; set; }
     public int      Duration        => (int)(EndTime - StartTime).TotalMinutes;
+    [Required(ErrorMessage = "Please select deviation type.")]
     public string   DeviationTypeId { get; set; }
+    [Required(ErrorMessage = "Please enter deviation reason.")]
     public string   Reason          { get; set; }
+    [Required(ErrorMessage = "Please select deviation status.")]
     public string   StatusId        { get; set; }
     public int      Id              { get; set; }
 

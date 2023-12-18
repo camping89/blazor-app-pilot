@@ -20,14 +20,16 @@
 
 <div class="form-group mt-2">
     <label for="status">Status:</label>
-    <SfDropDownList ID="status" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
-        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+    <SfDropDownList ID="status" TValue="string" TItem="KeyValueDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a status" DataSource="@_deviationStatus" @bind-Value="@DeviationDto.StatusId">
+        <DropDownListFieldSettings Value="Key" Text="Value"></DropDownListFieldSettings>
     </SfDropDownList>
+    <ValidationMessage For="@(() => DeviationDto.StatusId)"></ValidationMessage>
 </div>
 
 <div class="form-group mt-2">
     <label for="type">Type:</label>
-    <SfDropDownList ID="type" TValue="string" TItem="StatusDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a type" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
-        <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
+    <SfDropDownList ID="type" TValue="string" TItem="KeyValueDto" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a type" DataSource="@_deviationType" @bind-Value="@DeviationDto.DeviationTypeId">
+        <DropDownListFieldSettings Value="Key" Text="Value"></DropDownListFieldSettings>
     </SfDropDownList>
+    <ValidationMessage For="@(() => DeviationDto.DeviationTypeId)"></ValidationMessage>
 </div>

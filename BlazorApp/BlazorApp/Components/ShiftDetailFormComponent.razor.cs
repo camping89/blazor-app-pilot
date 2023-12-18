@@ -12,7 +12,7 @@ public partial class ShiftDetailFormComponent
         Date         = DateTime.Now,
     };
     
-    private List<StatusDto> _shiftStatus;
+    private List<KeyValueDto> _shiftStatus;
     private List<Employee>  _employees = new();
     private List<Client>    _clients   = new();
 
@@ -21,22 +21,22 @@ public partial class ShiftDetailFormComponent
         _employees = (await EmployeeApiService.Get()).Payload;
         _clients   = (await ClientApiService.Get()).Payload;
         
-        _shiftStatus = new List<StatusDto>
+        _shiftStatus = new List<KeyValueDto>
         {
             new()
             {
-                Id   = "1",
-                Name = "Planned"
+                Key   = "1",
+                Value = "Planned"
             },
             new()
             {
-                Id   = "2",
-                Name = "Approved"
+                Key   = "2",
+                Value = "Approved"
             },
             new()
             {
-                Id   = "3",
-                Name = "Completed"
+                Key   = "3",
+                Value = "Completed"
             }
         };
     }
