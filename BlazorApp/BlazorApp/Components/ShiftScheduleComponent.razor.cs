@@ -1,5 +1,6 @@
 using System.Drawing;
 using BlazorApp.Models;
+using BlazorApp.Share.Enums;
 using Syncfusion.Blazor.Schedule;
 
 namespace BlazorApp.Components;
@@ -20,16 +21,67 @@ public partial class ShiftScheduleComponent
                 var color = RandomColor();
                 foreach (var shift in employee.Shifts)
                 {
-                    DataSource.Add(new ShiftScheduleDto
+                    
+                    if (shift.Deviations.Any())
                     {
-                        Id            = shift.Id,
-                        Subject       = $"Shift: {shift.Title}",
-                        Location      = $"Client: {shift.Client?.Name ?? ""}",
-                        StartTime     = shift.Date.ToDateTime(shift.StartTime),
-                        EndTime       = shift.Date.ToDateTime(shift.EndTime),
-                        Description   = $"Employee: {employee.Name}",
-                        CategoryColor = color
-                    });
+                        var deviationAppointments = new List<ShiftScheduleDto>();
+                        foreach (var deviation in shift.Deviations)
+                        {
+                            deviationAppointments.Add(new ShiftScheduleDto
+                            {
+                                Id            = shift.Id,
+                                Subject       = $"Type: {deviation.DeviationType}",
+                                Location      = $"Shift: {shift.Title}",
+                                StartTime     = shift.Date.ToDateTime(deviation.StartTime),
+                                EndTime       = shift.Date.ToDateTime(deviation.EndTime),
+                                Description   = $"Reason: {deviation.Reason}",
+                                CategoryColor = color
+                            });
+                        }
+                        
+                        DataSource.AddRange(deviationAppointments);
+
+                        var latenessDeviation = shift.Deviations.FirstOrDefault(deviation =>
+                            deviation.DeviationType == DeviationType.Lateness);
+                        var earlyLeaveDeviation = shift.Deviations.FirstOrDefault(deviation =>
+                            deviation.DeviationType == DeviationType.EarlyLeave);
+
+                        DateTime startTime = shift.Date.ToDateTime(shift.StartTime);
+                        DateTime endTime = shift.Date.ToDateTime(shift.EndTime);
+                        if (latenessDeviation is not null)
+                        {
+                            startTime = shift.Date.ToDateTime(latenessDeviation.EndTime);
+                        }
+
+                        if (earlyLeaveDeviation is not null)
+                        {
+                            endTime =  shift.Date.ToDateTime(earlyLeaveDeviation.StartTime);
+                        }
+                        
+                        DataSource.Add(new ShiftScheduleDto
+                        {
+                            Id            = shift.Id,
+                            Subject       = $"Shift: {shift.Title}",
+                            Location      = $"Client: {shift.Client?.Name ?? ""}",
+                            StartTime     = startTime,
+                            EndTime       = endTime,
+                            Description   = $"Employee: {employee.Name}",
+                            CategoryColor = color
+                        });
+                    }
+                    else
+                    {
+                        DataSource.Add(new ShiftScheduleDto
+                        {
+                            Id            = shift.Id,
+                            Subject       = $"Shift: {shift.Title}",
+                            Location      = $"Client: {shift.Client?.Name ?? ""}",
+                            StartTime     = shift.Date.ToDateTime(shift.StartTime),
+                            EndTime       = shift.Date.ToDateTime(shift.EndTime),
+                            Description   = $"Employee: {employee.Name}",
+                            CategoryColor = color
+                        });
+                    }
                 }
             }
         }
