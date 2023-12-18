@@ -33,10 +33,10 @@ public partial class ShiftPlanning
                 {
                     shiftPlanningDto.Id *= -1;
                     shiftPlanningDtos.Add(shiftPlanningDto);
-                    var subTask = shift.ToShiftPlanningDto(employee.Name);
-                    subTask.ParentId    = shiftPlanningDtos.First().Id;
-                    subTask.Description = $"Shift Title: {shiftPlanningDto.Title}";
-                    shiftPlanningDtos.Add(subTask);
+                    var sub = shift.ToShiftPlanningDto(employee.Name);
+                    sub.ParentId    = shiftPlanningDtos.First().Id;
+                    sub.Description = $"Shift Title: {shiftPlanningDto.Title}";
+                    shiftPlanningDtos.Add(sub);
                 }
             }
 
