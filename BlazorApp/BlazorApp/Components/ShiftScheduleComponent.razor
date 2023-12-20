@@ -1,10 +1,11 @@
 @using BlazorApp.Models
 @using BlazorApp.Services
+
 @inject EmployeeApiService EmployeeApiService
 
 <SfSchedule  @ref="_shiftSchedule"  TValue=ShiftScheduleDto> 
-    <ScheduleEventSettings DataSource="@DataSource" AllowEditing="false" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
-    <ScheduleEvents TValue="ShiftScheduleDto" EventRendered="OnEventRendered"></ScheduleEvents> 
+    <ScheduleEventSettings DataSource="@DataSource"  AllowEditing="false" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+    <ScheduleEvents   TValue="ShiftScheduleDto" EventRendered="OnEventRendered"></ScheduleEvents> 
     <ScheduleViews>
         <ScheduleView Option="View.Day"></ScheduleView>
         <ScheduleView Option="View.Week"></ScheduleView>
@@ -13,3 +14,9 @@
         <ScheduleView Option="View.Agenda"></ScheduleView>
     </ScheduleViews>
 </SfSchedule>
+
+<style>
+   .e-quick-popup-wrapper .e-popup-footer .e-event-edit, .e-quick-popup-wrapper .e-popup-footer .e-event-delete {
+        display: none !important;
+    }
+</style>
