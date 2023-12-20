@@ -2,6 +2,7 @@
 @using BlazorApp.Services
 @inject EmployeeApiService EmployeeApiService
 @inject ShiftApiService    ShiftApiService
+@inject DeviationApiService DeviationApiService
 
 <SfGantt @ref="_gantt" AllowResizing="true"   ShowColumnChooser="true"  AllowSorting="true" AllowFiltering="true" AllowReordering="true" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
     <GanttTaskFields Id="Id" Name="Title" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
@@ -13,13 +14,22 @@
     <GanttTooltipSettings ShowTooltip="true" TValue="ShiftPlanningDto">
         <TaskbarTemplate>
             @{
-                <div>Shift Title: @context.Title</div>
-                <div>Client: @context.ClientName</div>
-                <div>Employee: @context.EmployeeName</div>
-                <div>Start Time: @context.StartDate</div>
-                <div>End Time: @context.EndDate</div>
-                <div>Shift Duration: @context.Duration Minutes</div>
-                <div>Deviation: @context.DeviationDuration Minutes</div>
+                if (@context.IsDeviation)
+                {
+                    <div>Deviation Type: @context.DeviationType</div>
+                    <div>Deviation Reason: @context.DeviationReason</div>
+                    <div>Deviation Duration: @context.DeviationDuration Minutes</div>
+                }
+                else
+                {
+                    <div>Shift Title: @context.Title</div>
+                    <div>Client: @context.ClientName</div>
+                    <div>Employee: @context.EmployeeName</div>
+                    <div>Start Time: @context.StartDate</div>
+                    <div>End Time: @context.EndDate</div>
+                    <div>Shift Duration: @context.Duration Minutes</div>
+                    <div>Deviations Duration: @context.TotalDeviationDuration Minutes</div>
+                }
             }
         </TaskbarTemplate>
     </GanttTooltipSettings>

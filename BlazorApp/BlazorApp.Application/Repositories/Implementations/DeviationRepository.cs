@@ -10,9 +10,9 @@ public class DeviationRepository : BaseRepository<Deviation>, IDeviationReposito
     {
     }
 
-    public async Task<Deviation?> GetByShiftId(int shiftId)
+    public async Task<List<Deviation>> GetByShiftId(int shiftId)
     {
         var deviations = await _cacheService.GetByPrefix<Deviation>();
-        return deviations.FirstOrDefault(deviation => deviation.ShiftId == shiftId);
+        return deviations.Where(deviation => deviation.ShiftId == shiftId).ToList();
     }
 }

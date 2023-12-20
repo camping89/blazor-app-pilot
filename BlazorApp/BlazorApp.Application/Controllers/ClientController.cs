@@ -33,8 +33,8 @@ public class ClientController : ControllerBase
             foreach (var shift in shifts)
             {
                 shift.Deviations = new List<Deviation>();
-                var deviation = await _deviationRepository.GetByShiftId(shift.Id);
-                if (deviation is not null)
+                var deviations = await _deviationRepository.GetByShiftId(shift.Id);
+                foreach (var deviation in deviations)
                 {
                     shift.Deviations.Add(deviation);
                 }

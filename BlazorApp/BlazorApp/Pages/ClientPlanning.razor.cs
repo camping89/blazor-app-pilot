@@ -19,6 +19,7 @@ public partial class ClientPlanning
         foreach (var client in clients)
         {
             var shiftPlanningDtos = new List<ShiftPlanningDto>();
+            var totalDuration = client.Shifts.Sum(shift => shift.Duration);
             foreach (var shift in client.Shifts.OrderBy(s => s.Date).ThenBy(s => s.StartTime))
             {
                 var shiftPlanningDto = shift.ToShiftPlanningDto(client.Name);
@@ -28,15 +29,21 @@ public partial class ClientPlanning
                     shiftPlanningDto.ParentId    = shiftPlanningDtos.First().Id;
                     shiftPlanningDto.Description = $"Shift Title: {shiftPlanningDto.Title}";
                     shiftPlanningDtos.Add(shiftPlanningDto);
+                    
+                    AddDeviationPlanning(shift, shift.Employee, shiftPlanningDto, shiftPlanningDtos);
                 }
                 else
                 {
                     shiftPlanningDto.Id *= -1;
+                    shiftPlanningDto.DurationDescription = $"Total Shift Duration: {totalDuration} minutes";
                     shiftPlanningDtos.Add(shiftPlanningDto);
-                    var sub = shift.ToShiftPlanningDto(client.Name);
-                    sub.ParentId    = shiftPlanningDtos.First().Id;
-                    sub.Description = $"Shift Title: {shiftPlanningDto.Title}";
-                    shiftPlanningDtos.Add(sub);
+                    
+                    var subShiftPlanningDto = shift.ToShiftPlanningDto(client.Name);
+                    subShiftPlanningDto.ParentId    = shiftPlanningDtos.First().Id;
+                    subShiftPlanningDto.Description = $"Shift Title: {shiftPlanningDto.Title}";
+                    shiftPlanningDtos.Add(subShiftPlanningDto);
+                    
+                    AddDeviationPlanning(shift, shift.Employee, subShiftPlanningDto, shiftPlanningDtos);
                 }
             }
 

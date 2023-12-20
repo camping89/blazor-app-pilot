@@ -122,6 +122,7 @@ public class RandomDataGenerator
                                           .RuleFor(_ => _.Status,     f => f.PickRandom(DeviationStatus.Pending, DeviationStatus.Approved, DeviationStatus.Rejected))
                                           .RuleFor(_ => _.CreatedAt,  (f, d) => DateTime.Now)
                                           .RuleFor(_ => _.ModifiedAt, (f, d) => DateTime.Now)
+                                          .RuleFor(_=>_.Shift, new  Shift())
                                           .FinishWith((f,                 e) => { Debug.WriteLine("Generated Shift {0}|{1}", e.Id, e.Reason); });
 
         return faker.Generate(1).First();

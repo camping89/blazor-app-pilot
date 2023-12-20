@@ -85,10 +85,10 @@ public class ShiftController : ControllerBase
         {
             var client    = await _clientRepository.Get(shift.ClientId.ToString());
             var employee  = await _employeeRepository.Get(shift.EmployeeId.ToString());
-            var deviation = await _deviationRepository.GetByShiftId(shift.Id);
+            var deviations = await _deviationRepository.GetByShiftId(shift.Id);
             shift.Client     = client;
             shift.Employee   = employee;
-            shift.Deviations = new List<Deviation> { deviation };
+            shift.Deviations = deviations;
         }
 
         return Ok(new ResultDto<List<Shift>> { Payload = shifts });
@@ -98,34 +98,24 @@ public class ShiftController : ControllerBase
     public async Task<IActionResult> Get(string id)
     {
         var shift = await _shiftRepository.Get(id);
-        shift.Deviations = new List<Deviation>();
-        var deviation = await _deviationRepository.GetByShiftId(shift.Id);
-        if (deviation != null) shift.Deviations.Add(deviation);
-        var returnData = new ResultDto<Shift> { Payload = shift };
-        return Ok(returnData);
+        if (shift != null)
+        {
+            shift.Deviations = new List<Deviation>();
+            var deviations = await _deviationRepository.GetByShiftId(shift.Id);
+            shift.Deviations = deviations;
+            var returnData = new ResultDto<Shift> {Payload = shift};
+            return Ok(returnData);
+        }
+        else
+        {
+            return NotFound();
+        }
     }
 
     [HttpPost("update")]
     public async Task<IActionResult> Update(UpdateShiftRequestInput input)
     {
         var       returnData = await ValidateShift(input.Shift, true);
-        Deviation deviation  = null;
-
-        if (!returnData.IsError)
-        {
-            if (input.Shift.Deviations != null && input.Shift.Deviations.Any())
-            {
-                deviation = input.Shift.Deviations.First();
-                var validateDeviationResultDto = await _deviationService.ValidateDeviation(deviation, input.Shift, true);
-                if (validateDeviationResultDto.IsError)
-                {
-                    returnData.ErrorDetails = validateDeviationResultDto.ErrorDetails;
-                    returnData.IsError      = validateDeviationResultDto.IsError;
-                    return BadRequest(returnData);
-                }
-            }
-        }
-
         if (returnData.IsError)
         {
             return BadRequest(returnData);
@@ -134,21 +124,6 @@ public class ShiftController : ControllerBase
         var employee = await _employeeRepository.Get(input.Shift.EmployeeId.ToString());
         await _shiftRepository.Update(input.Shift.Id.ToString(), input.Shift);
         input.Shift.Employee = employee;
-
-        if (deviation is not null && _deviationService.HasDeviation(deviation))
-        {
-            await _deviationRepository.Update(deviation.Id.ToString(), deviation);
-            input.Shift.Deviations = new List<Deviation> { deviation };
-        }
-        else
-        {
-            var existingDeviation = await _deviationRepository.GetByShiftId(input.Shift.Id);
-            if (existingDeviation is not null)
-            {
-                await _deviationRepository.Delete(existingDeviation.Id.ToString());
-            }
-        }
-
         returnData.Payload = input.Shift;
 
         return Ok(returnData);
@@ -213,8 +188,8 @@ public class ShiftController : ControllerBase
         if (shift is not null)
         {
             await _shiftRepository.Delete(shift.Id.ToString());
-            var deviation = await _deviationRepository.GetByShiftId(shift.Id);
-            if (deviation is not null)
+            var deviations = await _deviationRepository.GetByShiftId(shift.Id);
+            foreach (var deviation in deviations)
             {
                 await _deviationRepository.Delete(deviation.Id.ToString());
             }

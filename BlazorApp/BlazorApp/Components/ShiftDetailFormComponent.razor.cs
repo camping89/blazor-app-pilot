@@ -7,6 +7,7 @@ namespace BlazorApp.Components;
 public partial class ShiftDetailFormComponent
 {
     [Parameter] public ShiftDto Shift { get; set; } = new();
+    [Parameter] public bool EnabledDropBox { get; set; }
     
     private List<KeyValueDto> _shiftStatus;
     private List<Employee>  _employees = new();

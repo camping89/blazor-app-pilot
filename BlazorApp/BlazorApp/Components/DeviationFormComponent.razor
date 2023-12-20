@@ -7,21 +7,21 @@
     <DialogTemplates>
         <Header>@Title</Header>
         <Content>
-            <EditForm id="deviationForm" Model="@_deviationDto" OnValidSubmit="HandleValidSubmit">
+            <EditForm id="deviationForm" Model="@DeviationDto" OnValidSubmit="HandleValidSubmit">
                 <ContentTemplate>
                     <DataAnnotationsValidator/>
                     <CustomFormValidator @ref="customFormValidator"></CustomFormValidator>
 
                     <div class="form-group">
                         <label for="shift">Shift:</label>
-                        <SfDropDownList ID="shift" TValue="string" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a shift" @bind-Value="@_deviationDto.ShiftId" DataSource="@_shifts">
+                        <SfDropDownList ID="shift" TValue="string" Enabled="@EnabledShitDropBox" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a shift" @bind-Value="@DeviationDto.ShiftId" DataSource="@_shifts">
                             <DropDownListFieldSettings Value="Id" Text="Title"></DropDownListFieldSettings>
                             <DropDownListEvents TValue="string" TItem="Shift" ValueChange="OnValueChange"></DropDownListEvents>
                         </SfDropDownList>
-                        <ValidationMessage For="@(() => _deviationDto.ShiftId)"></ValidationMessage>
+                        <ValidationMessage For="@(() => DeviationDto.ShiftId)"></ValidationMessage>
                     </div>
 
-                    <DeviationDetailFormComponent DeviationDto="@_deviationDto"></DeviationDetailFormComponent>
+                    <DeviationDetailFormComponent DeviationDto="@DeviationDto"></DeviationDetailFormComponent>
 
                 </ContentTemplate>
             </EditForm>

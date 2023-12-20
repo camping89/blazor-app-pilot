@@ -13,7 +13,7 @@
 
     <div class="form-group mt-2">
         <label for="employee">Employee:</label>
-        <SfDropDownList ID="employee" TValue="string" TItem="Employee" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a employee" @bind-Value="@Shift.EmployeeId" DataSource="@_employees">
+        <SfDropDownList ID="employee" TValue="string" TItem="Employee" Enabled="@EnabledDropBox" AllowFiltering="true" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a employee" @bind-Value="@Shift.EmployeeId" DataSource="@_employees">
             <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
         </SfDropDownList>
         <ValidationMessage For="@(() => Shift.EmployeeId)"></ValidationMessage>
@@ -21,7 +21,7 @@
 
     <div class="form-group mt-2">
         <label for="client">Client:</label>
-        <SfDropDownList ID="client" TValue="string" TItem="Client" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a client" @bind-Value="@Shift.ClientId" DataSource="@_clients">
+        <SfDropDownList ID="client" TValue="string" TItem="Client" AllowFiltering="true" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a client" @bind-Value="@Shift.ClientId" DataSource="@_clients">
             <DropDownListFieldSettings Value="Id" Text="Name"></DropDownListFieldSettings>
         </SfDropDownList>
         <ValidationMessage For="@(() => Shift.ClientId)"></ValidationMessage>

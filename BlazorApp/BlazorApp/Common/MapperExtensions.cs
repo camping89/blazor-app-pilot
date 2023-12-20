@@ -19,7 +19,10 @@ public static class MapperExtensions
             DurationUnit = "minute",
             EmployeeName = employeeName,
             IsDeviation = true,
-            Description = $"Deviation Type: {deviation.DeviationType} - Reason: {deviation.Reason}"
+            Description = $"Deviation Type: {deviation.DeviationType} - Reason: {deviation.Reason}",
+            DeviationType = deviation.DeviationType.ToString(),
+            DeviationReason = deviation.Reason,
+            DeviationDuration = deviation.Duration.ToString()
         };
         
         if (shift.Client is not null)
@@ -54,27 +57,12 @@ public static class MapperExtensions
         Console.WriteLine($"shift ShiftPlanningDto  {item.Id}, shift ShiftPlanningDto Duration {item.Duration}");
 
         if (shift.Deviations == null || !shift.Deviations.Any()) return item;
-
-        // note: for now, shift has only one deviation
+        
         var deviation = shift.Deviations.FirstOrDefault();
         if (deviation is null) return item;
-        
-        var deviationDuration = shift.Deviations.First().Duration;
-        item.DeviationDuration = deviationDuration;
-        // if (deviation.DeviationType == DeviationType.EarlyLeave)
-        // {
-        //     item.Progress = (shift.Duration - deviationDuration) / (decimal) shift.Duration * 100;
-        // }
-        //
-        // if (deviation.DeviationType == DeviationType.Lateness)
-        // {
-        //     item.Progress = deviationDuration / (decimal)shift.Duration * 100;
-        // }
-        //
-        // if (deviation.DeviationType == DeviationType.Illness)
-        // {
-        //     item.Progress = 100;
-        // }
+
+        var deviationDuration = shift.Deviations.Sum(_ => _.Duration);
+        item.TotalDeviationDuration = deviationDuration;
 
         if (shift.Deviations.Any())
         {
@@ -104,6 +92,7 @@ public static class MapperExtensions
     {
         return new DeviationDto
         {
+            Id = deviation.Id,
             Reason          = deviation.Reason,
             EmployeeId      = deviation.EmployeeId.ToString(),
             StatusId        = ((int)deviation.Status).ToString(),

@@ -114,7 +114,7 @@ public partial class PlanningChartComponent
     
     private void Callback(RowDataBoundEventArgs<ShiftPlanningDto> obj)
     {
-        if (obj.Data.ParentId is null || (obj.Data.IsDeviation && obj.Data.Id < 0))
+        if (obj.Data.ParentId is null)
         {
             obj.Row.AddStyle(new []{"font-weight: bold"});
         }
@@ -141,11 +141,27 @@ public partial class PlanningChartComponent
             args.Cancel = true;
             if (args.RowData.ParentId is not null)
             {
-                var shift = await ShiftApiService.Get(args.RowData.Id);
-                _shiftForm.Shift                   = shift.ToShiftDto();
-                _shiftForm.Title                   = "Update Shift";
-                _shiftForm.IsDisplayedDeleteButton = true;
-                await _shiftForm.Show();
+                if (args.RowData.IsDeviation)
+                {
+                    if (args.RowData.Id > 0)
+                    {
+                        var deviation = await DeviationApiService.Get(args.RowData.Id.ToString());
+                        _deviationForm.DeviationDto = deviation.ToDeviationDto(deviation.Shift);
+                        _deviationForm.Title = "Update Deviation";
+                        _deviationForm.IsDisplayedDeleteButton = true;
+                        _deviationForm.EnabledShitDropBox = false;
+                        await _deviationForm.Show();
+                    }
+                }
+                else
+                {
+                    var shift = await ShiftApiService.Get(args.RowData.Id);
+                    _shiftForm.Shift                   = shift.ToShiftDto();
+                    _shiftForm.Title                   = "Update Shift";
+                    _shiftForm.IsDisplayedDeleteButton = true;
+                    _shiftForm.EnabledDropBox = false;
+                    await _shiftForm.Show();
+                }
             }
         }
     }

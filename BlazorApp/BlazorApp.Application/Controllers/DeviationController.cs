@@ -66,4 +66,20 @@ public class DeviationController : ControllerBase
 
         return Ok();
     }
+
+    [HttpGet("get/{id}")]
+    public async Task<IActionResult> Get(string id)
+    {
+        var deviation = await _deviationRepository.Get(id);
+        if (deviation is null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            var shift = await _shiftRepository.Get(deviation.ShiftId.ToString());
+            if (shift != null) deviation.Shift = shift;
+        }
+        return Ok(new ResultDto<Deviation> {Payload = deviation});
+    }
 }

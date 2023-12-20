@@ -12,4 +12,5 @@ public class Deviation : Entity
     public DeviationType DeviationType { get; set; }
     public string Reason { get; set; }
     public DeviationStatus  Status { get; set; }
+    public Shift? Shift { get; set; }
 }

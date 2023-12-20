@@ -31,9 +31,16 @@ public class DeviationApiService : BaseService
         return response.Data;
     }
     
-    public async Task Delete(string Id)
+    public async Task Delete(string id)
     {
-        var request  = new RestRequest($"deviation/delete/{Id}", Method.Delete);
+        var request  = new RestRequest($"deviation/delete/{id}", Method.Delete);
         await GetRestClient().ExecuteAsync(request);
+    }
+
+    public async Task<Deviation> Get(string id)
+    {
+        var request = new RestRequest($"deviation/get/{id}");
+        var response = await GetRestClient().ExecuteAsync<ResultDto<Deviation>>(request);
+        return response.Data.Payload;
     }
 }

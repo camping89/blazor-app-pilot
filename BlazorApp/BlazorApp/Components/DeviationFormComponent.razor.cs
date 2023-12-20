@@ -14,13 +14,14 @@ public partial class DeviationFormComponent
 
     [Inject] ILogger<DeviationFormComponent> Logger { get; set; }
     private  SfDialog                        DialogObj;
-    private  DeviationDto                    _deviationDto           = new();
     private  List<Shift>                     _shifts                 = new();
     public   bool                            IsDisplayedDeleteButton = false;
 
     protected CustomFormValidator customFormValidator;
 
     public string Title { get; set; }
+    public  DeviationDto                    DeviationDto           = new();
+    public bool EnabledShitDropBox = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,7 +33,7 @@ public partial class DeviationFormComponent
         customFormValidator.ClearFormErrors();
         try
         {
-            var resultData = _deviationDto.Id == 0 ? await DeviationApiService.Add(_deviationDto) : await DeviationApiService.Update(_deviationDto);
+            var resultData = DeviationDto.Id == 0 ? await DeviationApiService.Add(DeviationDto) : await DeviationApiService.Update(DeviationDto);
             if (resultData.IsError)
             {
                 customFormValidator.DisplayFormErrors(resultData.ErrorDetails);
@@ -50,7 +51,7 @@ public partial class DeviationFormComponent
 
     private async Task OnDelete()
     {
-        await DeviationApiService.Delete(_deviationDto.Id.ToString());
+        await DeviationApiService.Delete(DeviationDto.Id.ToString());
         await Hide();
     }
 
@@ -74,7 +75,7 @@ public partial class DeviationFormComponent
     public void OnValueChange(ChangeEventArgs<string, Shift> args)
     {
         var shift = _shifts.FirstOrDefault(_ => _.Id == args.ItemData.Id);
-        _deviationDto = new DeviationDto
+        DeviationDto = new DeviationDto
         {
             ShiftId    = shift.Id.ToString(),
             EmployeeId = shift.EmployeeId.ToString(),
@@ -85,6 +86,6 @@ public partial class DeviationFormComponent
 
     public void ResetData()
     {
-        _deviationDto = new DeviationDto();
+        DeviationDto = new DeviationDto();
     }
 }

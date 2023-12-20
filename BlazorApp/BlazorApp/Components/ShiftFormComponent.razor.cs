@@ -36,6 +36,8 @@ public partial class ShiftFormComponent
         Date         = DateTime.Now,
     };
 
+    public bool EnabledDropBox { get; set; } = true;
+
     protected override async Task OnInitializedAsync()
     {
         

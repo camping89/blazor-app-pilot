@@ -52,31 +52,7 @@ public partial class ShiftPlanning
         VisibleProperty = false;
     }
 
-    private static void AddDeviationPlanning(Shift shift, Employee employee, ShiftPlanningDto shiftPlanningDto,
-        List<ShiftPlanningDto> shiftPlanningDtos)
-    {
-        if (shift.Deviations != null && shift.Deviations.Any())
-        {
-            var totalDuration = shift.Deviations.Sum(deviation => deviation.Duration);
-            foreach (var deviation in shift.Deviations)
-            {
-                var deviationPlanning = deviation.ToShiftPlanningDto(shift, employee.Name);
-                deviationPlanning.ParentId = shiftPlanningDto.Id;
-                deviationPlanning.DurationDescription = $"{deviationPlanning.Duration} minutes";
-                shiftPlanningDtos.Add(deviationPlanning);
-                            
-                var subDeviationPlanning = deviation.ToShiftPlanningDto(shift, employee.Name);
-                subDeviationPlanning.Id *= -1;
-                subDeviationPlanning.StartDate = shiftPlanningDto.StartDate;
-                subDeviationPlanning.EndDate = shiftPlanningDto.EndDate;
-                subDeviationPlanning.ParentId = shiftPlanningDto.Id;
-                subDeviationPlanning.Duration = shiftPlanningDto.Duration;
-                subDeviationPlanning.Description = "Deviation Summary";
-                subDeviationPlanning.DurationDescription = $"Total Deviation Duration: {totalDuration} minutes";
-                shiftPlanningDtos.Add(subDeviationPlanning);
-            }
-        }
-    }
+    
 
     public async Task ReloadComponent()
     {
