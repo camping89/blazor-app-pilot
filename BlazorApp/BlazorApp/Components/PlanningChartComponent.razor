@@ -3,7 +3,7 @@
 @inject EmployeeApiService EmployeeApiService
 @inject ShiftApiService    ShiftApiService
 
-<SfGantt @ref="_gantt"  ShowColumnChooser="true"  AllowSorting="true" AllowFiltering="true" AllowReordering="true" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
+<SfGantt @ref="_gantt" AllowResizing="true"   ShowColumnChooser="true"  AllowSorting="true" AllowFiltering="true" AllowReordering="true" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
     <GanttTaskFields Id="Id" Name="Title" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
     </GanttTaskFields>
     <GanttTimelineSettings >
@@ -25,12 +25,12 @@
     </GanttTooltipSettings>
     <GanttEditSettings AllowEditing="true" AllowAdding="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Gantt.EditMode.Dialog">
     </GanttEditSettings>
-    <GanttEvents OnToolbarClick="ToolbarClickHandler" TValue="ShiftPlanningDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo" Created="OnCreated"></GanttEvents>
+    <GanttEvents RowDataBound="Callback" OnToolbarClick="ToolbarClickHandler" TValue="ShiftPlanningDto" OnActionBegin="ActionBegin" QueryChartRowInfo="GanttChartRowInfo" Created="OnCreated"></GanttEvents>
     <GanttColumns>
-        <GanttColumn Field="Description" HeaderText="@ColumnHeaderText" AllowEditing="false"> </GanttColumn>
-        <GanttColumn Field="StartDate" HeaderText="StartDate" AllowEditing="false"> </GanttColumn>
-        <GanttColumn Field="EndDate" HeaderText="EndDate" AllowEditing="false"> </GanttColumn>
-        <GanttColumn Field="Duration" HeaderText="Duration" AllowEditing="false"> </GanttColumn>
+        <GanttColumn Field="Description" HeaderText="@ColumnHeaderText" AllowEditing="false" > </GanttColumn>
+        <GanttColumn Field="StartDate" HeaderText="StartDate" AllowEditing="false" Format="MM/dd/yyyy HH:mm" MaxWidth="150px" AllowResizing="false" > </GanttColumn>
+        <GanttColumn Field="EndDate" HeaderText="EndDate" AllowEditing="false" Format="MM/dd/yyyy HH:mm" MaxWidth="150px" AllowResizing="false"> </GanttColumn>
+        <GanttColumn Field="DurationDescription" HeaderText="Duration" AllowEditing="false" MaxWidth="300px" MinWidth="300px"  AllowResizing="false" > </GanttColumn>
     </GanttColumns>
 </SfGantt>
 
@@ -59,6 +59,10 @@
   .customize-task-child-1 .e-gantt-child-taskbar {
       background-color: #0c4128 !important;
     }
+    
+ .customize-task-child-1-sub .e-gantt-child-taskbar {
+          background-color: rgba(12, 65, 40, 0.5) !important;
+        }
    
   .customize-task-parent-2 .e-gantt-parent-taskbar {
     background-color: #0a58ca !important;
@@ -66,7 +70,11 @@
   
   .customize-task-child-2 .e-gantt-child-taskbar {
       background-color: #0a58ca !important;
-    }
+  }
+  
+  .customize-task-child-2-sub .e-gantt-child-taskbar-sub {
+      background-color: rgba(10, 88, 202, 0.5) !important;
+  }
   
    .customize-task-parent-3 .e-gantt-parent-taskbar {
       background-color: #0dcaf0 !important;
@@ -76,6 +84,10 @@
       background-color: #0dcaf0 !important;
     }
     
+     .customize-task-child-3-sub .e-gantt-child-taskbar {
+          background-color: rgba(13, 202, 240, 0.5) !important;
+        }
+    
     .customize-task-parent-4 .e-gantt-parent-taskbar {
           background-color: #3a0647 !important;
         }
@@ -83,6 +95,10 @@
      .customize-task-child-4 .e-gantt-child-taskbar{
               background-color: #3a0647 !important;
             }
+            
+    .customize-task-child-4-sub .e-gantt-child-taskbar{
+      background-color: rgba(58, 6, 71, 0.5) !important;
+    }
         
     .customize-task-parent-5 .e-gantt-parent-taskbar {
               background-color: #6a1a21 !important;
@@ -91,18 +107,29 @@
     .customize-task-child-5 .e-gantt-child-taskbar {
                   background-color: #6a1a21 !important;
                 }  
+                
+    .customize-task-child-5-sub .e-gantt-child-taskbar {
+                      background-color: rgba(106, 26, 33, 0.5) !important;
+                    }  
             
-     .customize-task-parent-5 .e-gantt-parent-taskbar {
+     .customize-task-parent-6 .e-gantt-parent-taskbar {
       background-color: #86b7fe !important;
     }      
     
-    .customize-task-child-5  .e-gantt-child-taskbar {
+    .customize-task-child-6  .e-gantt-child-taskbar {
           background-color: #86b7fe !important;
-        }            
+        } 
         
-        
-    .customize-child .e-gantt-child-taskbar {
-            background-color: red !important;
-        }                                                                            
+        .customize-task-child-6-sub  .e-gantt-child-taskbar {
+                  background-color: rgba(134, 183, 254, 0.5) !important;
+                }               
+                                                                   
 
+   .hide-taskbar .e-taskbar-main-container {
+        display: none !important;
+   }
+   
+   .text-thick {
+        font-weight: bold;
+   }
 </style>

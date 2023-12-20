@@ -2,6 +2,7 @@ using BlazorApp.Common;
 using BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Gantt;
+using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 
 namespace BlazorApp.Components;
@@ -16,8 +17,6 @@ public partial class PlanningChartComponent
     public EventCallback ReloadComponent { get; set; }
     
     private SfGantt<ShiftPlanningDto> _gantt;
-    
-    
     private ShiftFormComponent        _shiftForm;
     private DeviationFormComponent _deviationForm;
     private int                       _index;
@@ -72,22 +71,52 @@ public partial class PlanningChartComponent
     
     private void GanttChartRowInfo(QueryChartRowInfoEventArgs<ShiftPlanningDto> args)
     {
-        if (args.Data.ParentId is null)
+        if (args.Data.IsDeviation && args.Data.Id < 0)
         {
-            if (_index == 6)
-            {
-                _index = 1;
-            }
-            else
-            {
-                _index += 1;
-            }
-
-            args.Row.AddClass(new[] { $"customize-task-parent-{_index}" });
+            args.Row.AddClass(new []{"hide-taskbar"});
         }
         else
         {
-            args.Row.AddClass(new[] { $"customize-task-child-{_index}" });
+            if (args.Data.ParentId is null)
+            {
+                if (_index == 6)
+                {
+                    _index = 1;
+                }
+                else
+                {
+                    _index += 1;
+                }
+                args.Row.AddClass(new []{"hide-taskbar"});
+            }
+            else
+            {
+                if (args.Data.HasDeviation)
+                {
+                    args.Row.AddClass(new[] { $"customize-task-parent-{_index}" });
+                }
+                else
+                {
+                    if (args.Data.IsDeviation)
+                    {
+                        args.Row.AddClass(new[] { $"customize-task-child-{_index}-sub" });
+                    }
+                    else
+                    {
+                        args.Row.AddClass(new[] { $"customize-task-child-{_index}" });
+                    }
+                    
+                }
+                
+            }
+        }
+    }
+    
+    private void Callback(RowDataBoundEventArgs<ShiftPlanningDto> obj)
+    {
+        if (obj.Data.ParentId is null || (obj.Data.IsDeviation && obj.Data.Id < 0))
+        {
+            obj.Row.AddStyle(new []{"font-weight: bold"});
         }
     }
     

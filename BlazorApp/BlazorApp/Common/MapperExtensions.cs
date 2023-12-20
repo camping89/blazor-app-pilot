@@ -6,6 +6,31 @@ namespace BlazorApp.Common;
 
 public static class MapperExtensions
 {
+    public static ShiftPlanningDto ToShiftPlanningDto(this Deviation deviation, Shift shift, string employeeName)
+    {
+        var item = new ShiftPlanningDto
+        {
+            Id           = deviation.Id,
+            StartDate    = shift.Date.ToDateTime(deviation.StartTime),
+            EndDate      = shift.Date.ToDateTime(deviation.EndTime),
+            Duration     = deviation.Duration.ToString(),
+            Title        = deviation.Reason,
+            Progress     = 0,
+            DurationUnit = "minute",
+            EmployeeName = employeeName,
+            IsDeviation = true,
+            Description = $"Deviation Type: {deviation.DeviationType} - Reason: {deviation.Reason}"
+        };
+        
+        if (shift.Client is not null)
+        {
+            item.ClientName = shift.Client.Name;
+        }
+
+        item.Progress = 0;
+
+        return item;
+    }
     public static ShiftPlanningDto ToShiftPlanningDto(this Shift shift, string employeeName)
     {
         var item = new ShiftPlanningDto
@@ -17,7 +42,8 @@ public static class MapperExtensions
             Title        = shift.Title,
             Progress     = 0,
             DurationUnit = "minute",
-            EmployeeName = employeeName
+            EmployeeName = employeeName,
+            DurationDescription = $"{shift.Duration} minutes"
         };
 
         if (shift.Client is not null)
@@ -35,27 +61,27 @@ public static class MapperExtensions
         
         var deviationDuration = shift.Deviations.First().Duration;
         item.DeviationDuration = deviationDuration;
-        if (deviation.DeviationType == DeviationType.EarlyLeave)
+        // if (deviation.DeviationType == DeviationType.EarlyLeave)
+        // {
+        //     item.Progress = (shift.Duration - deviationDuration) / (decimal) shift.Duration * 100;
+        // }
+        //
+        // if (deviation.DeviationType == DeviationType.Lateness)
+        // {
+        //     item.Progress = deviationDuration / (decimal)shift.Duration * 100;
+        // }
+        //
+        // if (deviation.DeviationType == DeviationType.Illness)
+        // {
+        //     item.Progress = 100;
+        // }
+
+        if (shift.Deviations.Any())
         {
-            item.Progress = (shift.Duration - deviationDuration) / (decimal) shift.Duration * 100;
+            item.HasDeviation = true;
         }
 
-        if (deviation.DeviationType == DeviationType.Lateness)
-        {
-            item.Progress = deviationDuration / (decimal)shift.Duration * 100;
-        }
-
-        if (deviation.DeviationType == DeviationType.Illness)
-        {
-            item.Progress = 100;
-        }
-        
-
-        foreach (var shiftDeviation in shift.Deviations)
-        {
-            item.Deviations.Add(shiftDeviation.ToDeviationDto(shift));
-        }
-
+        item.Progress = 0;
         return item;
     }
 
