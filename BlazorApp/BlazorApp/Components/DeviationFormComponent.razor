@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label for="shift">Shift:</label>
                         <SfDropDownList ID="shift" TValue="string" Enabled="@EnabledShitDropBox" AllowFiltering="true" TItem="Shift" PopupHeight="200px" PopupWidth="425px" Placeholder="Select a shift" @bind-Value="@DeviationDto.ShiftId" DataSource="@_shifts">
-                            <DropDownListFieldSettings Value="Id" Text="Title"></DropDownListFieldSettings>
+                            <DropDownListFieldSettings Value="Id" Text="ShortTitle"></DropDownListFieldSettings>
                             <DropDownListEvents TValue="string" TItem="Shift" ValueChange="OnValueChange"></DropDownListEvents>
                         </SfDropDownList>
                         <ValidationMessage For="@(() => DeviationDto.ShiftId)"></ValidationMessage>

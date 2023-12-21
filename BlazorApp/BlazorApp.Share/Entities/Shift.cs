@@ -2,7 +2,7 @@ using BlazorApp.Share.Enums;
 
 namespace BlazorApp.Share.Entities;
 
-public class Shift : Entity
+public partial class Shift : Entity
 {
     public int         EmployeeId { get; set; }
     public int         ClientId   { get; set; }
