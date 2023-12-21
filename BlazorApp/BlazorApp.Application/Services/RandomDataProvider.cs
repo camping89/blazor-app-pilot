@@ -47,37 +47,46 @@ public class RandomDataProvider : IRandomDataProvider
 
             for (int j = 0; j < 6; j++)
             {
-                var morningShift = RandomDataGenerator.GetShift(employee.Id, client.Id);
-                morningShift.Date      = DateTime.Now.AddDays(j).ToDateOnly();
-                morningShift.StartTime = new TimeOnly(8,  0);
-                morningShift.EndTime   = new TimeOnly(12, 0);
-                morningShift.Status    = ShiftStatus.Planned;
-
-                bool fiftyPercentChance = random.NextDouble() < 0.5;
-                if (fiftyPercentChance)
-                {
-                    var deviation = RandomDataGenerator.GetDeviation(morningShift);
-                    morningShift.Deviations.Add(deviation);
-                    await _deviationRepository.Add(deviation);
-                }
-                await _shiftRepository.Add(morningShift);
-
-                // afternoon shift
-                var afternoonShift = RandomDataGenerator.GetShift(employee.Id, client.Id);
-                afternoonShift.Date      = DateTime.Now.AddDays(j).ToDateOnly();
-                afternoonShift.StartTime = new TimeOnly(13, 0);
-                afternoonShift.EndTime   = new TimeOnly(17, 0);
-                afternoonShift.Status    = ShiftStatus.Planned;
-
-                fiftyPercentChance = random.NextDouble() < 0.3;
-                if (fiftyPercentChance)
-                {
-                    var deviation = RandomDataGenerator.GetDeviation(afternoonShift);
-                    afternoonShift.Deviations.Add(deviation);
-                    await _deviationRepository.Add(deviation);
-                }
-                await _shiftRepository.Add(afternoonShift);
+                var dateTime = DateTime.Now.AddDays(j);
+                await CreateShift(employee, client, random, dateTime);
+                
+                dateTime = DateTime.Now.AddDays(-j);
+                await CreateShift(employee, client, random, dateTime);
             }
         }
+    }
+
+    private async Task CreateShift(Employee employee, Client client, Random random, DateTime dateTime)
+    {
+        var morningShift = RandomDataGenerator.GetShift(employee.Id, client.Id);
+        morningShift.Date      = dateTime.ToDateOnly();
+        morningShift.StartTime = new TimeOnly(8,  0);
+        morningShift.EndTime   = new TimeOnly(12, 0);
+        morningShift.Status    = ShiftStatus.Planned;
+
+        bool fiftyPercentChance = random.NextDouble() < 0.5;
+        if (fiftyPercentChance)
+        {
+            var deviation = RandomDataGenerator.GetDeviation(morningShift);
+            morningShift.Deviations.Add(deviation);
+            await _deviationRepository.Add(deviation);
+        }
+        await _shiftRepository.Add(morningShift);
+
+        // afternoon shift
+        var afternoonShift = RandomDataGenerator.GetShift(employee.Id, client.Id);
+        afternoonShift.Date      = dateTime.ToDateOnly();
+        afternoonShift.StartTime = new TimeOnly(13, 0);
+        afternoonShift.EndTime   = new TimeOnly(17, 0);
+        afternoonShift.Status    = ShiftStatus.Planned;
+
+        fiftyPercentChance = random.NextDouble() < 0.3;
+        if (fiftyPercentChance)
+        {
+            var deviation = RandomDataGenerator.GetDeviation(afternoonShift);
+            afternoonShift.Deviations.Add(deviation);
+            await _deviationRepository.Add(deviation);
+        }
+        await _shiftRepository.Add(afternoonShift);
     }
 }
