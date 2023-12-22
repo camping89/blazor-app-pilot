@@ -4,7 +4,7 @@
 @inject ShiftApiService    ShiftApiService
 @inject DeviationApiService DeviationApiService
 
-<SfGantt @ref="_gantt" AllowResizing="true"   ShowColumnChooser="true"  AllowSorting="true" AllowFiltering="true" AllowReordering="true" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="100%" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
+<SfGantt @ref="_gantt" AllowResizing="true"   ShowColumnChooser="true"  AllowSorting="true" AllowFiltering="true" AllowReordering="true" DataSource="@ShiftPlanningDtos" Toolbar="ToolbarItems" Height="calc(100vh - 150px)" Width="100%" ScrollToTaskbarOnClick="true" EnablePredecessorValidation="true">
     <GanttTaskFields Id="Id" Name="Title" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit" Progress="Progress" ParentID="ParentId">
     </GanttTaskFields>
     <GanttTimelineSettings >
