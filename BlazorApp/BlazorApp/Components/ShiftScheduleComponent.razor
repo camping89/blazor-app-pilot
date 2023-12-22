@@ -3,7 +3,7 @@
 
 @inject EmployeeApiService EmployeeApiService
 
-<SfSchedule  @ref="_shiftSchedule"  TValue=ShiftScheduleDto> 
+<SfSchedule  @ref="_shiftSchedule" Height="calc(100vh - 150px)"  TValue=ShiftScheduleDto> 
     <ScheduleEventSettings DataSource="@DataSource"  AllowEditing="false" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
     <ScheduleEvents   TValue="ShiftScheduleDto" EventRendered="OnEventRendered"></ScheduleEvents> 
     <ScheduleViews>
